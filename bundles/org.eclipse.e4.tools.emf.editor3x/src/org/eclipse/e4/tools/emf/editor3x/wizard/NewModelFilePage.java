@@ -42,17 +42,20 @@ public class NewModelFilePage extends WizardPage {
 	private Text fileText;
 
 	private ISelection selection;
+	
+	private String defaultFilename;
 
 	/**
 	 * Constructor for SampleNewWizardPage.
 	 * 
 	 * @param pageName
 	 */
-	public NewModelFilePage(ISelection selection) {
+	public NewModelFilePage(ISelection selection, String defaultFilename) {
 		super("wizardPage");
 		setTitle("Multi-page Editor File");
 		setDescription("This wizard creates a new file with *.e4xmi extension that can be opened by a multi-page editor.");
 		this.selection = selection;
+		this.defaultFilename = defaultFilename;
 	}
 
 	/**
@@ -119,7 +122,7 @@ public class NewModelFilePage extends WizardPage {
 				containerText.setText(container.getFullPath().toString());
 			}
 		}
-		fileText.setText("Application.e4xmi");
+		fileText.setText(defaultFilename);
 	}
 
 	/**

@@ -14,14 +14,14 @@ import org.eclipse.e4.ui.model.application.MApplicationFactory;
 import org.eclipse.emf.ecore.EObject;
 
 
-public class NewApplicationModelWizard extends BaseApplicationModelWizard {
+public class NewContributionModelWizard extends BaseApplicationModelWizard {
 
 	@Override
 	public String getDefaultFileName() {
-		return "Application.e4xmi";
+		return "components.e4xmi";
 	}
 	
 	protected EObject createInitialModel() {
-		return (EObject) MApplicationFactory.INSTANCE.createApplication();
+		return (EObject) MApplicationFactory.INSTANCE.createModelComponents();
 	}
 }
