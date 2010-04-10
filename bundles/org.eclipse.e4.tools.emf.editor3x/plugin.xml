@@ -12,5 +12,17 @@
             name="e4 Workbenchmodel Editor">
       </editor>
    </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            canFinishEarly="false"
+            category="org.eclipse.e4"
+            class="org.eclipse.e4.tools.emf.editor3x.wizard.NewApplicationModelWizard"
+            hasPages="true"
+            icon="icons/full/obj16/application_view_tile.png"
+            id="org.eclipse.e4.tools.emf.editor3x.newappmodel"
+            name="New Application Model">
+      </wizard>
+   </extension>
 
 </plugin>
