@@ -12,7 +12,7 @@ package org.eclipse.e4.tools.emf.editor;
 
 import javax.inject.Named;
 
-import org.eclipse.e4.ui.model.application.MPart;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.e4.workbench.modeling.EPartService;
 
