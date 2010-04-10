@@ -16,8 +16,8 @@ import java.net.URL;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.dialogs.ContributionClassDialog;
-import org.eclipse.e4.ui.model.application.MApplicationPackage;
 import org.eclipse.e4.ui.model.application.MContribution;
+import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -67,7 +67,7 @@ public class DirectToolItemEditor extends ToolItemEditor {
 
 		Text t = new Text(parent, SWT.BORDER);
 		t.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value( getEditingDomain(), MApplicationPackage.Literals.CONTRIBUTION__URI).observeDetail(master));
+		context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value( getEditingDomain(), ApplicationPackageImpl.Literals.CONTRIBUTION__CONTRIBUTION_URI).observeDetail(master));
 
 		final Button b = new Button(parent, SWT.PUSH|SWT.FLAT);
 		b.setText("Find ...");

@@ -15,10 +15,12 @@ import java.net.URL;
 
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.e4.tools.emf.ui.internal.ObservableColumnLabelProvider;
-import org.eclipse.e4.ui.model.application.MApplicationFactory;
-import org.eclipse.e4.ui.model.application.MApplicationPackage;
-import org.eclipse.e4.ui.model.application.MHandledItem;
-import org.eclipse.e4.ui.model.application.MParameter;
+import org.eclipse.e4.ui.model.application.commands.MCommandsFactory;
+import org.eclipse.e4.ui.model.application.commands.MParameter;
+import org.eclipse.e4.ui.model.application.commands.impl.CommandsPackageImpl;
+import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
+import org.eclipse.e4.ui.model.application.ui.menu.MHandledItem;
+import org.eclipse.e4.ui.model.application.ui.menu.impl.MenuPackageImpl;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.FeaturePath;
@@ -86,7 +88,7 @@ public class HandledToolItemEditor extends ToolItemEditor {
 		Text t = new Text(parent, SWT.BORDER);
 		t.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		t.setEnabled(false);
-		context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value( getEditingDomain(), FeaturePath.fromList(MApplicationPackage.Literals.HANDLED_ITEM__COMMAND, MApplicationPackage.Literals.APPLICATION_ELEMENT__ID)).observeDetail(master));
+		context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value( getEditingDomain(), FeaturePath.fromList(MenuPackageImpl.Literals.HANDLED_ITEM__COMMAND, ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__ELEMENT_ID)).observeDetail(master));
 
 		Button b = new Button(parent, SWT.PUSH|SWT.FLAT);
 		b.setText("Find ...");
@@ -109,7 +111,7 @@ public class HandledToolItemEditor extends ToolItemEditor {
 		tableviewer.setContentProvider(cp);
 		
 		{
-			IEMFValueProperty prop = EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.PARAMETER__TAG);
+			IEMFValueProperty prop = EMFEditProperties.value(getEditingDomain(), CommandsPackageImpl.Literals.PARAMETER__NAME);
 			
 			TableViewerColumn column = new TableViewerColumn(tableviewer, SWT.NONE);
 			column.getColumn().setText("Tag");
@@ -120,7 +122,7 @@ public class HandledToolItemEditor extends ToolItemEditor {
 
 				@Override
 				protected void setValue(Object element, Object value) {
-					Command cmd = SetCommand.create(getEditingDomain(), getMaster().getValue(), MApplicationPackage.Literals.PARAMETER__TAG, value);
+					Command cmd = SetCommand.create(getEditingDomain(), getMaster().getValue(), CommandsPackageImpl.Literals.PARAMETER__NAME, value);
 					if( cmd.canExecute() ) {
 						getEditingDomain().getCommandStack().execute(cmd);
 					}
@@ -128,7 +130,7 @@ public class HandledToolItemEditor extends ToolItemEditor {
 
 				@Override
 				protected Object getValue(Object element) {
-					String val = ((MParameter)element).getTag();
+					String val = ((MParameter)element).getName();
 					return val == null ? "" : val;
 				}
 
@@ -145,7 +147,7 @@ public class HandledToolItemEditor extends ToolItemEditor {
 		}
 
 		{
-			IEMFValueProperty prop = EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.PARAMETER__VALUE);
+			IEMFValueProperty prop = EMFEditProperties.value(getEditingDomain(), CommandsPackageImpl.Literals.PARAMETER__VALUE);
 			
 			TableViewerColumn column = new TableViewerColumn(tableviewer, SWT.NONE);
 			column.getColumn().setText("Value");
@@ -156,7 +158,7 @@ public class HandledToolItemEditor extends ToolItemEditor {
 
 				@Override
 				protected void setValue(Object element, Object value) {
-					Command cmd = SetCommand.create(getEditingDomain(), getMaster().getValue(), MApplicationPackage.Literals.PARAMETER__VALUE, value);
+					Command cmd = SetCommand.create(getEditingDomain(), getMaster().getValue(), CommandsPackageImpl.Literals.PARAMETER__VALUE, value);
 					if( cmd.canExecute() ) {
 						getEditingDomain().getCommandStack().execute(cmd);
 					}
@@ -194,7 +196,7 @@ public class HandledToolItemEditor extends ToolItemEditor {
 		};
 		TableViewerEditor.create(tableviewer, editorActivationStrategy, ColumnViewerEditor.TABBING_HORIZONTAL | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR);
 
-		IEMFEditListProperty prop = EMFEditProperties.list(getEditingDomain(), MApplicationPackage.Literals.HANDLED_ITEM__PARAMETERS);
+		IEMFEditListProperty prop = EMFEditProperties.list(getEditingDomain(), MenuPackageImpl.Literals.HANDLED_ITEM__PARAMETERS);
 		tableviewer.setInput(prop.observeDetail(getMaster()));
 		
 		Composite buttonComp = new Composite(parent, SWT.NONE);
@@ -224,8 +226,8 @@ public class HandledToolItemEditor extends ToolItemEditor {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				MHandledItem item = (MHandledItem) master.getValue();
-				MParameter param = MApplicationFactory.eINSTANCE.createParameter();
-				Command cmd = AddCommand.create(getEditingDomain(), item, MApplicationPackage.Literals.HANDLED_ITEM__PARAMETERS, param);
+				MParameter param = MCommandsFactory.INSTANCE.createParameter();
+				Command cmd = AddCommand.create(getEditingDomain(), item, MenuPackageImpl.Literals.HANDLED_ITEM__PARAMETERS, param);
 				if( cmd.canExecute() ) {
 					getEditingDomain().getCommandStack().execute(cmd);
 				}
@@ -241,7 +243,7 @@ public class HandledToolItemEditor extends ToolItemEditor {
 				IStructuredSelection s = (IStructuredSelection) tableviewer.getSelection();
 				if( !s.isEmpty() ) {
 					MHandledItem item = (MHandledItem) master.getValue();
-					Command cmd = RemoveCommand.create(getEditingDomain(), item, MApplicationPackage.Literals.HANDLED_ITEM__PARAMETERS, s.toList());
+					Command cmd = RemoveCommand.create(getEditingDomain(), item, MenuPackageImpl.Literals.HANDLED_ITEM__PARAMETERS, s.toList());
 					if( cmd.canExecute() ) {
 						getEditingDomain().getCommandStack().execute(cmd);
 					}

@@ -24,13 +24,14 @@ import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
 import org.eclipse.e4.tools.emf.ui.internal.ObservableColumnLabelProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ComponentLabelProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
-import org.eclipse.e4.ui.model.application.ItemType;
-import org.eclipse.e4.ui.model.application.MApplicationFactory;
-import org.eclipse.e4.ui.model.application.MApplicationPackage;
-import org.eclipse.e4.ui.model.application.MElementContainer;
-import org.eclipse.e4.ui.model.application.MHandler;
-import org.eclipse.e4.ui.model.application.MMenuItem;
-import org.eclipse.e4.ui.model.application.MUILabel;
+import org.eclipse.e4.ui.model.application.commands.MHandler;
+import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
+import org.eclipse.e4.ui.model.application.ui.MElementContainer;
+import org.eclipse.e4.ui.model.application.ui.MUILabel;
+import org.eclipse.e4.ui.model.application.ui.impl.UiPackageImpl;
+import org.eclipse.e4.ui.model.application.ui.menu.ItemType;
+import org.eclipse.e4.ui.model.application.ui.menu.MMenuItem;
+import org.eclipse.e4.ui.model.application.ui.menu.impl.MenuPackageImpl;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.EMFProperties;
@@ -39,6 +40,7 @@ import org.eclipse.emf.databinding.IEMFListProperty;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.databinding.edit.IEMFEditValueProperty;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.MoveCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
@@ -75,7 +77,7 @@ public class MenuItemEditor extends AbstractComponentEditor {
 	private EMFDataBindingContext context;
 	private ModelEditor editor;
 
-	private IListProperty ELEMENT_CONTAINER__CHILDREN = EMFProperties.list(MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN);
+	private IListProperty ELEMENT_CONTAINER__CHILDREN = EMFProperties.list(UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN);
 
 	private class Struct {
 		private final String label;
@@ -187,7 +189,7 @@ public class MenuItemEditor extends AbstractComponentEditor {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalSpan = 2;
 			t.setLayoutData(gd);
-			context.bindValue(textProp.observeDelayed(200, t), EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.APPLICATION_ELEMENT__ID).observeDetail(getMaster()));
+			context.bindValue(textProp.observeDelayed(200, t), EMFEditProperties.value(getEditingDomain(), ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__ELEMENT_ID).observeDetail(getMaster()));
 		}
 
 		return parent;
@@ -208,7 +210,7 @@ public class MenuItemEditor extends AbstractComponentEditor {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalSpan = 2;
 			t.setLayoutData(gd);
-			context.bindValue(textProp.observeDelayed(200, t), EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.APPLICATION_ELEMENT__ID).observeDetail(getMaster()));
+			context.bindValue(textProp.observeDelayed(200, t), EMFEditProperties.value(getEditingDomain(), ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__ELEMENT_ID).observeDetail(getMaster()));
 		}
 
 		if (this.getClass() != MenuItemEditor.class) {
@@ -223,7 +225,7 @@ public class MenuItemEditor extends AbstractComponentEditor {
 				GridData gd = new GridData();
 				gd.horizontalSpan = 2;
 				viewer.getControl().setLayoutData(gd);
-				IObservableValue itemTypeObs = EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.ITEM__TYPE).observeDetail(master);
+				IObservableValue itemTypeObs = EMFEditProperties.value(getEditingDomain(), MenuPackageImpl.Literals.ITEM__TYPE).observeDetail(master);
 				context.bindValue(ViewerProperties.singleSelection().observe(viewer), itemTypeObs);
 			}
 		}
@@ -237,7 +239,7 @@ public class MenuItemEditor extends AbstractComponentEditor {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalSpan = 2;
 			t.setLayoutData(gd);
-			context.bindValue(textProp.observeDelayed(200, t), EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.UI_LABEL__LABEL).observeDetail(master));
+			context.bindValue(textProp.observeDelayed(200, t), EMFEditProperties.value(getEditingDomain(), UiPackageImpl.Literals.UI_LABEL__LABEL).observeDetail(master));
 		}
 
 		// ------------------------------------------------------------
@@ -249,7 +251,7 @@ public class MenuItemEditor extends AbstractComponentEditor {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalSpan = 2;
 			t.setLayoutData(gd);
-			context.bindValue(textProp.observeDelayed(200, t), EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.UI_LABEL__TOOLTIP).observeDetail(master));
+			context.bindValue(textProp.observeDelayed(200, t), EMFEditProperties.value(getEditingDomain(), UiPackageImpl.Literals.UI_LABEL__TOOLTIP).observeDetail(master));
 		}
 
 		// ------------------------------------------------------------
@@ -259,7 +261,7 @@ public class MenuItemEditor extends AbstractComponentEditor {
 
 			Text t = new Text(parent, SWT.BORDER);
 			t.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			context.bindValue(textProp.observeDelayed(200, t), EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.UI_LABEL__ICON_URI).observeDetail(master));
+			context.bindValue(textProp.observeDelayed(200, t), EMFEditProperties.value(getEditingDomain(), UiPackageImpl.Literals.UI_LABEL__ICON_URI).observeDetail(master));
 
 			Button b = new Button(parent, SWT.PUSH | SWT.FLAT);
 			b.setImage(getImage(t.getDisplay(), SEARCH_IMAGE));
@@ -298,7 +300,7 @@ public class MenuItemEditor extends AbstractComponentEditor {
 			}
 
 			{
-				IEMFEditValueProperty prop = EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.ITEM__TYPE);
+				IEMFEditValueProperty prop = EMFEditProperties.value(getEditingDomain(), MenuPackageImpl.Literals.ITEM__TYPE);
 
 				TableViewerColumn column = new TableViewerColumn(viewer, SWT.NONE);
 				column.getColumn().setText("ItemType");
@@ -306,7 +308,7 @@ public class MenuItemEditor extends AbstractComponentEditor {
 				column.setLabelProvider(new ObservableColumnLabelProvider<MHandler>(prop.observeDetail(cp.getKnownElements())));
 			}
 
-			IEMFListProperty prop = EMFEditProperties.list(getEditingDomain(), MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN);
+			IEMFListProperty prop = EMFEditProperties.list(getEditingDomain(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN);
 			viewer.setInput(prop.observeDetail(master));
 
 			Composite buttonComp = new Composite(parent, SWT.NONE);
@@ -332,7 +334,7 @@ public class MenuItemEditor extends AbstractComponentEditor {
 							MElementContainer<?> container = (MElementContainer<?>) getMaster().getValue();
 							int idx = container.getChildren().indexOf(obj) - 1;
 							if (idx >= 0) {
-								Command cmd = MoveCommand.create(getEditingDomain(), getMaster().getValue(), MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN, obj, idx);
+								Command cmd = MoveCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, obj, idx);
 
 								if (cmd.canExecute()) {
 									getEditingDomain().getCommandStack().execute(cmd);
@@ -359,7 +361,7 @@ public class MenuItemEditor extends AbstractComponentEditor {
 							MElementContainer<?> container = (MElementContainer<?>) getMaster().getValue();
 							int idx = container.getChildren().indexOf(obj) + 1;
 							if (idx < container.getChildren().size()) {
-								Command cmd = MoveCommand.create(getEditingDomain(), getMaster().getValue(), MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN, obj, idx);
+								Command cmd = MoveCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, obj, idx);
 
 								if (cmd.canExecute()) {
 									getEditingDomain().getCommandStack().execute(cmd);
@@ -383,8 +385,8 @@ public class MenuItemEditor extends AbstractComponentEditor {
 				}
 			});
 
-			Struct defaultStruct = new Struct("MenuItem", MApplicationPackage.Literals.MENU_ITEM, false);
-			childrenDropDown.setInput(new Struct[] { new Struct("Separator", MApplicationPackage.Literals.MENU_ITEM, true), defaultStruct, new Struct("Handled MenuItem", MApplicationPackage.Literals.HANDLED_MENU_ITEM, false), new Struct("Direct MenuItem", MApplicationPackage.Literals.DIRECT_MENU_ITEM, false) });
+			Struct defaultStruct = new Struct("MenuItem", MenuPackageImpl.Literals.MENU_ITEM, false);
+			childrenDropDown.setInput(new Struct[] { new Struct("Separator", MenuPackageImpl.Literals.MENU_ITEM, true), defaultStruct, new Struct("Handled MenuItem", MenuPackageImpl.Literals.HANDLED_MENU_ITEM, false), new Struct("Direct MenuItem", MenuPackageImpl.Literals.DIRECT_MENU_ITEM, false) });
 			childrenDropDown.setSelection(new StructuredSelection(defaultStruct));
 
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
@@ -396,13 +398,13 @@ public class MenuItemEditor extends AbstractComponentEditor {
 					if (!childrenDropDown.getSelection().isEmpty()) {
 						Struct struct = (Struct) ((IStructuredSelection) childrenDropDown.getSelection()).getFirstElement();
 						EClass eClass = struct.eClass;
-						MMenuItem eObject = (MMenuItem) MApplicationFactory.eINSTANCE.create(eClass);
+						MMenuItem eObject = (MMenuItem) EcoreUtil.create(eClass);
 
 						if (struct.separator) {
 							eObject.setType(ItemType.SEPARATOR);
 						}
 
-						Command cmd = AddCommand.create(getEditingDomain(), getMaster().getValue(), MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN, eObject);
+						Command cmd = AddCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, eObject);
 
 						if (cmd.canExecute()) {
 							getEditingDomain().getCommandStack().execute(cmd);
@@ -423,7 +425,7 @@ public class MenuItemEditor extends AbstractComponentEditor {
 				public void widgetSelected(SelectionEvent e) {
 					if (!viewer.getSelection().isEmpty()) {
 						List<?> keybinding = ((IStructuredSelection) viewer.getSelection()).toList();
-						Command cmd = RemoveCommand.create(getEditingDomain(), getMaster().getValue(), MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN, keybinding);
+						Command cmd = RemoveCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, keybinding);
 						if (cmd.canExecute()) {
 							getEditingDomain().getCommandStack().execute(cmd);
 						}
@@ -449,6 +451,6 @@ public class MenuItemEditor extends AbstractComponentEditor {
 
 	@Override
 	public FeaturePath[] getLabelProperties() {
-		return new FeaturePath[] { FeaturePath.fromList(MApplicationPackage.Literals.UI_LABEL__LABEL) };
+		return new FeaturePath[] { FeaturePath.fromList(UiPackageImpl.Literals.UI_LABEL__LABEL) };
 	}
 }

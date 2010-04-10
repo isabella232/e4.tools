@@ -24,10 +24,11 @@ import org.eclipse.core.databinding.property.list.IListProperty;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.ComponentLabelProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
-import org.eclipse.e4.ui.model.application.MApplicationFactory;
-import org.eclipse.e4.ui.model.application.MApplicationPackage;
-import org.eclipse.e4.ui.model.application.MElementContainer;
-import org.eclipse.e4.ui.model.application.MPartSashContainer;
+import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
+import org.eclipse.e4.ui.model.application.ui.MElementContainer;
+import org.eclipse.e4.ui.model.application.ui.basic.MPartSashContainer;
+import org.eclipse.e4.ui.model.application.ui.basic.impl.BasicPackageImpl;
+import org.eclipse.e4.ui.model.application.ui.impl.UiPackageImpl;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.EMFProperties;
@@ -38,6 +39,7 @@ import org.eclipse.emf.databinding.edit.IEMFEditListProperty;
 import org.eclipse.emf.databinding.edit.IEMFEditValueProperty;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.MoveCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
@@ -74,7 +76,7 @@ public class PartSashContainerEditor extends AbstractComponentEditor {
 	private EMFDataBindingContext context;
 	private ModelEditor editor;
 
-	private IListProperty ELEMENT_CONTAINER__CHILDREN = EMFProperties.list(MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN);
+	private IListProperty ELEMENT_CONTAINER__CHILDREN = EMFProperties.list(UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN);
 
 	public PartSashContainerEditor(EditingDomain editingDomain, ModelEditor editor) {
 		super(editingDomain);
@@ -146,7 +148,7 @@ public class PartSashContainerEditor extends AbstractComponentEditor {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalSpan=2;
 			t.setLayoutData(gd);
-			context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.APPLICATION_ELEMENT__ID).observeDetail(getMaster()));
+			context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__ELEMENT_ID).observeDetail(getMaster()));
 		}
 
 		// ------------------------------------------------------------
@@ -167,7 +169,7 @@ public class PartSashContainerEditor extends AbstractComponentEditor {
 			});
 			viewer.setInput(new Boolean[] { Boolean.TRUE, Boolean.FALSE });
 			IViewerValueProperty vProp = ViewerProperties.singleSelection();
-			context.bindValue(vProp.observe(viewer), EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.GENERIC_TILE__HORIZONTAL).observeDetail(getMaster()));
+			context.bindValue(vProp.observe(viewer), EMFEditProperties.value(getEditingDomain(), UiPackageImpl.Literals.GENERIC_TILE__HORIZONTAL).observeDetail(getMaster()));
 		}
 
 		// ------------------------------------------------------------
@@ -179,13 +181,13 @@ public class PartSashContainerEditor extends AbstractComponentEditor {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalSpan=2;
 			viewer.getControl().setLayoutData(gd);
-			IEMFEditListProperty listProp = EMFEditProperties.list(getEditingDomain(), MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN);
-			IEMFEditValueProperty valProp = EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.APPLICATION_ELEMENT__ID);
+			IEMFEditListProperty listProp = EMFEditProperties.list(getEditingDomain(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN);
+			IEMFEditValueProperty valProp = EMFEditProperties.value(getEditingDomain(), ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__ELEMENT_ID);
 			IViewerValueProperty vProp = ViewerProperties.singleSelection();
 
 			final Binding[] binding = new Binding[1];
 			final IObservableValue uiObs = vProp.observe(viewer);
-			final IObservableValue mObs = EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.ELEMENT_CONTAINER__SELECTED_ELEMENT).observeDetail(getMaster());
+			final IObservableValue mObs = EMFEditProperties.value(getEditingDomain(), UiPackageImpl.Literals.ELEMENT_CONTAINER__SELECTED_ELEMENT).observeDetail(getMaster());
 			getMaster().addValueChangeListener(new IValueChangeListener() {
 
 				public void handleValueChange(ValueChangeEvent event) {
@@ -221,7 +223,7 @@ public class PartSashContainerEditor extends AbstractComponentEditor {
 			viewer.setContentProvider(cp);
 			viewer.setLabelProvider(new ComponentLabelProvider(editor));
 			
-			IEMFListProperty prop = EMFProperties.list(MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN);
+			IEMFListProperty prop = EMFProperties.list(UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN);
 			viewer.setInput(prop.observeDetail(getMaster()));
 			
 			Composite buttonComp = new Composite(parent, SWT.NONE);
@@ -247,7 +249,7 @@ public class PartSashContainerEditor extends AbstractComponentEditor {
 							MElementContainer<?> container = (MElementContainer<?>) getMaster().getValue();
 							int idx = container.getChildren().indexOf(obj) - 1;
 							if( idx >= 0 ) {
-								Command cmd = MoveCommand.create(getEditingDomain(), getMaster().getValue(), MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN, obj, idx);
+								Command cmd = MoveCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, obj, idx);
 								
 								if( cmd.canExecute() ) {
 									getEditingDomain().getCommandStack().execute(cmd);
@@ -274,7 +276,7 @@ public class PartSashContainerEditor extends AbstractComponentEditor {
 							MElementContainer<?> container = (MElementContainer<?>) getMaster().getValue();
 							int idx = container.getChildren().indexOf(obj) + 1;
 							if( idx < container.getChildren().size() ) {
-								Command cmd = MoveCommand.create(getEditingDomain(), getMaster().getValue(), MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN, obj, idx);
+								Command cmd = MoveCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, obj, idx);
 								
 								if( cmd.canExecute() ) {
 									getEditingDomain().getCommandStack().execute(cmd);
@@ -298,11 +300,11 @@ public class PartSashContainerEditor extends AbstractComponentEditor {
 				}
 			});
 			childrenDropDown.setInput(new EClass[] {
-					MApplicationPackage.Literals.PART_SASH_CONTAINER,
-					MApplicationPackage.Literals.PART_STACK,
-					MApplicationPackage.Literals.PART
+					BasicPackageImpl.Literals.PART_SASH_CONTAINER,
+					BasicPackageImpl.Literals.PART_STACK,
+					BasicPackageImpl.Literals.PART
 			});
-			childrenDropDown.setSelection(new StructuredSelection(MApplicationPackage.Literals.PART_SASH_CONTAINER));
+			childrenDropDown.setSelection(new StructuredSelection(BasicPackageImpl.Literals.PART_SASH_CONTAINER));
 			
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
 			b.setImage(getImage(b.getDisplay(), TABLE_ADD_IMAGE));
@@ -312,9 +314,9 @@ public class PartSashContainerEditor extends AbstractComponentEditor {
 				public void widgetSelected(SelectionEvent e) {
 					if( ! childrenDropDown.getSelection().isEmpty() ) {
 						EClass eClass = (EClass) ((IStructuredSelection)childrenDropDown.getSelection()).getFirstElement();
-						EObject eObject = MApplicationFactory.eINSTANCE.create(eClass);
+						EObject eObject = EcoreUtil.create(eClass);
 						
-						Command cmd = AddCommand.create(getEditingDomain(), getMaster().getValue(), MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN, eObject);
+						Command cmd = AddCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, eObject);
 						
 						if( cmd.canExecute() ) {
 							getEditingDomain().getCommandStack().execute(cmd);
@@ -334,7 +336,7 @@ public class PartSashContainerEditor extends AbstractComponentEditor {
 					if( ! viewer.getSelection().isEmpty() ) {
 						List<?> elements = ((IStructuredSelection)viewer.getSelection()).toList();
 						
-						Command cmd = RemoveCommand.create(getEditingDomain(), getMaster().getValue(), MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN, elements);
+						Command cmd = RemoveCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, elements);
 						if( cmd.canExecute() ) {
 							getEditingDomain().getCommandStack().execute(cmd);
 						}
@@ -360,7 +362,7 @@ public class PartSashContainerEditor extends AbstractComponentEditor {
 	@Override
 	public FeaturePath[] getLabelProperties() {
 		return new FeaturePath[] {
-			FeaturePath.fromList(MApplicationPackage.Literals.GENERIC_TILE__HORIZONTAL)	
+			FeaturePath.fromList(UiPackageImpl.Literals.GENERIC_TILE__HORIZONTAL)	
 		};
 	}
 }

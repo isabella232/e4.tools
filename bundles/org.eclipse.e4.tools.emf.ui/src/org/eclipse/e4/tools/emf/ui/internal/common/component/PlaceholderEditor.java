@@ -16,9 +16,9 @@ import java.net.URL;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
-import org.eclipse.e4.ui.model.application.MApplicationPackage;
-import org.eclipse.e4.ui.model.application.MPlaceholder;
-import org.eclipse.e4.ui.model.application.MUILabel;
+import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
+import org.eclipse.e4.ui.model.application.ui.MUILabel;
+import org.eclipse.e4.ui.model.application.ui.advanced.MPlaceholder;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.ecore.EObject;
@@ -76,13 +76,13 @@ public class PlaceholderEditor extends AbstractComponentEditor {
 				} else if( label.getTooltip() != null && label.getTooltip().trim().length() > 0 ) {
 					b.append(" (" + label.getTooltip() + ")");
 				} else {
-					if( pl.getRef().getId() != null && pl.getRef().getId().trim().length() > 0 ) {
-						b.append(pl.getRef().getId());
+					if( pl.getRef().getElementId() != null && pl.getRef().getElementId().trim().length() > 0 ) {
+						b.append(pl.getRef().getElementId());
 					}
 				}
 			} else {
-				if( pl.getRef().getId() != null && pl.getRef().getId().trim().length() > 0 ) {
-					b.append(" (" + pl.getRef().getId() + ")");
+				if( pl.getRef().getElementId() != null && pl.getRef().getElementId().trim().length() > 0 ) {
+					b.append(" (" + pl.getRef().getElementId() + ")");
 				}
 			}
 
@@ -122,7 +122,7 @@ public class PlaceholderEditor extends AbstractComponentEditor {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalSpan = 2;
 			t.setLayoutData(gd);
-			context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.APPLICATION_ELEMENT__ID).observeDetail(getMaster()));
+			context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__ELEMENT_ID).observeDetail(getMaster()));
 		}
 
 		return parent;

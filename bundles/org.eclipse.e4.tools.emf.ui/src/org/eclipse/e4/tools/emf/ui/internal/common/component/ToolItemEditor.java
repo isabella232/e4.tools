@@ -18,9 +18,11 @@ import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.databinding.property.value.IValueProperty;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
-import org.eclipse.e4.ui.model.application.ItemType;
-import org.eclipse.e4.ui.model.application.MApplicationPackage;
-import org.eclipse.e4.ui.model.application.MToolItem;
+import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
+import org.eclipse.e4.ui.model.application.ui.impl.UiPackageImpl;
+import org.eclipse.e4.ui.model.application.ui.menu.ItemType;
+import org.eclipse.e4.ui.model.application.ui.menu.MToolItem;
+import org.eclipse.e4.ui.model.application.ui.menu.impl.MenuPackageImpl;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.FeaturePath;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
@@ -96,7 +98,7 @@ public class ToolItemEditor extends AbstractComponentEditor {
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		t.setLayoutData(gd);
-		context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.APPLICATION_ELEMENT__ID).observeDetail(master));
+		context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__ELEMENT_ID).observeDetail(master));
 
 		if (this.getClass() != ToolItemEditor.class) {
 			createFormSubTypeForm(parent, context, master);
@@ -119,7 +121,7 @@ public class ToolItemEditor extends AbstractComponentEditor {
 			GridData gd = new GridData();
 			gd.horizontalSpan = 2;
 			viewer.getControl().setLayoutData(gd);
-			IObservableValue itemTypeObs = EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.ITEM__TYPE).observeDetail(master);
+			IObservableValue itemTypeObs = EMFEditProperties.value(getEditingDomain(), MenuPackageImpl.Literals.ITEM__TYPE).observeDetail(master);
 			context.bindValue(ViewerProperties.singleSelection().observe(viewer), itemTypeObs);
 		}
 
@@ -132,7 +134,7 @@ public class ToolItemEditor extends AbstractComponentEditor {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalSpan = 2;
 			t.setLayoutData(gd);
-			context.bindValue(textProp.observe(t), EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.UI_LABEL__LABEL).observeDetail(master));
+			context.bindValue(textProp.observe(t), EMFEditProperties.value(getEditingDomain(), UiPackageImpl.Literals.UI_LABEL__LABEL).observeDetail(master));
 		}
 
 		// ------------------------------------------------------------
@@ -144,7 +146,7 @@ public class ToolItemEditor extends AbstractComponentEditor {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalSpan = 2;
 			t.setLayoutData(gd);
-			context.bindValue(textProp.observe(t), EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.UI_LABEL__TOOLTIP).observeDetail(master));
+			context.bindValue(textProp.observe(t), EMFEditProperties.value(getEditingDomain(), UiPackageImpl.Literals.UI_LABEL__TOOLTIP).observeDetail(master));
 		}
 
 		// ------------------------------------------------------------
@@ -154,7 +156,7 @@ public class ToolItemEditor extends AbstractComponentEditor {
 
 			Text t = new Text(parent, SWT.BORDER);
 			t.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			context.bindValue(textProp.observe(t), EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.UI_LABEL__ICON_URI).observeDetail(master));
+			context.bindValue(textProp.observe(t), EMFEditProperties.value(getEditingDomain(), UiPackageImpl.Literals.UI_LABEL__ICON_URI).observeDetail(master));
 
 			Button b = new Button(parent, SWT.PUSH | SWT.FLAT);
 			b.setText("Find ...");
@@ -197,8 +199,8 @@ public class ToolItemEditor extends AbstractComponentEditor {
 	@Override
 	public FeaturePath[] getLabelProperties() {
 		return new FeaturePath[] {
-			FeaturePath.fromList(MApplicationPackage.Literals.UI_LABEL__LABEL),
-			FeaturePath.fromList(MApplicationPackage.Literals.UI_LABEL__TOOLTIP)
+			FeaturePath.fromList(UiPackageImpl.Literals.UI_LABEL__LABEL),
+			FeaturePath.fromList(UiPackageImpl.Literals.UI_LABEL__TOOLTIP)
 		};
 	}
 }

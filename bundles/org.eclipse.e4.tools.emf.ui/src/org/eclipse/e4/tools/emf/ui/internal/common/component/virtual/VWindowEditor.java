@@ -18,10 +18,11 @@ import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
 import org.eclipse.e4.tools.emf.ui.internal.ObservableColumnLabelProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.VirtualEntry;
-import org.eclipse.e4.ui.model.application.MApplicationFactory;
-import org.eclipse.e4.ui.model.application.MApplicationPackage;
-import org.eclipse.e4.ui.model.application.MElementContainer;
-import org.eclipse.e4.ui.model.application.MWindow;
+import org.eclipse.e4.ui.model.application.ui.MElementContainer;
+import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
+import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
+import org.eclipse.e4.ui.model.application.ui.basic.impl.BasicPackageImpl;
+import org.eclipse.e4.ui.model.application.ui.impl.UiPackageImpl;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
@@ -107,7 +108,7 @@ public class VWindowEditor extends AbstractComponentEditor {
 		viewer.getTable().setHeaderVisible(true);
 
 		{
-			IEMFEditValueProperty valProp = EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.UI_LABEL__LABEL);
+			IEMFEditValueProperty valProp = EMFEditProperties.value(getEditingDomain(), UiPackageImpl.Literals.UI_LABEL__LABEL);
 
 			TableViewerColumn column = new TableViewerColumn(viewer, SWT.NONE);
 			column.getColumn().setText("Name");
@@ -116,7 +117,7 @@ public class VWindowEditor extends AbstractComponentEditor {
 		}
 
 		{
-			IEMFEditValueProperty valProp = EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.WINDOW__X);
+			IEMFEditValueProperty valProp = EMFEditProperties.value(getEditingDomain(), BasicPackageImpl.Literals.WINDOW__X);
 
 			TableViewerColumn column = new TableViewerColumn(viewer, SWT.NONE);
 			column.getColumn().setText("X");
@@ -125,7 +126,7 @@ public class VWindowEditor extends AbstractComponentEditor {
 		}
 
 		{
-			IEMFEditValueProperty valProp = EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.WINDOW__Y);
+			IEMFEditValueProperty valProp = EMFEditProperties.value(getEditingDomain(), BasicPackageImpl.Literals.WINDOW__Y);
 
 			TableViewerColumn column = new TableViewerColumn(viewer, SWT.NONE);
 			column.getColumn().setText("Y");
@@ -134,7 +135,7 @@ public class VWindowEditor extends AbstractComponentEditor {
 		}
 
 		{
-			IEMFEditValueProperty valProp = EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.WINDOW__WIDTH);
+			IEMFEditValueProperty valProp = EMFEditProperties.value(getEditingDomain(), BasicPackageImpl.Literals.WINDOW__WIDTH);
 
 			TableViewerColumn column = new TableViewerColumn(viewer, SWT.NONE);
 			column.getColumn().setText("Width");
@@ -143,7 +144,7 @@ public class VWindowEditor extends AbstractComponentEditor {
 		}
 
 		{
-			IEMFEditValueProperty valProp = EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.WINDOW__HEIGHT);
+			IEMFEditValueProperty valProp = EMFEditProperties.value(getEditingDomain(), BasicPackageImpl.Literals.WINDOW__HEIGHT);
 
 			TableViewerColumn column = new TableViewerColumn(viewer, SWT.NONE);
 			column.getColumn().setText("Height");
@@ -174,7 +175,7 @@ public class VWindowEditor extends AbstractComponentEditor {
 						MElementContainer<?> container = (MElementContainer<?>) getMaster().getValue();
 						int idx = container.getChildren().indexOf(obj) - 1;
 						if( idx >= 0 ) {
-							Command cmd = MoveCommand.create(getEditingDomain(), getMaster().getValue(), MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN, obj, idx);
+							Command cmd = MoveCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, obj, idx);
 							
 							if( cmd.canExecute() ) {
 								getEditingDomain().getCommandStack().execute(cmd);
@@ -201,7 +202,7 @@ public class VWindowEditor extends AbstractComponentEditor {
 						MElementContainer<?> container = (MElementContainer<?>) getMaster().getValue();
 						int idx = container.getChildren().indexOf(obj) + 1;
 						if( idx < container.getChildren().size() ) {
-							Command cmd = MoveCommand.create(getEditingDomain(), getMaster().getValue(), MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN, obj, idx);
+							Command cmd = MoveCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, obj, idx);
 							
 							if( cmd.canExecute() ) {
 								getEditingDomain().getCommandStack().execute(cmd);
@@ -221,8 +222,8 @@ public class VWindowEditor extends AbstractComponentEditor {
 		b.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				MWindow handler = MApplicationFactory.eINSTANCE.createWindow();
-				Command cmd = AddCommand.create(getEditingDomain(), getMaster().getValue(), MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN, handler);
+				MWindow handler = MBasicFactory.INSTANCE.createWindow();
+				Command cmd = AddCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, handler);
 
 				if (cmd.canExecute()) {
 					getEditingDomain().getCommandStack().execute(cmd);
@@ -241,7 +242,7 @@ public class VWindowEditor extends AbstractComponentEditor {
 				if (!viewer.getSelection().isEmpty()) {
 					List<?> windows = ((IStructuredSelection) viewer.getSelection()).toList();
 					MElementContainer<?> container = (MElementContainer<?>) getMaster().getValue();
-					Command cmd = RemoveCommand.create(getEditingDomain(), container, MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN, windows);
+					Command cmd = RemoveCommand.create(getEditingDomain(), container, UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, windows);
 					if (cmd.canExecute()) {
 						getEditingDomain().getCommandStack().execute(cmd);
 						if( container.getChildren().size() > 0 ) {

@@ -21,12 +21,13 @@ import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
 import org.eclipse.e4.tools.emf.ui.internal.ObservableColumnLabelProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ComponentLabelProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
-import org.eclipse.e4.ui.model.application.ItemType;
-import org.eclipse.e4.ui.model.application.MApplicationFactory;
-import org.eclipse.e4.ui.model.application.MApplicationPackage;
-import org.eclipse.e4.ui.model.application.MElementContainer;
-import org.eclipse.e4.ui.model.application.MHandler;
-import org.eclipse.e4.ui.model.application.MToolItem;
+import org.eclipse.e4.ui.model.application.commands.MHandler;
+import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
+import org.eclipse.e4.ui.model.application.ui.MElementContainer;
+import org.eclipse.e4.ui.model.application.ui.impl.UiPackageImpl;
+import org.eclipse.e4.ui.model.application.ui.menu.ItemType;
+import org.eclipse.e4.ui.model.application.ui.menu.MToolItem;
+import org.eclipse.e4.ui.model.application.ui.menu.impl.MenuPackageImpl;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.EMFProperties;
@@ -34,6 +35,7 @@ import org.eclipse.emf.databinding.IEMFListProperty;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.databinding.edit.IEMFEditValueProperty;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.MoveCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
@@ -67,7 +69,7 @@ public class ToolBarEditor extends AbstractComponentEditor {
 	private EMFDataBindingContext context;
 	private ModelEditor editor;
 
-	private IListProperty ELEMENT_CONTAINER__CHILDREN = EMFProperties.list(MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN);
+	private IListProperty ELEMENT_CONTAINER__CHILDREN = EMFProperties.list(UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN);
 
 	private class Struct {
 		private final String label;
@@ -135,7 +137,7 @@ public class ToolBarEditor extends AbstractComponentEditor {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalSpan = 2;
 			t.setLayoutData(gd);
-			context.bindValue(textProp.observeDelayed(200, t), EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.APPLICATION_ELEMENT__ID).observeDetail(getMaster()));
+			context.bindValue(textProp.observeDelayed(200, t), EMFEditProperties.value(getEditingDomain(), ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__ELEMENT_ID).observeDetail(getMaster()));
 		}
 
 		// ------------------------------------------------------------
@@ -161,7 +163,7 @@ public class ToolBarEditor extends AbstractComponentEditor {
 			}
 
 			{
-				IEMFEditValueProperty prop = EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.ITEM__TYPE);
+				IEMFEditValueProperty prop = EMFEditProperties.value(getEditingDomain(), MenuPackageImpl.Literals.ITEM__TYPE);
 
 				TableViewerColumn column = new TableViewerColumn(viewer, SWT.NONE);
 				column.getColumn().setText("ItemType");
@@ -169,7 +171,7 @@ public class ToolBarEditor extends AbstractComponentEditor {
 				column.setLabelProvider(new ObservableColumnLabelProvider<MHandler>(prop.observeDetail(cp.getKnownElements())));
 			}
 
-			IEMFListProperty prop = EMFEditProperties.list(getEditingDomain(), MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN);
+			IEMFListProperty prop = EMFEditProperties.list(getEditingDomain(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN);
 			viewer.setInput(prop.observeDetail(master));
 
 			Composite buttonComp = new Composite(parent, SWT.NONE);
@@ -195,7 +197,7 @@ public class ToolBarEditor extends AbstractComponentEditor {
 							MElementContainer<?> container = (MElementContainer<?>) getMaster().getValue();
 							int idx = container.getChildren().indexOf(obj) - 1;
 							if (idx >= 0) {
-								Command cmd = MoveCommand.create(getEditingDomain(), getMaster().getValue(), MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN, obj, idx);
+								Command cmd = MoveCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, obj, idx);
 
 								if (cmd.canExecute()) {
 									getEditingDomain().getCommandStack().execute(cmd);
@@ -222,7 +224,7 @@ public class ToolBarEditor extends AbstractComponentEditor {
 							MElementContainer<?> container = (MElementContainer<?>) getMaster().getValue();
 							int idx = container.getChildren().indexOf(obj) + 1;
 							if (idx < container.getChildren().size()) {
-								Command cmd = MoveCommand.create(getEditingDomain(), getMaster().getValue(), MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN, obj, idx);
+								Command cmd = MoveCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, obj, idx);
 
 								if (cmd.canExecute()) {
 									getEditingDomain().getCommandStack().execute(cmd);
@@ -246,8 +248,8 @@ public class ToolBarEditor extends AbstractComponentEditor {
 				}
 			});
 
-			Struct defaultStruct = new Struct("Handled ToolItem", MApplicationPackage.Literals.HANDLED_TOOL_ITEM, false);
-			childrenDropDown.setInput(new Struct[] { defaultStruct, new Struct("Direct ToolItem", MApplicationPackage.Literals.DIRECT_TOOL_ITEM, false), new Struct("Separator", MApplicationPackage.Literals.TOOL_ITEM, true) });
+			Struct defaultStruct = new Struct("Handled ToolItem", MenuPackageImpl.Literals.HANDLED_TOOL_ITEM, false);
+			childrenDropDown.setInput(new Struct[] { defaultStruct, new Struct("Direct ToolItem", MenuPackageImpl.Literals.DIRECT_TOOL_ITEM, false), new Struct("Separator", MenuPackageImpl.Literals.TOOL_ITEM, true) });
 			childrenDropDown.setSelection(new StructuredSelection(defaultStruct));
 
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
@@ -259,13 +261,13 @@ public class ToolBarEditor extends AbstractComponentEditor {
 					if (!childrenDropDown.getSelection().isEmpty()) {
 						Struct struct = (Struct) ((IStructuredSelection) childrenDropDown.getSelection()).getFirstElement();
 						EClass eClass = struct.eClass;
-						MToolItem eObject = (MToolItem) MApplicationFactory.eINSTANCE.create(eClass);
+						MToolItem eObject = (MToolItem) EcoreUtil.create(eClass);
 
 						if (struct.separator) {
 							eObject.setType(ItemType.SEPARATOR);
 						}
 
-						Command cmd = AddCommand.create(getEditingDomain(), getMaster().getValue(), MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN, eObject);
+						Command cmd = AddCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, eObject);
 
 						if (cmd.canExecute()) {
 							getEditingDomain().getCommandStack().execute(cmd);
@@ -286,7 +288,7 @@ public class ToolBarEditor extends AbstractComponentEditor {
 				public void widgetSelected(SelectionEvent e) {
 					if (!viewer.getSelection().isEmpty()) {
 						List<?> keybinding = ((IStructuredSelection) viewer.getSelection()).toList();
-						Command cmd = RemoveCommand.create(getEditingDomain(), getMaster().getValue(), MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN, keybinding);
+						Command cmd = RemoveCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, keybinding);
 						if (cmd.canExecute()) {
 							getEditingDomain().getCommandStack().execute(cmd);
 						}

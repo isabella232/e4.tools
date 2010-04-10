@@ -6,7 +6,8 @@ import java.util.List;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.MApplicationElement;
-import org.eclipse.e4.ui.model.application.MApplicationPackage;
+import org.eclipse.e4.ui.model.application.commands.impl.CommandsPackageImpl;
+import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.databinding.EMFProperties;
 import org.eclipse.emf.databinding.IEMFListProperty;
@@ -45,7 +46,7 @@ public class ControlFactory {
 				@Override
 				public void keyPressed(KeyEvent e) {
 					if (e.keyCode == SWT.CR || e.keyCode == SWT.LF) {
-						handleAddText( editor, MApplicationPackage.Literals.BINDINGS__BINDING_CONTEXTS, t);
+						handleAddText( editor, CommandsPackageImpl.Literals.BINDINGS__BINDING_CONTEXTS, t);
 					}
 				}
 			});
@@ -57,7 +58,7 @@ public class ControlFactory {
 			b.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					handleAddText( editor, MApplicationPackage.Literals.BINDINGS__BINDING_CONTEXTS, t);
+					handleAddText( editor, CommandsPackageImpl.Literals.BINDINGS__BINDING_CONTEXTS, t);
 				}
 			});
 			
@@ -70,7 +71,7 @@ public class ControlFactory {
 			gd.heightHint = 150;
 			viewer.getControl().setLayoutData(gd);
 			
-			IEMFListProperty prop = EMFProperties.list(MApplicationPackage.Literals.BINDINGS__BINDING_CONTEXTS);
+			IEMFListProperty prop = EMFProperties.list(CommandsPackageImpl.Literals.BINDINGS__BINDING_CONTEXTS);
 			viewer.setInput(prop.observeDetail(editor.getMaster()));
 			
 			Composite buttonComp = new Composite(parent, SWT.NONE);
@@ -96,7 +97,7 @@ public class ControlFactory {
 							MApplication container = (MApplication) editor.getMaster().getValue();
 							int idx = container.getCommands().indexOf(obj) - 1;
 							if( idx >= 0 ) {
-								Command cmd = MoveCommand.create(editor.getEditingDomain(), editor.getMaster().getValue(), MApplicationPackage.Literals.BINDINGS__BINDING_CONTEXTS, obj, idx);
+								Command cmd = MoveCommand.create(editor.getEditingDomain(), editor.getMaster().getValue(), CommandsPackageImpl.Literals.BINDINGS__BINDING_CONTEXTS, obj, idx);
 								
 								if( cmd.canExecute() ) {
 									editor.getEditingDomain().getCommandStack().execute(cmd);
@@ -123,7 +124,7 @@ public class ControlFactory {
 							MApplication container = (MApplication) editor.getMaster().getValue();
 							int idx = container.getCommands().indexOf(obj) + 1;
 							if( idx < container.getCommands().size() ) {
-								Command cmd = MoveCommand.create(editor.getEditingDomain(), editor.getMaster().getValue(), MApplicationPackage.Literals.BINDINGS__BINDING_CONTEXTS, obj, idx);
+								Command cmd = MoveCommand.create(editor.getEditingDomain(), editor.getMaster().getValue(), CommandsPackageImpl.Literals.BINDINGS__BINDING_CONTEXTS, obj, idx);
 								
 								if( cmd.canExecute() ) {
 									editor.getEditingDomain().getCommandStack().execute(cmd);
@@ -146,7 +147,7 @@ public class ControlFactory {
 					if( ! viewer.getSelection().isEmpty() ) {
 						MApplication el = (MApplication) editor.getMaster().getValue();
 						List<?> ids = ((IStructuredSelection)viewer.getSelection()).toList();
-						Command cmd = RemoveCommand.create(editor.getEditingDomain(), el, MApplicationPackage.Literals.BINDINGS__BINDING_CONTEXTS, ids);
+						Command cmd = RemoveCommand.create(editor.getEditingDomain(), el, CommandsPackageImpl.Literals.BINDINGS__BINDING_CONTEXTS, ids);
 						if( cmd.canExecute() ) {
 							editor.getEditingDomain().getCommandStack().execute(cmd);
 							if( el.getBindingContexts().size() > 0 ) {
@@ -169,7 +170,7 @@ public class ControlFactory {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.keyCode == SWT.CR || e.keyCode == SWT.LF) {
-					handleAddText(editor, MApplicationPackage.Literals.APPLICATION_ELEMENT__TAGS, tagText);
+					handleAddText(editor, ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__TAGS, tagText);
 				}
 			}
 		});
@@ -179,7 +180,7 @@ public class ControlFactory {
 		b.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				handleAddText(editor, MApplicationPackage.Literals.APPLICATION_ELEMENT__TAGS, tagText);
+				handleAddText(editor, ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__TAGS, tagText);
 			}
 		});
 		b.setImage(editor.getImage(b.getDisplay(), AbstractComponentEditor.TABLE_ADD_IMAGE));
@@ -198,7 +199,7 @@ public class ControlFactory {
 		gd.heightHint = 120;
 		viewer.getControl().setLayoutData(gd);
 
-		IEMFEditListProperty prop = EMFEditProperties.list(editor.getEditingDomain(), MApplicationPackage.Literals.APPLICATION_ELEMENT__TAGS);
+		IEMFEditListProperty prop = EMFEditProperties.list(editor.getEditingDomain(), ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__TAGS);
 		viewer.setInput(prop.observeDetail(editor.getMaster()));
 
 		Composite buttonComp = new Composite(parent, SWT.NONE);
@@ -230,7 +231,7 @@ public class ControlFactory {
 				IStructuredSelection s = (IStructuredSelection) viewer.getSelection();
 				if( ! s.isEmpty() ) {
 					MApplicationElement appEl = (MApplicationElement) editor.getMaster().getValue();
-					Command cmd = RemoveCommand.create(editor.getEditingDomain(), appEl, MApplicationPackage.Literals.APPLICATION_ELEMENT__TAGS, s.toList());
+					Command cmd = RemoveCommand.create(editor.getEditingDomain(), appEl, ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__TAGS, s.toList());
 					if( cmd.canExecute() ) {
 						editor.getEditingDomain().getCommandStack().execute(cmd);
 					}

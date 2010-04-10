@@ -12,7 +12,7 @@ package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.e4.ui.model.application.MApplicationPackage;
+import org.eclipse.e4.ui.model.application.ui.impl.UiPackageImpl;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -49,7 +49,7 @@ public class InputPartEditor extends PartEditor {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalSpan=2;
 			t.setLayoutData(gd);
-			context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.INPUT__INPUT_URI).observeDetail(master));			
+			context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), UiPackageImpl.Literals.INPUT__INPUT_URI).observeDetail(master));			
 		}
 	}
 }

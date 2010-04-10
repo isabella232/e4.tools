@@ -23,9 +23,12 @@ import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.VirtualEntry;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.dialogs.ContributionClassDialog;
-import org.eclipse.e4.ui.model.application.MApplicationPackage;
 import org.eclipse.e4.ui.model.application.MContribution;
-import org.eclipse.e4.ui.model.application.MPart;
+import org.eclipse.e4.ui.model.application.commands.impl.CommandsPackageImpl;
+import org.eclipse.e4.ui.model.application.descriptor.basic.impl.BasicPackageImpl;
+import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.model.application.ui.impl.UiPackageImpl;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.EMFProperties;
 import org.eclipse.emf.databinding.FeaturePath;
@@ -59,8 +62,8 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 	private EMFDataBindingContext context;
 	private IProject project;
 	
-	private IListProperty PART__MENUS = EMFProperties.list(MApplicationPackage.Literals.PART__MENUS);
-	private IListProperty HANDLER_CONTAINER__HANDLERS = EMFProperties.list(MApplicationPackage.Literals.HANDLER_CONTAINER__HANDLERS);
+	private IListProperty PART__MENUS = EMFProperties.list(BasicPackageImpl.Literals.PART_DESCRIPTOR__MENUS);
+	private IListProperty HANDLER_CONTAINER__HANDLERS = EMFProperties.list(CommandsPackageImpl.Literals.HANDLER_CONTAINER__HANDLERS);
 
 	public PartDescriptorEditor(EditingDomain editingDomain, IProject project) {
 		super(editingDomain);
@@ -116,7 +119,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalSpan=2;
 			t.setLayoutData(gd);
-			context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.APPLICATION_ELEMENT__ID).observeDetail(master));			
+			context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__ELEMENT_ID).observeDetail(master));			
 		}
 
 		// ------------------------------------------------------------
@@ -128,7 +131,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalSpan=2;
 			t.setLayoutData(gd);
-			context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.UI_LABEL__LABEL).observeDetail(master));			
+			context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), UiPackageImpl.Literals.UI_LABEL__LABEL).observeDetail(master));			
 		}
 
 		// ------------------------------------------------------------
@@ -140,7 +143,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalSpan=2;
 			t.setLayoutData(gd);
-			context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.UI_LABEL__TOOLTIP).observeDetail(master));			
+			context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), UiPackageImpl.Literals.UI_LABEL__TOOLTIP).observeDetail(master));			
 		}
 
 		// ------------------------------------------------------------
@@ -150,7 +153,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 
 			Text t = new Text(parent, SWT.BORDER);
 			t.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.UI_LABEL__ICON_URI).observeDetail(master));
+			context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), UiPackageImpl.Literals.UI_LABEL__ICON_URI).observeDetail(master));
 
 			Button b = new Button(parent, SWT.PUSH|SWT.FLAT);
 			b.setImage(getImage(t.getDisplay(), SEARCH_IMAGE));
@@ -164,7 +167,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 
 			Text t = new Text(parent, SWT.BORDER);
 			t.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.CONTRIBUTION__URI).observeDetail(master));
+			context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), ApplicationPackageImpl.Literals.CONTRIBUTION__CONTRIBUTION_URI).observeDetail(master));
 
 			final Button b = new Button(parent, SWT.PUSH|SWT.FLAT);
 			b.setImage(getImage(t.getDisplay(), SEARCH_IMAGE));
@@ -186,7 +189,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 			Button checkbox = new Button(parent, SWT.CHECK);
 			checkbox.setLayoutData(new GridData(GridData.BEGINNING, GridData.BEGINNING, false, false, 2, 1));
 			
-			IEMFEditValueProperty mprop = EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.PART__CLOSEABLE);
+			IEMFEditValueProperty mprop = EMFEditProperties.value(getEditingDomain(), BasicPackageImpl.Literals.PART_DESCRIPTOR__CLOSEABLE);
 			IWidgetValueProperty uiProp = WidgetProperties.selection();
 			
 			context.bindValue(uiProp.observe(checkbox), mprop.observeDetail(master));
@@ -200,7 +203,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 			Button checkbox = new Button(parent, SWT.CHECK);
 			checkbox.setLayoutData(new GridData(GridData.BEGINNING, GridData.BEGINNING, false, false, 2, 1));
 			
-			IEMFEditValueProperty mprop = EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.PART_DESCRIPTOR__ALLOW_MULTIPLE);
+			IEMFEditValueProperty mprop = EMFEditProperties.value(getEditingDomain(), BasicPackageImpl.Literals.PART_DESCRIPTOR__ALLOW_MULTIPLE);
 			IWidgetValueProperty uiProp = WidgetProperties.selection();
 			
 			context.bindValue(uiProp.observe(checkbox), mprop.observeDetail(master));
@@ -213,7 +216,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 			
 			Text t = new Text(parent, SWT.BORDER);
 			t.setLayoutData(new GridData(GridData.FILL,GridData.BEGINNING, true, false, 2, 1));
-			context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.PART_DESCRIPTOR__CATEGORY).observeDetail(master));
+			context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), BasicPackageImpl.Literals.PART_DESCRIPTOR__CATEGORY).observeDetail(master));
 		}
 		
 		// ------------------------------------------------------------
@@ -255,7 +258,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 				}
 			});
 			
-			IEMFEditListProperty prop = EMFEditProperties.list(getEditingDomain(), MApplicationPackage.Literals.CONTRIBUTION__PERSISTED_STATE);
+			IEMFEditListProperty prop = EMFEditProperties.list(getEditingDomain(), ApplicationPackageImpl.Literals.CONTRIBUTION__PERSISTED_STATE);
 			tableviewer.setInput(prop.observeDetail(getMaster()));
 			
 			Composite buttonComp = new Composite(parent, SWT.NONE);
@@ -376,7 +379,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 	@Override
 	public FeaturePath[] getLabelProperties() {
 		return new FeaturePath[] {
-			FeaturePath.fromList(MApplicationPackage.Literals.UI_LABEL__LABEL)	
+			FeaturePath.fromList(UiPackageImpl.Literals.UI_LABEL__LABEL)	
 		};
 	}
 }

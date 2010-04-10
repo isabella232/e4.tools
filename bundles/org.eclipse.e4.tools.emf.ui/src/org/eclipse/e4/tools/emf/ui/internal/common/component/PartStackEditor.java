@@ -24,10 +24,11 @@ import org.eclipse.core.databinding.property.list.IListProperty;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.ComponentLabelProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
-import org.eclipse.e4.ui.model.application.MApplicationFactory;
-import org.eclipse.e4.ui.model.application.MApplicationPackage;
-import org.eclipse.e4.ui.model.application.MElementContainer;
-import org.eclipse.e4.ui.model.application.MPart;
+import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
+import org.eclipse.e4.ui.model.application.ui.MElementContainer;
+import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.model.application.ui.impl.UiPackageImpl;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.EMFProperties;
@@ -68,7 +69,7 @@ public class PartStackEditor extends AbstractComponentEditor {
 	private EMFDataBindingContext context;
 	private ModelEditor editor;
 
-	private IListProperty ELEMENT_CONTAINER__CHILDREN = EMFProperties.list(MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN);
+	private IListProperty ELEMENT_CONTAINER__CHILDREN = EMFProperties.list(UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN);
 
 	public PartStackEditor(EditingDomain editingDomain, ModelEditor editor) {
 		super(editingDomain);
@@ -125,7 +126,7 @@ public class PartStackEditor extends AbstractComponentEditor {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalSpan=2;
 			t.setLayoutData(gd);
-			context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.APPLICATION_ELEMENT__ID).observeDetail(getMaster()));
+			context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__ELEMENT_ID).observeDetail(getMaster()));
 		}
 
 		// ------------------------------------------------------------
@@ -137,13 +138,13 @@ public class PartStackEditor extends AbstractComponentEditor {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalSpan=2;
 			viewer.getControl().setLayoutData(gd);
-			IEMFEditListProperty listProp = EMFEditProperties.list(getEditingDomain(), MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN);
-			IEMFEditValueProperty valProp = EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.UI_LABEL__LABEL);
+			IEMFEditListProperty listProp = EMFEditProperties.list(getEditingDomain(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN);
+			IEMFEditValueProperty valProp = EMFEditProperties.value(getEditingDomain(), UiPackageImpl.Literals.UI_LABEL__LABEL);
 			IViewerValueProperty vProp = ViewerProperties.singleSelection();
 
 			final Binding[] binding = new Binding[1];
 			final IObservableValue uiObs = vProp.observe(viewer);
-			final IObservableValue mObs = EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.ELEMENT_CONTAINER__SELECTED_ELEMENT).observeDetail(getMaster());
+			final IObservableValue mObs = EMFEditProperties.value(getEditingDomain(), UiPackageImpl.Literals.ELEMENT_CONTAINER__SELECTED_ELEMENT).observeDetail(getMaster());
 			getMaster().addValueChangeListener(new IValueChangeListener() {
 
 				public void handleValueChange(ValueChangeEvent event) {
@@ -177,7 +178,7 @@ public class PartStackEditor extends AbstractComponentEditor {
 			viewer.getControl().setLayoutData(gd);
 			
 			
-			IEMFListProperty prop = EMFProperties.list(MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN);
+			IEMFListProperty prop = EMFProperties.list(UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN);
 			viewer.setInput(prop.observeDetail(getMaster()));
 			
 			Composite buttonComp = new Composite(parent, SWT.NONE);
@@ -203,7 +204,7 @@ public class PartStackEditor extends AbstractComponentEditor {
 							MElementContainer<?> container = (MElementContainer<?>) getMaster().getValue();
 							int idx = container.getChildren().indexOf(obj) - 1;
 							if( idx >= 0 ) {
-								Command cmd = MoveCommand.create(getEditingDomain(), getMaster().getValue(), MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN, obj, idx);
+								Command cmd = MoveCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, obj, idx);
 								
 								if( cmd.canExecute() ) {
 									getEditingDomain().getCommandStack().execute(cmd);
@@ -230,7 +231,7 @@ public class PartStackEditor extends AbstractComponentEditor {
 							MElementContainer<?> container = (MElementContainer<?>) getMaster().getValue();
 							int idx = container.getChildren().indexOf(obj) + 1;
 							if( idx < container.getChildren().size() ) {
-								Command cmd = MoveCommand.create(getEditingDomain(), getMaster().getValue(), MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN, obj, idx);
+								Command cmd = MoveCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, obj, idx);
 								
 								if( cmd.canExecute() ) {
 									getEditingDomain().getCommandStack().execute(cmd);
@@ -250,8 +251,8 @@ public class PartStackEditor extends AbstractComponentEditor {
 			b.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					MPart part = MApplicationFactory.eINSTANCE.createPart();
-					Command cmd = AddCommand.create(getEditingDomain(), getMaster().getValue(), MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN, part);
+					MPart part = MBasicFactory.INSTANCE.createPart();
+					Command cmd = AddCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, part);
 					
 					if( cmd.canExecute() ) {
 						getEditingDomain().getCommandStack().execute(cmd);
@@ -271,7 +272,7 @@ public class PartStackEditor extends AbstractComponentEditor {
 					if( ! viewer.getSelection().isEmpty() ) {
 						List<?> elements = ((IStructuredSelection)viewer.getSelection()).toList();
 						
-						Command cmd = RemoveCommand.create(getEditingDomain(), getMaster().getValue(), MApplicationPackage.Literals.ELEMENT_CONTAINER__CHILDREN, elements);
+						Command cmd = RemoveCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, elements);
 						if( cmd.canExecute() ) {
 							getEditingDomain().getCommandStack().execute(cmd);
 						}

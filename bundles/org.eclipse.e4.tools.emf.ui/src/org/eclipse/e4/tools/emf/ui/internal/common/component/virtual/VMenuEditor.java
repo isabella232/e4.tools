@@ -18,9 +18,10 @@ import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
 import org.eclipse.e4.tools.emf.ui.internal.ObservableColumnLabelProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.VirtualEntry;
-import org.eclipse.e4.ui.model.application.MApplicationFactory;
-import org.eclipse.e4.ui.model.application.MApplicationPackage;
-import org.eclipse.e4.ui.model.application.MMenu;
+import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
+import org.eclipse.e4.ui.model.application.ui.basic.impl.BasicPackageImpl;
+import org.eclipse.e4.ui.model.application.ui.menu.MMenu;
+import org.eclipse.e4.ui.model.application.ui.menu.MMenuFactory;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
@@ -97,7 +98,7 @@ public class VMenuEditor extends AbstractComponentEditor {
 		ObservableListContentProvider cp = new ObservableListContentProvider();
 		viewer.setContentProvider(cp);
 		
-		IEMFEditValueProperty valProp = EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.APPLICATION_ELEMENT__ID);
+		IEMFEditValueProperty valProp = EMFEditProperties.value(getEditingDomain(), ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__ELEMENT_ID);
 		viewer.setLabelProvider(new ObservableColumnLabelProvider<MMenu>(valProp.observeDetail(cp.getKnownElements())));
 		
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -130,8 +131,8 @@ public class VMenuEditor extends AbstractComponentEditor {
 		b.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				MMenu handler = MApplicationFactory.eINSTANCE.createMenu();
-				Command cmd = AddCommand.create(getEditingDomain(), getMaster().getValue(), MApplicationPackage.Literals.PART__MENUS, handler);
+				MMenu handler = MMenuFactory.INSTANCE.createMenu();
+				Command cmd = AddCommand.create(getEditingDomain(), getMaster().getValue(), BasicPackageImpl.Literals.PART__MENUS, handler);
 
 				if (cmd.canExecute()) {
 					getEditingDomain().getCommandStack().execute(cmd);
@@ -149,7 +150,7 @@ public class VMenuEditor extends AbstractComponentEditor {
 			public void widgetSelected(SelectionEvent e) {
 				if (!viewer.getSelection().isEmpty()) {
 					List<?> windows = ((IStructuredSelection) viewer.getSelection()).toList();
-					Command cmd = RemoveCommand.create(getEditingDomain(), getMaster().getValue(), MApplicationPackage.Literals.PART__MENUS, windows);
+					Command cmd = RemoveCommand.create(getEditingDomain(), getMaster().getValue(), BasicPackageImpl.Literals.PART__MENUS, windows);
 					if (cmd.canExecute()) {
 						getEditingDomain().getCommandStack().execute(cmd);
 					}

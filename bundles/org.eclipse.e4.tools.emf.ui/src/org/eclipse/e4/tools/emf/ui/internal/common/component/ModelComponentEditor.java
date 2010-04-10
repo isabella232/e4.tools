@@ -19,11 +19,13 @@ import org.eclipse.core.databinding.property.list.IListProperty;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.VirtualEntry;
-import org.eclipse.e4.ui.model.application.MApplicationPackage;
-import org.eclipse.e4.ui.model.application.MMenu;
 import org.eclipse.e4.ui.model.application.MModelComponent;
-import org.eclipse.e4.ui.model.application.MPart;
-import org.eclipse.e4.ui.model.application.MPartDescriptor;
+import org.eclipse.e4.ui.model.application.commands.impl.CommandsPackageImpl;
+import org.eclipse.e4.ui.model.application.descriptor.basic.MPartDescriptor;
+import org.eclipse.e4.ui.model.application.descriptor.basic.impl.BasicPackageImpl;
+import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.model.application.ui.menu.MMenu;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.EMFProperties;
 import org.eclipse.emf.databinding.FeaturePath;
@@ -48,12 +50,12 @@ public class ModelComponentEditor extends AbstractComponentEditor {
 	private Image image;
 	private EMFDataBindingContext context;
 
-	private IListProperty MODEL_COMPONENT__CHILDREN = EMFProperties.list( MApplicationPackage.Literals.MODEL_COMPONENT__CHILDREN);
-	private IListProperty PART_DESCRIPTOR_CONTAINER__DESCRIPTORS = EMFProperties.list( MApplicationPackage.Literals.PART_DESCRIPTOR_CONTAINER__DESCRIPTORS);
-	private IListProperty HANDLER_CONTAINER__HANDLERS = EMFProperties.list(MApplicationPackage.Literals.HANDLER_CONTAINER__HANDLERS);
-	private IListProperty BINDING_CONTAINER__BINDINGS = EMFProperties.list(MApplicationPackage.Literals.BINDING_CONTAINER__BINDING_TABLES);
-	private IListProperty MODEL_COMPONENT__COMMANDS = EMFProperties.list(MApplicationPackage.Literals.MODEL_COMPONENT__COMMANDS);
-	private IListProperty MODEL_COMPONENT__BINDINGS = EMFProperties.list(MApplicationPackage.Literals.MODEL_COMPONENT__BINDINGS);
+	private IListProperty MODEL_COMPONENT__CHILDREN = EMFProperties.list( ApplicationPackageImpl.Literals.MODEL_COMPONENT__CHILDREN);
+	private IListProperty PART_DESCRIPTOR_CONTAINER__DESCRIPTORS = EMFProperties.list( BasicPackageImpl.Literals.PART_DESCRIPTOR_CONTAINER__DESCRIPTORS);
+	private IListProperty HANDLER_CONTAINER__HANDLERS = EMFProperties.list(CommandsPackageImpl.Literals.HANDLER_CONTAINER__HANDLERS);
+	private IListProperty BINDING_CONTAINER__BINDINGS = EMFProperties.list(CommandsPackageImpl.Literals.BINDING_TABLE_CONTAINER__BINDING_TABLES);
+	private IListProperty MODEL_COMPONENT__COMMANDS = EMFProperties.list(ApplicationPackageImpl.Literals.MODEL_COMPONENT__COMMANDS);
+	private IListProperty MODEL_COMPONENT__BINDINGS = EMFProperties.list(ApplicationPackageImpl.Literals.MODEL_COMPONENT__BINDINGS);
 	
 	public ModelComponentEditor(EditingDomain editingDomain) {
 		super(editingDomain);
@@ -99,7 +101,7 @@ public class ModelComponentEditor extends AbstractComponentEditor {
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan=2;
 		t.setLayoutData(gd);
-		context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.APPLICATION_ELEMENT__ID).observeDetail(getMaster()));
+		context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__ELEMENT_ID).observeDetail(getMaster()));
 
 		// ------------------------------------------------------------
 
@@ -108,7 +110,7 @@ public class ModelComponentEditor extends AbstractComponentEditor {
 
 		t = new Text(parent, SWT.BORDER);
 		t.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.MODEL_COMPONENT__PARENT_ID).observeDetail(getMaster()));
+		context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), ApplicationPackageImpl.Literals.MODEL_COMPONENT__PARENT_ID).observeDetail(getMaster()));
 
 		Button b = new Button(parent, SWT.PUSH|SWT.FLAT);
 		b.setText("Find ...");
@@ -122,7 +124,7 @@ public class ModelComponentEditor extends AbstractComponentEditor {
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan=2;
 		t.setLayoutData(gd);
-		context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.MODEL_COMPONENT__POSITION_IN_PARENT).observeDetail(getMaster()));
+		context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), ApplicationPackageImpl.Literals.MODEL_COMPONENT__POSITION_IN_PARENT).observeDetail(getMaster()));
 
 		// ------------------------------------------------------------
 
@@ -133,7 +135,7 @@ public class ModelComponentEditor extends AbstractComponentEditor {
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan=2;
 		t.setLayoutData(gd);
-		context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), MApplicationPackage.Literals.MODEL_COMPONENT__PROCESSOR).observeDetail(getMaster()));
+		context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), ApplicationPackageImpl.Literals.MODEL_COMPONENT__PROCESSOR).observeDetail(getMaster()));
 		
 		// ------------------------------------------------------------
 
@@ -259,7 +261,7 @@ public class ModelComponentEditor extends AbstractComponentEditor {
 	@Override
 	public FeaturePath[] getLabelProperties() {
 		return new FeaturePath[] {
-			FeaturePath.fromList(MApplicationPackage.Literals.MODEL_COMPONENT__PARENT_ID)	
+			FeaturePath.fromList(ApplicationPackageImpl.Literals.MODEL_COMPONENT__PARENT_ID)	
 		};
 	}
 }

@@ -11,9 +11,9 @@
 package org.eclipse.e4.tools.emf.ui.internal.common.component.dialogs;
 
 import org.eclipse.e4.tools.emf.ui.common.IModelResource;
-import org.eclipse.e4.ui.model.application.MApplicationPackage;
-import org.eclipse.e4.ui.model.application.MCommand;
-import org.eclipse.e4.ui.model.application.MHandler;
+import org.eclipse.e4.ui.model.application.commands.MCommand;
+import org.eclipse.e4.ui.model.application.commands.MHandler;
+import org.eclipse.e4.ui.model.application.commands.impl.CommandsPackageImpl;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -44,6 +44,6 @@ public class HandlerCommandSelectionDialog extends AbstractCommandSelectionDialo
 
 	@Override
 	protected Command createStoreCommand( EditingDomain editingDomain, MCommand command) {
-		return SetCommand.create(editingDomain, handler, MApplicationPackage.Literals.HANDLER__COMMAND, command);
+		return SetCommand.create(editingDomain, handler, CommandsPackageImpl.Literals.HANDLER__COMMAND, command);
 	}
 }
