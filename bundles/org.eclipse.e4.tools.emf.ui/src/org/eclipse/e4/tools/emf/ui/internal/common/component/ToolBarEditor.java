@@ -248,7 +248,7 @@ public class ToolBarEditor extends AbstractComponentEditor {
 			});
 
 			Struct defaultStruct = new Struct("Handled ToolItem", MenuPackageImpl.Literals.HANDLED_TOOL_ITEM, false);
-			childrenDropDown.setInput(new Struct[] { defaultStruct, new Struct("Direct ToolItem", MenuPackageImpl.Literals.DIRECT_TOOL_ITEM, false), new Struct("Separator", MenuPackageImpl.Literals.TOOL_BAR_SEPARATOR, true) });
+			childrenDropDown.setInput(new Struct[] { defaultStruct, new Struct("Direct ToolItem", MenuPackageImpl.Literals.DIRECT_TOOL_ITEM, false), new Struct("ToolControl", MenuPackageImpl.Literals.TOOL_CONTROL, false), new Struct("Separator", MenuPackageImpl.Literals.TOOL_BAR_SEPARATOR, true) });
 			childrenDropDown.setSelection(new StructuredSelection(defaultStruct));
 
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);

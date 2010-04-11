@@ -194,7 +194,8 @@ public class VControlEditor extends AbstractComponentEditor {
 					AdvancedPackageImpl.Literals.PERSPECTIVE_STACK,
 					BasicPackageImpl.Literals.PART_SASH_CONTAINER,
 					BasicPackageImpl.Literals.PART_STACK,
-					BasicPackageImpl.Literals.PART
+					BasicPackageImpl.Literals.PART,
+					BasicPackageImpl.Literals.INPUT_PART
 			});
 			childrenDropDown.setSelection(new StructuredSelection(AdvancedPackageImpl.Literals.PERSPECTIVE_STACK));
 			

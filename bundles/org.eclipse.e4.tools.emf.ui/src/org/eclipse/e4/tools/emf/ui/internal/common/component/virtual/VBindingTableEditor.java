@@ -270,7 +270,7 @@ public class VBindingTableEditor extends AbstractComponentEditor {
 							|| event.eventType == ColumnViewerEditorActivationEvent.TRAVERSAL);
 				}
 			};
-			TreeViewerEditor.create(contextsViewer, editorActivationStrategy, ColumnViewerEditor.TABBING_HORIZONTAL | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR);
+			TreeViewerEditor.create(contextsViewer, editorActivationStrategy, ColumnViewerEditor.TABBING_HORIZONTAL | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK);
 
 			
 			Composite buttonComp = new Composite(parent, SWT.NONE);

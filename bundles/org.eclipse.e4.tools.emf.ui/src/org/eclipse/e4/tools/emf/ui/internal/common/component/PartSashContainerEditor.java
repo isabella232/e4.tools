@@ -302,7 +302,8 @@ public class PartSashContainerEditor extends AbstractComponentEditor {
 			childrenDropDown.setInput(new EClass[] {
 					BasicPackageImpl.Literals.PART_SASH_CONTAINER,
 					BasicPackageImpl.Literals.PART_STACK,
-					BasicPackageImpl.Literals.PART
+					BasicPackageImpl.Literals.PART,
+					BasicPackageImpl.Literals.INPUT_PART
 			});
 			childrenDropDown.setSelection(new StructuredSelection(BasicPackageImpl.Literals.PART_SASH_CONTAINER));
 			
