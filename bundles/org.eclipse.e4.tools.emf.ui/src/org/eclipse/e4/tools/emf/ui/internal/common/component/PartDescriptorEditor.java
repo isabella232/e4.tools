@@ -167,7 +167,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 
 			Text t = new Text(parent, SWT.BORDER);
 			t.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), ApplicationPackageImpl.Literals.CONTRIBUTION__CONTRIBUTION_URI).observeDetail(master));
+			context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), BasicPackageImpl.Literals.PART_DESCRIPTOR__CONTRIBUTION_URI).observeDetail(master));
 
 			final Button b = new Button(parent, SWT.PUSH|SWT.FLAT);
 			b.setImage(getImage(t.getDisplay(), SEARCH_IMAGE));
@@ -180,6 +180,21 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 				}
 			});
 		}
+		
+		// ------------------------------------------------------------
+		{
+			Label l = new Label(parent, SWT.NONE);
+			l.setText("Dirtyable");
+
+			Button checkbox = new Button(parent, SWT.CHECK);
+			checkbox.setLayoutData(new GridData(GridData.BEGINNING, GridData.BEGINNING, false, false, 2, 1));
+			
+			IEMFEditValueProperty mprop = EMFEditProperties.value(getEditingDomain(), BasicPackageImpl.Literals.PART_DESCRIPTOR__DIRTYABLE);
+			IWidgetValueProperty uiProp = WidgetProperties.selection();
+			
+			context.bindValue(uiProp.observe(checkbox), mprop.observeDetail(master));
+		}
+
 		
 		// ------------------------------------------------------------
 		{
@@ -318,30 +333,6 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 
 
 		ControlFactory.createTagsWidget(parent, this);
-
-//		// ------------------------------------------------------------
-//
-//		l = new Label(parent, SWT.NONE);
-//		l.setText("");
-//
-//		Composite booleanContainer = new Composite(parent,SWT.NONE);
-//		gd = new GridData(GridData.FILL_HORIZONTAL);
-//		gd.horizontalSpan=2;
-//		booleanContainer.setBackgroundMode(SWT.INHERIT_DEFAULT);
-//		booleanContainer.setLayoutData(gd);
-//		booleanContainer.setLayout(new GridLayout(4,false));
-//
-//		Button checkbox = new Button(booleanContainer, SWT.CHECK);
-//		checkbox.setText("to render");
-//
-//		checkbox = new Button(booleanContainer, SWT.CHECK);
-//		checkbox.setText("on Top");
-//
-//		checkbox = new Button(booleanContainer, SWT.CHECK);
-//		checkbox.setText("visible");
-//
-//		checkbox = new Button(booleanContainer, SWT.CHECK);
-//		checkbox.setText("closeable");
 
 		return parent;
 	}
