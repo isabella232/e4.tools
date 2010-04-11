@@ -17,6 +17,7 @@ import java.util.List;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.property.list.IListProperty;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
+import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.ObservableColumnLabelProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
 import org.eclipse.e4.ui.model.application.commands.MBindingTable;
@@ -74,7 +75,7 @@ public class BindingTableEditor extends AbstractComponentEditor {
 	public Image getImage(Object element, Display display) {
 		if (image == null) {
 			try {
-				image = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.tools.emf.ui/icons/full/modelelements/BindingTable.png"));
+				image = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.tools.emf.ui/icons/full/modelelements/BindingTable.png")); //$NON-NLS-1$
 //				image = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/BindingTable.gif"));
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
@@ -87,12 +88,12 @@ public class BindingTableEditor extends AbstractComponentEditor {
 
 	@Override
 	public String getLabel(Object element) {
-		return "BindingTable";
+		return Messages.BindingTableEditor_Label;
 	}
 
 	@Override
 	public String getDescription(Object element) {
-		return "BindingTable bla bla bla";
+		return Messages.BindingTableEditor_Description;
 	}
 
 	@Override
@@ -113,7 +114,7 @@ public class BindingTableEditor extends AbstractComponentEditor {
 
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Id");
+			l.setText(Messages.BindingTableEditor_Id);
 
 			Text t = new Text(parent, SWT.BORDER);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -124,7 +125,7 @@ public class BindingTableEditor extends AbstractComponentEditor {
 		
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Context Id");
+			l.setText(Messages.BindingTableEditor_ContextId);
 
 			Text t = new Text(parent, SWT.BORDER);
 			t.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -132,12 +133,12 @@ public class BindingTableEditor extends AbstractComponentEditor {
 
 			Button b = new Button(parent, SWT.PUSH|SWT.FLAT);
 			b.setImage(getImage(t.getDisplay(), SEARCH_IMAGE));
-			b.setText("Find ...");			
+			b.setText(Messages.BindingTableEditor_Find);			
 		}
 		
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Keybindings");
+			l.setText(Messages.BindingTableEditor_Keybindings);
 			l.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 
 			final TableViewer viewer = new TableViewer(parent);
@@ -153,7 +154,7 @@ public class BindingTableEditor extends AbstractComponentEditor {
 				IEMFEditValueProperty prop = EMFEditProperties.value(getEditingDomain(), CommandsPackageImpl.Literals.KEY_SEQUENCE__KEY_SEQUENCE);
 
 				TableViewerColumn column = new TableViewerColumn(viewer, SWT.NONE);
-				column.getColumn().setText("KeySequence");
+				column.getColumn().setText(Messages.BindingTableEditor_KeySequence);
 				column.getColumn().setWidth(100);
 				column.setLabelProvider(new ObservableColumnLabelProvider<MHandler>(prop.observeDetail(cp.getKnownElements())));
 			}
@@ -162,7 +163,7 @@ public class BindingTableEditor extends AbstractComponentEditor {
 				IEMFEditValueProperty prop = EMFEditProperties.value(getEditingDomain(), FeaturePath.fromList(CommandsPackageImpl.Literals.KEY_BINDING__COMMAND, CommandsPackageImpl.Literals.COMMAND__COMMAND_NAME));
 
 				TableViewerColumn column = new TableViewerColumn(viewer, SWT.NONE);
-				column.getColumn().setText("Command");
+				column.getColumn().setText(Messages.BindingTableEditor_Command);
 				column.getColumn().setWidth(200);
 				column.setLabelProvider(new ObservableColumnLabelProvider<MHandler>(prop.observeDetail(cp.getKnownElements())));
 			}
@@ -171,7 +172,7 @@ public class BindingTableEditor extends AbstractComponentEditor {
 				IEMFEditValueProperty prop = EMFEditProperties.value(getEditingDomain(), ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__ELEMENT_ID);
 
 				TableViewerColumn column = new TableViewerColumn(viewer, SWT.NONE);
-				column.getColumn().setText("Id");
+				column.getColumn().setText(Messages.BindingTableEditor_Id);
 				column.getColumn().setWidth(170);
 				column.setLabelProvider(new ObservableColumnLabelProvider<MHandler>(prop.observeDetail(cp.getKnownElements())));
 			}
@@ -189,7 +190,7 @@ public class BindingTableEditor extends AbstractComponentEditor {
 			buttonComp.setLayout(gl);
 
 			Button b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Up");
+			b.setText(Messages.BindingTableEditor_Up);
 			b.setImage(getImage(b.getDisplay(), ARROW_UP));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 			b.addSelectionListener(new SelectionAdapter() {
@@ -216,7 +217,7 @@ public class BindingTableEditor extends AbstractComponentEditor {
 			});
 
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Down");
+			b.setText(Messages.BindingTableEditor_Down);
 			b.setImage(getImage(b.getDisplay(), ARROW_DOWN));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 			b.addSelectionListener(new SelectionAdapter() {
@@ -243,7 +244,7 @@ public class BindingTableEditor extends AbstractComponentEditor {
 			});
 
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Add ...");
+			b.setText(Messages.BindingTableEditor_Add);
 			b.setImage(getImage(b.getDisplay(), TABLE_ADD_IMAGE));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 			b.addSelectionListener(new SelectionAdapter() {
@@ -261,7 +262,7 @@ public class BindingTableEditor extends AbstractComponentEditor {
 			});
 
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Remove");
+			b.setText(Messages.BindingTableEditor_Remove);
 			b.setImage(getImage(b.getDisplay(), TABLE_DELETE_IMAGE));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 			b.addSelectionListener(new SelectionAdapter() {
