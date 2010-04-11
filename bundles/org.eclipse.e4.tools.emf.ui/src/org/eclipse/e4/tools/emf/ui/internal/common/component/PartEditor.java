@@ -309,7 +309,7 @@ public class PartEditor extends AbstractComponentEditor {
 	@Override
 	public IObservableList getChildList(Object element) {
 		WritableList list = new WritableList();
-		list.add(new VirtualEntry<Object>( ModelEditor.VIRTUAL_MENU, PART__MENUS, element, "Menus") {
+		list.add(new VirtualEntry<Object>( ModelEditor.VIRTUAL_PART_MENU, PART__MENUS, element, "Menus") {
 
 			@Override
 			protected boolean accepted(Object o) {

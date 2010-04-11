@@ -221,7 +221,7 @@ public class ModelComponentEditor extends AbstractComponentEditor {
 
 		});
 		
-		list.add(new VirtualEntry<Object>( ModelEditor.VIRTUAL_MENU, MODEL_COMPONENT__CHILDREN, element, "Menus") {
+		list.add(new VirtualEntry<Object>( ModelEditor.VIRTUAL_PART_MENU, MODEL_COMPONENT__CHILDREN, element, "Menus") {
 
 			@Override
 			protected boolean accepted(Object o) {

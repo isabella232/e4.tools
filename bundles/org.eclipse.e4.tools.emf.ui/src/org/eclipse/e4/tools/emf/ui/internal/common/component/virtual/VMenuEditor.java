@@ -26,6 +26,7 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.databinding.edit.IEMFEditValueProperty;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -48,10 +49,12 @@ public class VMenuEditor extends AbstractComponentEditor {
 	private EMFDataBindingContext context;
 	private ModelEditor editor;
 	private TableViewer viewer;
+	private EStructuralFeature feature;
 
-	public VMenuEditor(EditingDomain editingDomain, ModelEditor editor) {
+	public VMenuEditor(EditingDomain editingDomain, ModelEditor editor, EStructuralFeature feature) {
 		super(editingDomain);
 		this.editor = editor;
+		this.feature = feature;
 	}
 
 	@Override
@@ -132,7 +135,7 @@ public class VMenuEditor extends AbstractComponentEditor {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				MMenu handler = MMenuFactory.INSTANCE.createMenu();
-				Command cmd = AddCommand.create(getEditingDomain(), getMaster().getValue(), BasicPackageImpl.Literals.PART__MENUS, handler);
+				Command cmd = AddCommand.create(getEditingDomain(), getMaster().getValue(), feature, handler);
 
 				if (cmd.canExecute()) {
 					getEditingDomain().getCommandStack().execute(cmd);

@@ -95,7 +95,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 public class ModelEditor {
-	public static final int VIRTUAL_MENU = 0;
+	public static final int VIRTUAL_PART_MENU = 0;
 	public static final int VIRTUAL_PART = 1;
 	public static final int VIRTUAL_HANDLER = 2;
 	public static final int VIRTUAL_BINDING_TABLE = 3;
@@ -106,6 +106,7 @@ public class ModelEditor {
 	public static final int VIRTUAL_PART_DESCRIPTORS = 8;
 	public static final int VIRTUAL_MODEL_COMP_COMMANDS = 9;
 	public static final int VIRTUAL_MODEL_COMP_BINDINGS = 10;
+	public static final int VIRTUAL_PARTDESCRIPTOR_MENU = 11;
 
 	private Map<EClass, AbstractComponentEditor> editorMap = new HashMap<EClass, AbstractComponentEditor>();
 	private AbstractComponentEditor[] virtualEditors;
@@ -268,7 +269,7 @@ public class ModelEditor {
 	}
 
 	private void registerVirtualEditors() {
-		virtualEditors = new AbstractComponentEditor[] { new VMenuEditor(modelProvider.getEditingDomain(), this), // V-Menu
+		virtualEditors = new AbstractComponentEditor[] { new VMenuEditor(modelProvider.getEditingDomain(), this, BasicPackageImpl.Literals.PART__MENUS), // V-Menu
 				null, // V-Part
 				new VHandlerEditor(modelProvider.getEditingDomain(), this), 
 				new VBindingTableEditor(modelProvider.getEditingDomain(), this), 
@@ -278,7 +279,8 @@ public class ModelEditor {
 				new VWindowTrimEditor(modelProvider.getEditingDomain(), this),
 				new VPartDescriptor(modelProvider.getEditingDomain(), this),
 				new VCommandEditor(modelProvider.getEditingDomain(), this, ApplicationPackageImpl.Literals.MODEL_COMPONENT__COMMANDS),
-				new VModelComponentBindingEditor(modelProvider.getEditingDomain(), this)
+				new VModelComponentBindingEditor(modelProvider.getEditingDomain(), this),
+				new VMenuEditor(modelProvider.getEditingDomain(), this, org.eclipse.e4.ui.model.application.descriptor.basic.impl.BasicPackageImpl.Literals.PART_DESCRIPTOR__MENUS)
 		};
 	}
 
