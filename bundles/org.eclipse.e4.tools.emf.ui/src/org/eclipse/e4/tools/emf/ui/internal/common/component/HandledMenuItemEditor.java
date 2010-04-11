@@ -14,6 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.eclipse.core.databinding.observable.value.WritableValue;
+import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.ObservableColumnLabelProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
 import org.eclipse.e4.ui.model.application.commands.MCommandsFactory;
@@ -69,7 +70,7 @@ public class HandledMenuItemEditor extends MenuItemEditor {
 	public Image getImage(Object element, Display display) {
 		if (image == null) {
 			try {
-				image = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/HandledMenuItem.gif"));
+				image = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/HandledMenuItem.gif")); //$NON-NLS-1$
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -81,12 +82,12 @@ public class HandledMenuItemEditor extends MenuItemEditor {
 
 	@Override
 	public String getLabel(Object element) {
-		return "HandledMenuItem";
+		return Messages.HandledMenuItemEditor_Label;
 	}
 
 	@Override
 	public String getDescription(Object element) {
-		return "HandledMenuItem bla bla bla";
+		return Messages.HandledMenuItemEditor_Description;
 	}
 
 	@Override
@@ -96,7 +97,7 @@ public class HandledMenuItemEditor extends MenuItemEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Command");
+			l.setText(Messages.HandledMenuItemEditor_Command);
 
 			Text t = new Text(parent, SWT.BORDER);
 			t.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -104,7 +105,7 @@ public class HandledMenuItemEditor extends MenuItemEditor {
 			context.bindValue(textProp.observeDelayed(200, t), EMFEditProperties.value(getEditingDomain(), FeaturePath.fromList(MenuPackageImpl.Literals.HANDLED_ITEM__COMMAND, ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__ELEMENT_ID)).observeDetail(master));
 
 			Button b = new Button(parent, SWT.PUSH | SWT.FLAT);
-			b.setText("Find ...");
+			b.setText(Messages.HandledMenuItemEditor_Find);
 			b.setImage(getImage(b.getDisplay(), SEARCH_IMAGE));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
 		}
@@ -112,7 +113,7 @@ public class HandledMenuItemEditor extends MenuItemEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Parameters");
+			l.setText(Messages.HandledMenuItemEditor_Parameters);
 			l.setLayoutData(new GridData(GridData.BEGINNING, GridData.BEGINNING, false, false));
 
 			final TableViewer tableviewer = new TableViewer(parent);
@@ -128,7 +129,7 @@ public class HandledMenuItemEditor extends MenuItemEditor {
 				IEMFValueProperty prop = EMFEditProperties.value(getEditingDomain(), CommandsPackageImpl.Literals.PARAMETER__NAME);
 
 				TableViewerColumn column = new TableViewerColumn(tableviewer, SWT.NONE);
-				column.getColumn().setText("Tag");
+				column.getColumn().setText(Messages.HandledMenuItemEditor_Tag);
 				column.getColumn().setWidth(200);
 				column.setLabelProvider(new ObservableColumnLabelProvider<MParameter>(prop.observeDetail(cp.getKnownElements())));
 				column.setEditingSupport(new EditingSupport(tableviewer) {
@@ -145,7 +146,7 @@ public class HandledMenuItemEditor extends MenuItemEditor {
 					@Override
 					protected Object getValue(Object element) {
 						String val = ((MParameter) element).getName();
-						return val == null ? "" : val;
+						return val == null ? "" : val; //$NON-NLS-1$
 					}
 
 					@Override
@@ -164,7 +165,7 @@ public class HandledMenuItemEditor extends MenuItemEditor {
 				IEMFValueProperty prop = EMFEditProperties.value(getEditingDomain(), CommandsPackageImpl.Literals.PARAMETER__VALUE);
 
 				TableViewerColumn column = new TableViewerColumn(tableviewer, SWT.NONE);
-				column.getColumn().setText("Value");
+				column.getColumn().setText(Messages.HandledMenuItemEditor_Value);
 				column.getColumn().setWidth(200);
 				column.setLabelProvider(new ObservableColumnLabelProvider<MParameter>(prop.observeDetail(cp.getKnownElements())));
 				column.setEditingSupport(new EditingSupport(tableviewer) {
@@ -181,7 +182,7 @@ public class HandledMenuItemEditor extends MenuItemEditor {
 					@Override
 					protected Object getValue(Object element) {
 						String val = ((MParameter) element).getValue();
-						return val == null ? "" : val;
+						return val == null ? "" : val; //$NON-NLS-1$
 					}
 
 					@Override
@@ -220,17 +221,17 @@ public class HandledMenuItemEditor extends MenuItemEditor {
 			buttonComp.setLayout(gl);
 
 			Button b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Up");
+			b.setText(Messages.HandledMenuItemEditor_Up);
 			b.setImage(getImage(b.getDisplay(), ARROW_UP));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Down");
+			b.setText(Messages.HandledMenuItemEditor_Down);
 			b.setImage(getImage(b.getDisplay(), ARROW_DOWN));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Add ...");
+			b.setText(Messages.HandledMenuItemEditor_Add);
 			b.setImage(getImage(b.getDisplay(), TABLE_ADD_IMAGE));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 			b.addSelectionListener(new SelectionAdapter() {
@@ -247,7 +248,7 @@ public class HandledMenuItemEditor extends MenuItemEditor {
 			});
 
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Remove");
+			b.setText(Messages.HandledMenuItemEditor_Remove);
 			b.addSelectionListener(new SelectionAdapter() {
 
 				public void widgetSelected(SelectionEvent e) {

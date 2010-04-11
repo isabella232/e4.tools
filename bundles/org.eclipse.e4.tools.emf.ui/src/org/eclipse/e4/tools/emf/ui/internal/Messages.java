@@ -56,6 +56,23 @@ public class Messages {
 	public static String ControlFactory_Key;
 	public static String ControlFactory_Value;
 	
+	public static String DirectToolItemEditor_ClassURI;
+	public static String DirectToolItemEditor_Find;
+	public static String DirectToolItemEditor_Label;
+	public static String DirectToolItemEditor_Description;
+	
+	public static String HandledMenuItemEditor_Label;
+	public static String HandledMenuItemEditor_Description;
+	public static String HandledMenuItemEditor_Command;
+	public static String HandledMenuItemEditor_Find;
+	public static String HandledMenuItemEditor_Parameters;
+	public static String HandledMenuItemEditor_Tag;
+	public static String HandledMenuItemEditor_Value;
+	public static String HandledMenuItemEditor_Up;
+	public static String HandledMenuItemEditor_Down;
+	public static String HandledMenuItemEditor_Add;
+	public static String HandledMenuItemEditor_Remove;
+	
 	static {
 		NLS.initializeMessages(Messages.class.getName(), Messages.class);
 	}
