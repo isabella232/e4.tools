@@ -34,7 +34,7 @@ public class ToolBarSeparatorEditor extends AbstractComponentEditor {
 	public Image getImage(Object element, Display display) {
 		if (separatorImage == null) {
 			try {
-				separatorImage = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/MenuItem_separator.gif"));
+				separatorImage = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/ToolBarSeparator.gif"));
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
