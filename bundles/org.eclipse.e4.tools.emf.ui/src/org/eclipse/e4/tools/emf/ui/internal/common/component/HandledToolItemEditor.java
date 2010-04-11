@@ -68,7 +68,7 @@ public class HandledToolItemEditor extends ToolItemEditor {
 	public Image getImage(Object element, Display display) {
 		if (image == null) {
 			try {
-				image = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/HandledToolItem.gif"));
+				image = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/HandledToolItem.gif")); //$NON-NLS-1$
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
