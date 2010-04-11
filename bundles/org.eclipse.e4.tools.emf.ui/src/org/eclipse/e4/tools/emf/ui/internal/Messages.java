@@ -26,6 +26,22 @@ public class Messages {
 	public static String BindingTableEditor_Add;
 	public static String BindingTableEditor_Remove; 
 	
+	public static String CommandEditor_Label;
+	public static String CommandEditor_Description;
+	public static String CommandEditor_Id;
+	public static String CommandEditor_Name;
+	public static String CommandEditor_LabelDescription;
+	public static String CommandEditor_Parameters;
+	public static String CommandEditor_ParameterName;
+	public static String CommandEditor_ParameterTypeId;
+	public static String CommandEditor_ParameterOptional;
+	public static String CommandEditor_ParameterOptional_No;
+	public static String CommandEditor_ParameterOptional_Yes;
+	public static String CommandEditor_Up;
+	public static String CommandEditor_Down;
+	public static String CommandEditor_Add;
+	public static String CommandEditor_Remove;
+	
 	static {
 		NLS.initializeMessages(Messages.class.getName(), Messages.class);
 	}

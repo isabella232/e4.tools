@@ -15,6 +15,7 @@ import java.net.URL;
 
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
+import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.ObservableColumnLabelProvider;
 import org.eclipse.e4.ui.model.application.commands.MCommand;
 import org.eclipse.e4.ui.model.application.commands.MCommandParameter;
@@ -71,7 +72,7 @@ public class CommandEditor extends AbstractComponentEditor {
 	public Image getImage(Object element, Display display) {
 		if (image == null) {
 			try {
-				image = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/Command.gif"));
+				image = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/Command.gif")); //$NON-NLS-1$
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -83,12 +84,12 @@ public class CommandEditor extends AbstractComponentEditor {
 
 	@Override
 	public String getLabel(Object element) {
-		return "Command";
+		return Messages.CommandEditor_Label;
 	}
 
 	@Override
 	public String getDescription(Object element) {
-		return "Command bla bla bla";
+		return Messages.CommandEditor_Description;
 	}
 
 	@Override
@@ -109,7 +110,7 @@ public class CommandEditor extends AbstractComponentEditor {
 
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Id");
+			l.setText(Messages.CommandEditor_Id);
 
 			Text t = new Text(parent, SWT.BORDER);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -121,7 +122,7 @@ public class CommandEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Name");
+			l.setText(Messages.CommandEditor_Name);
 
 			Text t = new Text(parent, SWT.BORDER);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -133,7 +134,7 @@ public class CommandEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Description");
+			l.setText(Messages.CommandEditor_LabelDescription);
 			l.setLayoutData(new GridData(GridData.BEGINNING,GridData.BEGINNING,false,false));
 
 			Text t = new Text(parent, SWT.BORDER|SWT.H_SCROLL|SWT.V_SCROLL);
@@ -147,7 +148,7 @@ public class CommandEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Parameters");
+			l.setText(Messages.CommandEditor_Parameters);
 			l.setLayoutData(new GridData(GridData.BEGINNING,GridData.BEGINNING,false,false));
 
 			final TableViewer viewer = new TableViewer(parent,SWT.FULL_SELECTION|SWT.MULTI|SWT.BORDER);
@@ -163,7 +164,7 @@ public class CommandEditor extends AbstractComponentEditor {
 				IEMFValueProperty prop = EMFEditProperties.value(getEditingDomain(), CommandsPackageImpl.Literals.COMMAND_PARAMETER__NAME);
 				
 				TableViewerColumn column = new TableViewerColumn(viewer, SWT.NONE);
-				column.getColumn().setText("Name");
+				column.getColumn().setText(Messages.CommandEditor_ParameterName);
 				column.getColumn().setWidth(200);
 				column.setLabelProvider(new ObservableColumnLabelProvider<MCommandParameter>(prop.observeDetail(cp.getKnownElements())));
 				column.setEditingSupport(new EditingSupport(viewer) {
@@ -180,7 +181,7 @@ public class CommandEditor extends AbstractComponentEditor {
 					@Override
 					protected Object getValue(Object element) {
 						MCommandParameter obj = (MCommandParameter) element;
-						return obj.getName() != null ? obj.getName() : "";
+						return obj.getName() != null ? obj.getName() : ""; //$NON-NLS-1$
 					}
 					
 					@Override
@@ -199,7 +200,7 @@ public class CommandEditor extends AbstractComponentEditor {
 				IEMFValueProperty prop = EMFEditProperties.value(getEditingDomain(), CommandsPackageImpl.Literals.COMMAND_PARAMETER__TYPE_ID);
 				
 				TableViewerColumn column = new TableViewerColumn(viewer, SWT.NONE);
-				column.getColumn().setText("Type-Id");
+				column.getColumn().setText(Messages.CommandEditor_ParameterTypeId);
 				column.getColumn().setWidth(200);				
 				column.setLabelProvider(new ObservableColumnLabelProvider<MCommandParameter>(prop.observeDetail(cp.getKnownElements())));
 				column.setEditingSupport(new EditingSupport(viewer) {
@@ -216,7 +217,7 @@ public class CommandEditor extends AbstractComponentEditor {
 					@Override
 					protected Object getValue(Object element) {
 						MCommandParameter obj = (MCommandParameter) element;
-						return obj.getTypeId() != null ? obj.getTypeId() : "";
+						return obj.getTypeId() != null ? obj.getTypeId() : ""; //$NON-NLS-1$
 					}
 					
 					@Override
@@ -235,16 +236,16 @@ public class CommandEditor extends AbstractComponentEditor {
 				IEMFValueProperty prop = EMFEditProperties.value(getEditingDomain(), CommandsPackageImpl.Literals.COMMAND_PARAMETER__OPTIONAL);
 				
 				TableViewerColumn column = new TableViewerColumn(viewer, SWT.NONE);
-				column.getColumn().setText("Optional");
+				column.getColumn().setText(Messages.CommandEditor_ParameterOptional);
 				column.getColumn().setWidth(200);				
 				column.setLabelProvider(new ObservableColumnLabelProvider<MCommandParameter>(prop.observeDetail(cp.getKnownElements())) {
 					@Override
 					public String getText(MCommandParameter element) {
-						return element.isOptional() ? "yes" : "no";
+						return element.isOptional() ? Messages.CommandEditor_ParameterOptional_Yes : Messages.CommandEditor_ParameterOptional_No;
 					}
 				});
 				column.setEditingSupport(new EditingSupport(viewer) {
-					private ComboBoxCellEditor editor = new ComboBoxCellEditor(viewer.getTable(), new String[] { "yes", "no" });
+					private ComboBoxCellEditor editor = new ComboBoxCellEditor(viewer.getTable(), new String[] { Messages.CommandEditor_ParameterOptional_Yes, Messages.CommandEditor_ParameterOptional_No });
 					
 					@Override
 					protected void setValue(Object element, Object value) {
@@ -300,17 +301,17 @@ public class CommandEditor extends AbstractComponentEditor {
 			buttonComp.setLayout(gl);
 
 			Button b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Up");
+			b.setText(Messages.CommandEditor_Up);
 			b.setImage(getImage(b.getDisplay(), ARROW_UP));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Down");
+			b.setText(Messages.CommandEditor_Down);
 			b.setImage(getImage(b.getDisplay(), ARROW_DOWN));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Add ...");
+			b.setText(Messages.CommandEditor_Add);
 			b.setImage(getImage(b.getDisplay(), TABLE_ADD_IMAGE));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 			b.addSelectionListener(new SelectionAdapter() {
@@ -327,7 +328,7 @@ public class CommandEditor extends AbstractComponentEditor {
 			});
 
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Remove");
+			b.setText(Messages.CommandEditor_Remove);
 			b.setImage(getImage(b.getDisplay(), TABLE_DELETE_IMAGE));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 		}
@@ -339,7 +340,6 @@ public class CommandEditor extends AbstractComponentEditor {
 
 	@Override
 	public IObservableList getChildList(Object element) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
