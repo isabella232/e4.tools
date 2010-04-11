@@ -14,6 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.eclipse.core.databinding.observable.value.WritableValue;
+import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.ObservableColumnLabelProvider;
 import org.eclipse.e4.ui.model.application.commands.MCommandsFactory;
 import org.eclipse.e4.ui.model.application.commands.MParameter;
@@ -83,7 +84,7 @@ public class HandledToolItemEditor extends ToolItemEditor {
 		IWidgetValueProperty textProp = WidgetProperties.text(SWT.Modify);
 
 		Label l = new Label(parent, SWT.NONE);
-		l.setText("Command");
+		l.setText(Messages.HandledToolItemEditor_Command);
 
 		Text t = new Text(parent, SWT.BORDER);
 		t.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -91,14 +92,14 @@ public class HandledToolItemEditor extends ToolItemEditor {
 		context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value( getEditingDomain(), FeaturePath.fromList(MenuPackageImpl.Literals.HANDLED_ITEM__COMMAND, ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__ELEMENT_ID)).observeDetail(master));
 
 		Button b = new Button(parent, SWT.PUSH|SWT.FLAT);
-		b.setText("Find ...");
+		b.setText(Messages.HandledToolItemEditor_Find);
 		b.setImage(getImage(b.getDisplay(), SEARCH_IMAGE));
 		b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
 
 		// ------------------------------------------------------------
 
 		l = new Label(parent, SWT.NONE);
-		l.setText("Parameters");
+		l.setText(Messages.HandledToolItemEditor_Parameters);
 		l.setLayoutData(new GridData(GridData.BEGINNING, GridData.BEGINNING, false, false));
 
 		final TableViewer tableviewer = new TableViewer(parent);
@@ -114,7 +115,7 @@ public class HandledToolItemEditor extends ToolItemEditor {
 			IEMFValueProperty prop = EMFEditProperties.value(getEditingDomain(), CommandsPackageImpl.Literals.PARAMETER__NAME);
 			
 			TableViewerColumn column = new TableViewerColumn(tableviewer, SWT.NONE);
-			column.getColumn().setText("Tag");
+			column.getColumn().setText(Messages.HandledToolItemEditor_ParametersName);
 			column.getColumn().setWidth(200);
 			column.setLabelProvider(new ObservableColumnLabelProvider<MParameter>(prop.observeDetail(cp.getKnownElements())));
 			column.setEditingSupport(new EditingSupport(tableviewer) {
@@ -131,7 +132,7 @@ public class HandledToolItemEditor extends ToolItemEditor {
 				@Override
 				protected Object getValue(Object element) {
 					String val = ((MParameter)element).getName();
-					return val == null ? "" : val;
+					return val == null ? "" : val; //$NON-NLS-1$
 				}
 
 				@Override
@@ -150,7 +151,7 @@ public class HandledToolItemEditor extends ToolItemEditor {
 			IEMFValueProperty prop = EMFEditProperties.value(getEditingDomain(), CommandsPackageImpl.Literals.PARAMETER__VALUE);
 			
 			TableViewerColumn column = new TableViewerColumn(tableviewer, SWT.NONE);
-			column.getColumn().setText("Value");
+			column.getColumn().setText(Messages.HandledToolItemEditor_ParametersValue);
 			column.getColumn().setWidth(200);
 			column.setLabelProvider(new ObservableColumnLabelProvider<MParameter>(prop.observeDetail(cp.getKnownElements())));
 			column.setEditingSupport(new EditingSupport(tableviewer) {
@@ -167,7 +168,7 @@ public class HandledToolItemEditor extends ToolItemEditor {
 				@Override
 				protected Object getValue(Object element) {
 					String val = ((MParameter)element).getValue();
-					return val == null ? "" : val;
+					return val == null ? "" : val; //$NON-NLS-1$
 				}
 
 				@Override
@@ -209,17 +210,17 @@ public class HandledToolItemEditor extends ToolItemEditor {
 		buttonComp.setLayout(gl);
 
 		b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-		b.setText("Up");
+		b.setText(Messages.HandledToolItemEditor_Up);
 		b.setImage(getImage(b.getDisplay(), ARROW_UP));
 		b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 
 		b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-		b.setText("Down");
+		b.setText(Messages.HandledToolItemEditor_Down);
 		b.setImage(getImage(b.getDisplay(), ARROW_DOWN));
 		b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 
 		b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-		b.setText("Add ...");
+		b.setText(Messages.HandledToolItemEditor_Add);
 		b.setImage(getImage(b.getDisplay(), TABLE_ADD_IMAGE));
 		b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 		b.addSelectionListener(new SelectionAdapter() {
@@ -236,7 +237,7 @@ public class HandledToolItemEditor extends ToolItemEditor {
 		});
 
 		b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-		b.setText("Remove");
+		b.setText(Messages.HandledToolItemEditor_Remove);
 		b.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
@@ -258,11 +259,11 @@ public class HandledToolItemEditor extends ToolItemEditor {
 
 	@Override
 	public String getLabel(Object element) {
-		return "Handled Tool Item";
+		return Messages.HandledToolItemEditor_Label;
 	}
 
 	@Override
 	public String getDescription(Object element) {
-		return "Handled Tool Item bla bla bla";
+		return Messages.HandledToolItemEditor_Description;
 	}
 }
