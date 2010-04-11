@@ -73,6 +73,18 @@ public class Messages {
 	public static String HandledMenuItemEditor_Add;
 	public static String HandledMenuItemEditor_Remove;
 	
+	public static String HandledToolItemEditor_Command;
+	public static String HandledToolItemEditor_Find;
+	public static String HandledToolItemEditor_Parameters;
+	public static String HandledToolItemEditor_ParametersName;
+	public static String HandledToolItemEditor_ParametersValue;
+	public static String HandledToolItemEditor_Up;
+	public static String HandledToolItemEditor_Down;
+	public static String HandledToolItemEditor_Add;
+	public static String HandledToolItemEditor_Remove;
+	public static String HandledToolItemEditor_Label;
+	public static String HandledToolItemEditor_Description;
+	
 	static {
 		NLS.initializeMessages(Messages.class.getName(), Messages.class);
 	}
