@@ -25,8 +25,7 @@ import org.eclipse.e4.ui.model.application.commands.MHandler;
 import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
 import org.eclipse.e4.ui.model.application.ui.MElementContainer;
 import org.eclipse.e4.ui.model.application.ui.impl.UiPackageImpl;
-import org.eclipse.e4.ui.model.application.ui.menu.ItemType;
-import org.eclipse.e4.ui.model.application.ui.menu.MMenuItem;
+import org.eclipse.e4.ui.model.application.ui.menu.MMenuElement;
 import org.eclipse.e4.ui.model.application.ui.menu.impl.MenuPackageImpl;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
@@ -248,8 +247,8 @@ public class MenuEditor extends AbstractComponentEditor {
 				}
 			});
 
-			Struct defaultStruct = new Struct("MenuItem", MenuPackageImpl.Literals.MENU_ITEM, false);
-			childrenDropDown.setInput(new Struct[] { new Struct("Separator", MenuPackageImpl.Literals.MENU_ITEM, true), defaultStruct, new Struct("Handled MenuItem", MenuPackageImpl.Literals.HANDLED_MENU_ITEM, false), new Struct("Direct MenuItem", MenuPackageImpl.Literals.DIRECT_MENU_ITEM, false) });
+			Struct defaultStruct = new Struct("Handled MenuItem", MenuPackageImpl.Literals.HANDLED_MENU_ITEM, false);
+			childrenDropDown.setInput(new Struct[] { new Struct("Separator", MenuPackageImpl.Literals.MENU_SEPARATOR, true), new Struct("Menu", MenuPackageImpl.Literals.MENU, false), defaultStruct, new Struct("Direct MenuItem", MenuPackageImpl.Literals.DIRECT_MENU_ITEM, false) });
 			childrenDropDown.setSelection(new StructuredSelection(defaultStruct));
 
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
@@ -261,11 +260,7 @@ public class MenuEditor extends AbstractComponentEditor {
 					if (!childrenDropDown.getSelection().isEmpty()) {
 						Struct struct = (Struct) ((IStructuredSelection) childrenDropDown.getSelection()).getFirstElement();
 						EClass eClass = struct.eClass;
-						MMenuItem eObject = (MMenuItem) EcoreUtil.create(eClass);
-
-						if (struct.separator) {
-							eObject.setType(ItemType.SEPARATOR);
-						}
+						MMenuElement eObject = (MMenuElement) EcoreUtil.create(eClass);
 
 						Command cmd = AddCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, eObject);
 

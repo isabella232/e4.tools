@@ -25,8 +25,7 @@ import org.eclipse.e4.ui.model.application.commands.MHandler;
 import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
 import org.eclipse.e4.ui.model.application.ui.MElementContainer;
 import org.eclipse.e4.ui.model.application.ui.impl.UiPackageImpl;
-import org.eclipse.e4.ui.model.application.ui.menu.ItemType;
-import org.eclipse.e4.ui.model.application.ui.menu.MToolItem;
+import org.eclipse.e4.ui.model.application.ui.menu.MToolBarElement;
 import org.eclipse.e4.ui.model.application.ui.menu.impl.MenuPackageImpl;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
@@ -249,7 +248,7 @@ public class ToolBarEditor extends AbstractComponentEditor {
 			});
 
 			Struct defaultStruct = new Struct("Handled ToolItem", MenuPackageImpl.Literals.HANDLED_TOOL_ITEM, false);
-			childrenDropDown.setInput(new Struct[] { defaultStruct, new Struct("Direct ToolItem", MenuPackageImpl.Literals.DIRECT_TOOL_ITEM, false), new Struct("Separator", MenuPackageImpl.Literals.TOOL_ITEM, true) });
+			childrenDropDown.setInput(new Struct[] { defaultStruct, new Struct("Direct ToolItem", MenuPackageImpl.Literals.DIRECT_TOOL_ITEM, false), new Struct("Separator", MenuPackageImpl.Literals.TOOL_BAR_SEPARATOR, true) });
 			childrenDropDown.setSelection(new StructuredSelection(defaultStruct));
 
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
@@ -261,11 +260,7 @@ public class ToolBarEditor extends AbstractComponentEditor {
 					if (!childrenDropDown.getSelection().isEmpty()) {
 						Struct struct = (Struct) ((IStructuredSelection) childrenDropDown.getSelection()).getFirstElement();
 						EClass eClass = struct.eClass;
-						MToolItem eObject = (MToolItem) EcoreUtil.create(eClass);
-
-						if (struct.separator) {
-							eObject.setType(ItemType.SEPARATOR);
-						}
+						MToolBarElement eObject = (MToolBarElement) EcoreUtil.create(eClass);
 
 						Command cmd = AddCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, eObject);
 

@@ -53,6 +53,8 @@ public class WindowEditor extends AbstractComponentEditor {
 	private EMFDataBindingContext context;
 
 	private IListProperty HANDLER_CONTAINER__HANDLERS = EMFProperties.list(CommandsPackageImpl.Literals.HANDLER_CONTAINER__HANDLERS);
+	private IListProperty WINDOW__TRIMS = EMFProperties.list(BasicPackageImpl.Literals.WINDOW__TRIMS);
+	private IListProperty WINDOW__WINDOWS = EMFProperties.list(BasicPackageImpl.Literals.WINDOW__WINDOWS);
 	private IListProperty ELEMENT_CONTAINER__CHILDREN = EMFProperties.list(UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN);
 	private IValueProperty WINDOW__MAIN_MENU = EMFProperties.value(BasicPackageImpl.Literals.WINDOW__MAIN_MENU);
 
@@ -218,11 +220,20 @@ public class WindowEditor extends AbstractComponentEditor {
 
 		});
 
-		list.add(new VirtualEntry<Object>( ModelEditor.VIRTUAL_WINDOW_TRIMS, ELEMENT_CONTAINER__CHILDREN, element, "Trims") {
+		list.add(new VirtualEntry<Object>( ModelEditor.VIRTUAL_WINDOW_TRIMS, WINDOW__TRIMS, element, "Trims") {
 
 			@Override
 			protected boolean accepted(Object o) {
-				return o instanceof MWindowTrim;
+				return true;
+			}
+
+		});
+		
+		list.add(new VirtualEntry<Object>( ModelEditor.VIRTUAL_WINDOWS, WINDOW__WINDOWS, element, "Windows") {
+
+			@Override
+			protected boolean accepted(Object o) {
+				return true;
 			}
 
 		});

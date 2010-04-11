@@ -42,7 +42,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-public class ToolItemEditor extends AbstractComponentEditor {
+public abstract class ToolItemEditor extends AbstractComponentEditor {
 	private Composite composite;
 	private Image image;
 	private EMFDataBindingContext context;
@@ -98,7 +98,7 @@ public class ToolItemEditor extends AbstractComponentEditor {
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		t.setLayoutData(gd);
-		context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__ELEMENT_ID).observeDetail(master));
+		context.bindValue(textProp.observeDelayed(200, t), EMFEditProperties.value(getEditingDomain(), ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__ELEMENT_ID).observeDetail(master));
 
 		if (this.getClass() != ToolItemEditor.class) {
 			createFormSubTypeForm(parent, context, master);
@@ -184,23 +184,16 @@ public class ToolItemEditor extends AbstractComponentEditor {
 	@Override
 	public String getDetailLabel(Object element) {
 		MToolItem item = (MToolItem) element;
-		if (item.getType() == ItemType.SEPARATOR) {
-			return null;
-		} else {
-			if (item.getLabel() != null && item.getLabel().trim().length() > 0) {
-				return item.getLabel();
-			} else if (item.getTooltip() != null && item.getTooltip().trim().length() > 0) {
-				return item.getTooltip();
-			}
+		if (item.getLabel() != null && item.getLabel().trim().length() > 0) {
+			return item.getLabel();
+		} else if (item.getTooltip() != null && item.getTooltip().trim().length() > 0) {
+			return item.getTooltip();
 		}
 		return null;
 	}
 
 	@Override
 	public FeaturePath[] getLabelProperties() {
-		return new FeaturePath[] {
-			FeaturePath.fromList(UiPackageImpl.Literals.UI_LABEL__LABEL),
-			FeaturePath.fromList(UiPackageImpl.Literals.UI_LABEL__TOOLTIP)
-		};
+		return new FeaturePath[] { FeaturePath.fromList(UiPackageImpl.Literals.UI_LABEL__LABEL), FeaturePath.fromList(UiPackageImpl.Literals.UI_LABEL__TOOLTIP) };
 	}
 }
