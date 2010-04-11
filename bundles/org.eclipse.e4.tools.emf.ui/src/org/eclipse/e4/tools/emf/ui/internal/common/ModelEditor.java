@@ -95,6 +95,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 public class ModelEditor {
+	private static final String CSS_CLASS_KEY = "org.eclipse.e4.ui.css.CssClassName"; //$NON-NLS-1$
+	
 	public static final int VIRTUAL_PART_MENU = 0;
 	public static final int VIRTUAL_PART = 1;
 	public static final int VIRTUAL_HANDLER = 2;
@@ -147,7 +149,7 @@ public class ModelEditor {
 
 		Composite headerContainer = new Composite(editingArea, SWT.NONE);
 		headerContainer.setBackgroundMode(SWT.INHERIT_DEFAULT);
-		headerContainer.setData("org.eclipse.e4.ui.css.CssClassName", "headerSectionContainer");
+		headerContainer.setData(CSS_CLASS_KEY, "headerSectionContainer"); //$NON-NLS-1$
 		headerContainer.setLayout(new GridLayout(2, false));
 		headerContainer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
@@ -155,15 +157,15 @@ public class ModelEditor {
 		iconLabel.setLayoutData(new GridData(20, 20));
 
 		final Label textLabel = new Label(headerContainer, SWT.NONE);
-		textLabel.setData("org.eclipse.e4.ui.css.CssClassName", "sectionHeader");
+		textLabel.setData(CSS_CLASS_KEY, "sectionHeader"); //$NON-NLS-1$
 		textLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		final ScrolledComposite scrolling = new ScrolledComposite(editingArea, SWT.H_SCROLL | SWT.V_SCROLL);
 		scrolling.setBackgroundMode(SWT.INHERIT_DEFAULT);
-		scrolling.setData("org.eclipse.e4.ui.css.CssClassName", "formContainer");
+		scrolling.setData(CSS_CLASS_KEY, "formContainer"); //$NON-NLS-1$
 		
 		final Composite contentContainer = new Composite(scrolling, SWT.NONE);
-		contentContainer.setData("org.eclipse.e4.ui.css.CssClassName", "formContainer");
+		contentContainer.setData(CSS_CLASS_KEY, "formContainer"); //$NON-NLS-1$
 		scrolling.setExpandHorizontal(true);
 		scrolling.setExpandVertical(true);
 		scrolling.setContent(contentContainer);
@@ -220,7 +222,7 @@ public class ModelEditor {
 
 	private TreeViewer createTreeViewerArea(Composite parent) {
 		parent = new Composite(parent, SWT.NONE);
-		parent.setData("org.eclipse.e4.ui.css.CssClassName", "formContainer");
+		parent.setData(CSS_CLASS_KEY, "formContainer"); //$NON-NLS-1$
 		parent.setBackgroundMode(SWT.INHERIT_DEFAULT);
 		
 		FillLayout l = new FillLayout();

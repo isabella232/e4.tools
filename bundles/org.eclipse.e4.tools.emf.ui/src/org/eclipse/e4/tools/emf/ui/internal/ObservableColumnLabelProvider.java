@@ -81,7 +81,7 @@ public class ObservableColumnLabelProvider<M> extends CellLabelProvider {
 
 	public String getText(M element) {
 		Object value = attributeMaps[0].get(element);
-		return value == null ? "" : value.toString();
+		return value == null ? "" : value.toString(); //$NON-NLS-1$
 	}
 	
 	public Font getFont(M element) {
