@@ -169,7 +169,7 @@ public class KeyBindingEditor extends AbstractComponentEditor {
 		IEMFEditListProperty prop = EMFEditProperties.list(getEditingDomain(), CommandsPackageImpl.Literals.KEY_BINDING__PARAMETERS);
 
 		TableViewerColumn column = new TableViewerColumn(tableviewer, SWT.NONE);
-		column.getColumn().setText("Tag");
+		column.getColumn().setText("Key");
 		column.getColumn().setWidth(200);
 		column.setEditingSupport(new EditingSupport(tableviewer) {
 			private TextCellEditor cellEditor = new TextCellEditor(tableviewer.getTable());

@@ -2,6 +2,7 @@ package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -18,10 +19,12 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.MoveCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -37,7 +40,7 @@ import org.eclipse.swt.widgets.Text;
 public class ControlFactory {
 	public static void createBindingsWidget(Composite parent, final AbstractComponentEditor editor) {
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Bindings");
+			l.setText("Binding Contexts");
 			l.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 			
 			final Text t = new Text(parent, SWT.BORDER);
@@ -164,44 +167,42 @@ public class ControlFactory {
 		l.setText("Tags");
 		l.setLayoutData(new GridData(GridData.BEGINNING, GridData.BEGINNING, false, false));
 
-		final Text tagText = new Text(parent, SWT.BORDER);
-		tagText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		tagText.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.keyCode == SWT.CR || e.keyCode == SWT.LF) {
-					handleAddText(editor, ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__TAGS, tagText);
-				}
-			}
-		});
-
-		Button b = new Button(parent, SWT.PUSH | SWT.FLAT);
-		b.setText("Add");
-		b.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				handleAddText(editor, ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__TAGS, tagText);
-			}
-		});
-		b.setImage(editor.getImage(b.getDisplay(), AbstractComponentEditor.TABLE_ADD_IMAGE));
-		b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
-
-		l = new Label(parent, SWT.NONE);
-		final TableViewer viewer = new TableViewer(parent);
-		viewer.setContentProvider(new ObservableListContentProvider());
-		viewer.setLabelProvider(new LabelProvider() {
-			@Override
-			public String getText(Object element) {
-				return element.toString();
-			}
-		});
+		final TableViewer tableviewer = new TableViewer(parent);
+		
+		ObservableListContentProvider cp = new ObservableListContentProvider();
+		tableviewer.setContentProvider(cp);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.heightHint = 120;
-		viewer.getControl().setLayoutData(gd);
+		tableviewer.getControl().setLayoutData(gd);
+		
+		TableViewerColumn column = new TableViewerColumn(tableviewer, SWT.NONE);
+		column.getColumn().setText("Key");
+		column.getColumn().setWidth(200);
+		column.setLabelProvider(new ColumnLabelProvider() {
+			@SuppressWarnings("unchecked")
+			@Override
+			public String getText(Object element) {
+				Entry<String, String> entry = (Entry<String, String>) element;
+				return entry.getKey();
+			}
+		}); 
 
+		//FIXME How can we react upon changes in the Map-Value?
+		column = new TableViewerColumn(tableviewer, SWT.NONE);
+		column.getColumn().setText("Value");
+		column.getColumn().setWidth(200);
+		column.setLabelProvider(new ColumnLabelProvider() {
+			@SuppressWarnings("unchecked")
+			@Override
+			public String getText(Object element) {
+				Entry<String, String> entry = (Entry<String, String>) element;
+				return entry.getValue();
+			}
+		});
+		
 		IEMFEditListProperty prop = EMFEditProperties.list(editor.getEditingDomain(), ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__TAGS);
-		viewer.setInput(prop.observeDetail(editor.getMaster()));
-
+		tableviewer.setInput(prop.observeDetail(editor.getMaster()));
+		
 		Composite buttonComp = new Composite(parent, SWT.NONE);
 		buttonComp.setLayoutData(new GridData(GridData.FILL, GridData.END, false, false));
 		GridLayout gl = new GridLayout();
@@ -210,34 +211,16 @@ public class ControlFactory {
 		gl.marginWidth = 0;
 		gl.marginHeight = 0;
 		buttonComp.setLayout(gl);
-
-		b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-		b.setText("Up");
-		b.setImage(editor.getImage(b.getDisplay(), AbstractComponentEditor.ARROW_UP));
-		b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
-
-		b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-		b.setText("Down");
-		b.setImage(editor.getImage(b.getDisplay(), AbstractComponentEditor.ARROW_DOWN));
+		
+		Button b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
+		b.setText("Add ...");
+		b.setImage(editor.getImage(b.getDisplay(), AbstractComponentEditor.TABLE_ADD_IMAGE));
 		b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 
 		b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
 		b.setText("Remove");
 		b.setImage(editor.getImage(b.getDisplay(), AbstractComponentEditor.TABLE_DELETE_IMAGE));
 		b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
-		b.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				IStructuredSelection s = (IStructuredSelection) viewer.getSelection();
-				if( ! s.isEmpty() ) {
-					MApplicationElement appEl = (MApplicationElement) editor.getMaster().getValue();
-					Command cmd = RemoveCommand.create(editor.getEditingDomain(), appEl, ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__TAGS, s.toList());
-					if( cmd.canExecute() ) {
-						editor.getEditingDomain().getCommandStack().execute(cmd);
-					}
-				}
-			}
-		});
 	}
 
 	private static void handleAddText( AbstractComponentEditor editor, EStructuralFeature feature, Text tagText) {
