@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
+import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.MApplicationElement;
 import org.eclipse.e4.ui.model.application.commands.impl.CommandsPackageImpl;
@@ -50,7 +51,7 @@ import org.eclipse.swt.widgets.Text;
 public class ControlFactory {
 	public static void createBindingsWidget(Composite parent, final AbstractComponentEditor editor) {
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Binding Contexts");
+			l.setText(Messages.ControlFactory_BindingContexts);
 			l.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 			
 			final Text t = new Text(parent, SWT.BORDER);
@@ -65,7 +66,7 @@ public class ControlFactory {
 			});
 			
 			Button b = new Button(parent, SWT.PUSH | SWT.FLAT);
-			b.setText("Add");
+			b.setText(Messages.ControlFactory_Add);
 			b.setImage(editor.getImage(b.getDisplay(), AbstractComponentEditor.TABLE_ADD_IMAGE));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
 			b.addSelectionListener(new SelectionAdapter() {
@@ -97,7 +98,7 @@ public class ControlFactory {
 			buttonComp.setLayout(gl);
 
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Up");
+			b.setText(Messages.ControlFactory_Up);
 			b.setImage(editor.getImage(b.getDisplay(), AbstractComponentEditor.ARROW_UP));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 			b.addSelectionListener(new SelectionAdapter() {
@@ -124,7 +125,7 @@ public class ControlFactory {
 			});
 
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Down");
+			b.setText(Messages.ControlFactory_Down);
 			b.setImage(editor.getImage(b.getDisplay(), AbstractComponentEditor.ARROW_DOWN));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 			b.addSelectionListener(new SelectionAdapter() {
@@ -151,7 +152,7 @@ public class ControlFactory {
 			});
 
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Remove");
+			b.setText(Messages.ControlFactory_Remove);
 			b.setImage(editor.getImage(b.getDisplay(), AbstractComponentEditor.TABLE_DELETE_IMAGE));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 			b.addSelectionListener(new SelectionAdapter() {
@@ -174,7 +175,7 @@ public class ControlFactory {
 	
 	public static void createTagsWidget( Composite parent, final AbstractComponentEditor editor ) {
 		Label l = new Label(parent, SWT.NONE);
-		l.setText("Tags");
+		l.setText(Messages.ControlFactory_Tags);
 		l.setLayoutData(new GridData(GridData.BEGINNING, GridData.BEGINNING, false, false));
 
 		final TableViewer tableviewer = new TableViewer(parent);
@@ -186,7 +187,7 @@ public class ControlFactory {
 		tableviewer.getControl().setLayoutData(gd);
 		
 		TableViewerColumn column = new TableViewerColumn(tableviewer, SWT.NONE);
-		column.getColumn().setText("Key");
+		column.getColumn().setText(Messages.ControlFactory_Key);
 		column.getColumn().setWidth(200);
 		column.setLabelProvider(new ColumnLabelProvider() {
 			@SuppressWarnings("unchecked")
@@ -199,7 +200,7 @@ public class ControlFactory {
 
 		//FIXME How can we react upon changes in the Map-Value?
 		column = new TableViewerColumn(tableviewer, SWT.NONE);
-		column.getColumn().setText("Value");
+		column.getColumn().setText(Messages.ControlFactory_Value);
 		column.getColumn().setWidth(200);
 		column.setLabelProvider(new ColumnLabelProvider() {
 			@SuppressWarnings("unchecked")
@@ -223,19 +224,19 @@ public class ControlFactory {
 		buttonComp.setLayout(gl);
 		
 		Button b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-		b.setText("Add ...");
+		b.setText(Messages.ControlFactory_Add);
 		b.setImage(editor.getImage(b.getDisplay(), AbstractComponentEditor.TABLE_ADD_IMAGE));
 		b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 
 		b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-		b.setText("Remove");
+		b.setText(Messages.ControlFactory_Remove);
 		b.setImage(editor.getImage(b.getDisplay(), AbstractComponentEditor.TABLE_DELETE_IMAGE));
 		b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 	}
 
 	private static void handleAddText( AbstractComponentEditor editor, EStructuralFeature feature, Text tagText) {
 		if (tagText.getText().trim().length() > 0) {
-			String[] tags = tagText.getText().split(";");
+			String[] tags = tagText.getText().split(";"); //$NON-NLS-1$
 			for( int i = 0; i < tags.length;i++ ) {
 				tags[i] = tags[i].trim();
 			}
@@ -245,7 +246,7 @@ public class ControlFactory {
 			if (cmd.canExecute()) {
 				editor.getEditingDomain().getCommandStack().execute(cmd);
 			}
-			tagText.setText("");
+			tagText.setText(""); //$NON-NLS-1$
 		}
 	}
 }

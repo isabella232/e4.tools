@@ -42,6 +42,20 @@ public class Messages {
 	public static String CommandEditor_Add;
 	public static String CommandEditor_Remove;
 	
+	public static String DirectMenuItemEditor_Label;
+	public static String DirectMenuItemEditor_Description;
+	public static String DirectMenuItemEditor_ClassURI;
+	public static String DirectMenuItemEditor_Find;
+	
+	public static String ControlFactory_BindingContexts;
+	public static String ControlFactory_Add;
+	public static String ControlFactory_Up;
+	public static String ControlFactory_Down;
+	public static String ControlFactory_Remove;
+	public static String ControlFactory_Tags;
+	public static String ControlFactory_Key;
+	public static String ControlFactory_Value;
+	
 	static {
 		NLS.initializeMessages(Messages.class.getName(), Messages.class);
 	}
