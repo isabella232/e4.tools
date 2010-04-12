@@ -17,6 +17,7 @@ import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.property.value.IValueProperty;
 import org.eclipse.e4.tools.emf.ui.common.IModelResource;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
+import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.dialogs.KeyBindingCommandSelectionDialog;
 import org.eclipse.e4.ui.model.application.commands.MCommandsFactory;
 import org.eclipse.e4.ui.model.application.commands.MKeyBinding;
@@ -74,7 +75,7 @@ public class KeyBindingEditor extends AbstractComponentEditor {
 	public Image getImage(Object element, Display display) {
 		if (image == null) {
 			try {
-				image = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/KeyBinding.gif"));
+				image = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/KeyBinding.gif")); //$NON-NLS-1$
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -86,12 +87,12 @@ public class KeyBindingEditor extends AbstractComponentEditor {
 
 	@Override
 	public String getLabel(Object element) {
-		return "Binding";
+		return Messages.KeyBindingEditor_Label;
 	}
 
 	@Override
 	public String getDescription(Object element) {
-		return "Binding bla bla bla";
+		return Messages.KeyBindingEditor_Description;
 	}
 
 	@Override
@@ -113,7 +114,7 @@ public class KeyBindingEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Id");
+			l.setText(Messages.KeyBindingEditor_Id);
 
 			Text t = new Text(parent, SWT.BORDER);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -125,7 +126,7 @@ public class KeyBindingEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Sequence");
+			l.setText(Messages.KeyBindingEditor_Sequence);
 
 			Text t = new Text(parent, SWT.BORDER);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -137,7 +138,7 @@ public class KeyBindingEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Command");
+			l.setText(Messages.KeyBindingEditor_Command);
 
 			Text t = new Text(parent, SWT.BORDER);
 			t.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -145,7 +146,7 @@ public class KeyBindingEditor extends AbstractComponentEditor {
 			context.bindValue(textProp.observeDelayed(200, t), EMFEditProperties.value(getEditingDomain(), FeaturePath.fromList(CommandsPackageImpl.Literals.KEY_BINDING__COMMAND, ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__ELEMENT_ID)).observeDetail(getMaster()));
 
 			final Button b = new Button(parent, SWT.PUSH | SWT.FLAT);
-			b.setText("Find ...");
+			b.setText(Messages.KeyBindingEditor_Find);
 			b.setImage(getImage(b.getDisplay(), SEARCH_IMAGE));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
 			b.addSelectionListener(new SelectionAdapter() {
@@ -158,7 +159,7 @@ public class KeyBindingEditor extends AbstractComponentEditor {
 		}
 
 		Label l = new Label(parent, SWT.NONE);
-		l.setText("Parameters");
+		l.setText(Messages.KeyBindingEditor_Parameters);
 		l.setLayoutData(new GridData(GridData.BEGINNING, GridData.BEGINNING, false, false));
 
 		final TableViewer tableviewer = new TableViewer(parent);

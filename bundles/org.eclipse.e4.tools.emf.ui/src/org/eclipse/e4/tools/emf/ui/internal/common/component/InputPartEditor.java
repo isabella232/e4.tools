@@ -12,6 +12,7 @@ package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.ui.model.application.ui.impl.UiPackageImpl;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
@@ -33,7 +34,7 @@ public class InputPartEditor extends PartEditor {
 
 	@Override
 	public String getLabel(Object element) {
-		return "InputPart";
+		return Messages.InputPartEditor_Label;
 	}
 	
 	@Override
@@ -43,7 +44,7 @@ public class InputPartEditor extends PartEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("InputURI");
+			l.setText(Messages.InputPartEditor_InputURI);
 
 			Text t = new Text(parent, SWT.BORDER);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);

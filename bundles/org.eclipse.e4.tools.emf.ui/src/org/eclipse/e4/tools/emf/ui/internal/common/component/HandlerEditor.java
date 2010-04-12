@@ -17,6 +17,7 @@ import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.tools.emf.ui.common.IModelResource;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
+import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.dialogs.ContributionClassDialog;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.dialogs.HandlerCommandSelectionDialog;
 import org.eclipse.e4.ui.model.application.MContribution;
@@ -58,7 +59,7 @@ public class HandlerEditor extends AbstractComponentEditor {
 	public Image getImage(Object element, Display display) {
 		if (image == null) {
 			try {
-				image = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/Handler.gif"));
+				image = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/Handler.gif")); //$NON-NLS-1$
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -69,12 +70,12 @@ public class HandlerEditor extends AbstractComponentEditor {
 
 	@Override
 	public String getLabel(Object element) {
-		return "Handler";
+		return Messages.HandlerEditor_Label;
 	}
 
 	@Override
 	public String getDescription(Object element) {
-		return "Handler bla bla bla";
+		return Messages.HandlerEditor_Description;
 	}
 
 	@Override
@@ -96,7 +97,7 @@ public class HandlerEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Id");
+			l.setText(Messages.HandlerEditor_Id);
 
 			Text t = new Text(parent, SWT.BORDER);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -108,7 +109,7 @@ public class HandlerEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Command");
+			l.setText(Messages.HandlerEditor_Command);
 
 			Text t = new Text(parent, SWT.BORDER);
 			t.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -116,7 +117,7 @@ public class HandlerEditor extends AbstractComponentEditor {
 			context.bindValue(textProp.observeDelayed(200, t), EMFEditProperties.value(getEditingDomain(), FeaturePath.fromList(CommandsPackageImpl.Literals.HANDLER__COMMAND, ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__ELEMENT_ID)).observeDetail(getMaster()));
 
 			final Button b = new Button(parent, SWT.PUSH | SWT.FLAT);
-			b.setText("Find ...");
+			b.setText(Messages.HandlerEditor_Find);
 			b.setImage(getImage(b.getDisplay(), SEARCH_IMAGE));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
 			b.addSelectionListener(new SelectionAdapter() {
@@ -131,7 +132,7 @@ public class HandlerEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Class URI");
+			l.setText(Messages.HandlerEditor_ClassURI);
 
 			Text t = new Text(parent, SWT.BORDER);
 			t.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -139,7 +140,7 @@ public class HandlerEditor extends AbstractComponentEditor {
 
 			final Button b = new Button(parent, SWT.PUSH | SWT.FLAT);
 			b.setImage(getImage(b.getDisplay(), SEARCH_IMAGE));
-			b.setText("Find ...");
+			b.setText(Messages.HandlerEditor_Find);
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
 			b.addSelectionListener(new SelectionAdapter() {
 				@Override
@@ -157,7 +158,6 @@ public class HandlerEditor extends AbstractComponentEditor {
 
 	@Override
 	public IObservableList getChildList(Object element) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

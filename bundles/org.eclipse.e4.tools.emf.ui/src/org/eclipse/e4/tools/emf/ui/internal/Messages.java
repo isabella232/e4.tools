@@ -95,6 +95,24 @@ public class Messages {
 	public static String HandledToolItemEditor_Label;
 	public static String HandledToolItemEditor_Description;
 	
+	public static String HandlerEditor_Label;
+	public static String HandlerEditor_Description;
+	public static String HandlerEditor_Id;
+	public static String HandlerEditor_Command;
+	public static String HandlerEditor_Find;
+	public static String HandlerEditor_ClassURI;
+	
+	public static String InputPartEditor_Label;
+	public static String InputPartEditor_InputURI;
+	
+	public static String KeyBindingEditor_Label;
+	public static String KeyBindingEditor_Description;
+	public static String KeyBindingEditor_Id;
+	public static String KeyBindingEditor_Sequence;
+	public static String KeyBindingEditor_Command;
+	public static String KeyBindingEditor_Find;
+	public static String KeyBindingEditor_Parameters;
+	
 	static {
 		NLS.initializeMessages(Messages.class.getName(), Messages.class);
 	}
