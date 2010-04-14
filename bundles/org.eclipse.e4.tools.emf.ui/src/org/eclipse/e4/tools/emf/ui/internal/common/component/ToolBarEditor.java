@@ -18,6 +18,7 @@ import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.databinding.property.list.IListProperty;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
+import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.ObservableColumnLabelProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ComponentLabelProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
@@ -92,7 +93,7 @@ public class ToolBarEditor extends AbstractComponentEditor {
 	public Image getImage(Object element, Display display) {
 		if( image == null ) {
 			try {
-				image = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/Toolbar.gif"));
+				image = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/Toolbar.gif")); //$NON-NLS-1$
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -103,12 +104,12 @@ public class ToolBarEditor extends AbstractComponentEditor {
 
 	@Override
 	public String getLabel(Object element) {
-		return "Toolbar";
+		return Messages.ToolBarEditor_Label;
 	}
 
 	@Override
 	public String getDescription(Object element) {
-		return "Toolbar bla bla bla";
+		return Messages.ToolBarEditor_Description;
 	}
 
 	@Override
@@ -130,7 +131,7 @@ public class ToolBarEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Id");
+			l.setText(Messages.ToolBarEditor_Id);
 
 			Text t = new Text(parent, SWT.BORDER);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -142,7 +143,7 @@ public class ToolBarEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("ToolbarItems");
+			l.setText(Messages.ToolBarEditor_ToolbarItems);
 			l.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 
 			final TableViewer viewer = new TableViewer(parent);
@@ -156,7 +157,7 @@ public class ToolBarEditor extends AbstractComponentEditor {
 
 			{
 				TableViewerColumn column = new TableViewerColumn(viewer, SWT.NONE);
-				column.getColumn().setText("Type");
+				column.getColumn().setText(Messages.ToolBarEditor_ToolbarItemsType);
 				column.getColumn().setWidth(300);
 				column.setLabelProvider(new ComponentLabelProvider(editor));
 			}
@@ -165,7 +166,7 @@ public class ToolBarEditor extends AbstractComponentEditor {
 				IEMFEditValueProperty prop = EMFEditProperties.value(getEditingDomain(), MenuPackageImpl.Literals.ITEM__TYPE);
 
 				TableViewerColumn column = new TableViewerColumn(viewer, SWT.NONE);
-				column.getColumn().setText("ItemType");
+				column.getColumn().setText(Messages.ToolBarEditor_ToolbarItemsItemType);
 				column.getColumn().setWidth(100);
 				column.setLabelProvider(new ObservableColumnLabelProvider<MHandler>(prop.observeDetail(cp.getKnownElements())));
 			}
@@ -183,7 +184,7 @@ public class ToolBarEditor extends AbstractComponentEditor {
 			buttonComp.setLayout(gl);
 
 			Button b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Up");
+			b.setText(Messages.ToolBarEditor_Up);
 			b.setImage(getImage(b.getDisplay(), ARROW_UP));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false, 2, 1));
 			b.addSelectionListener(new SelectionAdapter() {
@@ -210,7 +211,7 @@ public class ToolBarEditor extends AbstractComponentEditor {
 			});
 
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Down");
+			b.setText(Messages.ToolBarEditor_Down);
 			b.setImage(getImage(b.getDisplay(), ARROW_DOWN));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false, 2, 1));
 			b.addSelectionListener(new SelectionAdapter() {
@@ -247,8 +248,8 @@ public class ToolBarEditor extends AbstractComponentEditor {
 				}
 			});
 
-			Struct defaultStruct = new Struct("Handled ToolItem", MenuPackageImpl.Literals.HANDLED_TOOL_ITEM, false);
-			childrenDropDown.setInput(new Struct[] { defaultStruct, new Struct("Direct ToolItem", MenuPackageImpl.Literals.DIRECT_TOOL_ITEM, false), new Struct("ToolControl", MenuPackageImpl.Literals.TOOL_CONTROL, false), new Struct("Separator", MenuPackageImpl.Literals.TOOL_BAR_SEPARATOR, true) });
+			Struct defaultStruct = new Struct(Messages.ToolBarEditor_HandledToolItem, MenuPackageImpl.Literals.HANDLED_TOOL_ITEM, false);
+			childrenDropDown.setInput(new Struct[] { defaultStruct, new Struct(Messages.ToolBarEditor_DirectToolItem, MenuPackageImpl.Literals.DIRECT_TOOL_ITEM, false), new Struct(Messages.ToolBarEditor_ToolControl, MenuPackageImpl.Literals.TOOL_CONTROL, false), new Struct(Messages.ToolBarEditor_Separator, MenuPackageImpl.Literals.TOOL_BAR_SEPARATOR, true) });
 			childrenDropDown.setSelection(new StructuredSelection(defaultStruct));
 
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
@@ -275,7 +276,7 @@ public class ToolBarEditor extends AbstractComponentEditor {
 			});
 
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Remove");
+			b.setText(Messages.ToolBarEditor_Remove);
 			b.setImage(getImage(b.getDisplay(), TABLE_DELETE_IMAGE));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false, 2, 1));
 			b.addSelectionListener(new SelectionAdapter() {

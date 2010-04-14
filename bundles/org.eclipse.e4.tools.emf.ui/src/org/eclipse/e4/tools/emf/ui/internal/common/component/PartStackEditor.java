@@ -22,6 +22,7 @@ import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.databinding.property.list.IListProperty;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
+import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.common.ComponentLabelProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
 import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
@@ -84,7 +85,7 @@ public class PartStackEditor extends AbstractComponentEditor {
 	public Image getImage(Object element, Display display) {
 		if( image == null ) {
 			try {
-				image = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/PartStack.gif"));
+				image = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/PartStack.gif")); //$NON-NLS-1$
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -96,12 +97,12 @@ public class PartStackEditor extends AbstractComponentEditor {
 
 	@Override
 	public String getLabel(Object element) {
-		return "Part Stack";
+		return Messages.PartStackEditor_Label;
 	}
 
 	@Override
 	public String getDescription(Object element) {
-		return "Stack bla bla bla";
+		return Messages.PartStackEditor_Description;
 	}
 
 	@Override
@@ -124,7 +125,7 @@ public class PartStackEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Id");
+			l.setText(Messages.PartStackEditor_Id);
 
 			Text t = new Text(parent, SWT.BORDER);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -136,7 +137,7 @@ public class PartStackEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Selected Element");
+			l.setText(Messages.PartStackEditor_SelectedElement);
 
 			ComboViewer viewer = new ComboViewer(parent);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -172,7 +173,7 @@ public class PartStackEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Parts");
+			l.setText(Messages.PartStackEditor_Parts);
 			
 			final TableViewer viewer = new TableViewer(parent);
 			viewer.setContentProvider(new ObservableListContentProvider());
@@ -195,7 +196,7 @@ public class PartStackEditor extends AbstractComponentEditor {
 			buttonComp.setLayout(gl);
 
 			Button b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Up");
+			b.setText(Messages.PartStackEditor_Up);
 			b.setImage(getImage(b.getDisplay(), ARROW_UP));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false,2,1));
 			b.addSelectionListener(new SelectionAdapter() { 
@@ -222,7 +223,7 @@ public class PartStackEditor extends AbstractComponentEditor {
 			});
 
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Down");
+			b.setText(Messages.PartStackEditor_Down);
 			b.setImage(getImage(b.getDisplay(), ARROW_DOWN));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false,2,1));
 			b.addSelectionListener(new SelectionAdapter() {
@@ -286,7 +287,7 @@ public class PartStackEditor extends AbstractComponentEditor {
 			
 			
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Remove");
+			b.setText(Messages.PartStackEditor_Remove);
 			b.setImage(getImage(b.getDisplay(), TABLE_DELETE_IMAGE));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false,2,1));
 			b.addSelectionListener(new SelectionAdapter() {

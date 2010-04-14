@@ -16,6 +16,7 @@ import java.net.URL;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
+import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
@@ -44,7 +45,7 @@ public class ToolBarSeparatorEditor extends AbstractComponentEditor {
 	public Image getImage(Object element, Display display) {
 		if (separatorImage == null) {
 			try {
-				separatorImage = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/ToolBarSeparator.gif"));
+				separatorImage = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/ToolBarSeparator.gif")); //$NON-NLS-1$
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -56,18 +57,16 @@ public class ToolBarSeparatorEditor extends AbstractComponentEditor {
 
 	@Override
 	public String getLabel(Object element) {
-		return "Separator";
+		return Messages.ToolBarSeparatorEditor_Label;
 	}
 
 	@Override
 	public String getDetailLabel(Object element) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getDescription(Object element) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -90,7 +89,7 @@ public class ToolBarSeparatorEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Id");
+			l.setText(Messages.ToolBarSeparatorEditor_Id);
 
 			Text t = new Text(parent, SWT.BORDER);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);

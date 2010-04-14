@@ -64,7 +64,6 @@ import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VMenuEditor
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VModelComponentBindingEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VPartDescriptor;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VWindowEditor;
-import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VWindowTrimEditor;
 import org.eclipse.e4.ui.model.application.commands.impl.CommandsPackageImpl;
 import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
 import org.eclipse.e4.ui.model.application.ui.advanced.impl.AdvancedPackageImpl;
@@ -104,11 +103,10 @@ public class ModelEditor {
 	public static final int VIRTUAL_COMMAND = 4;
 	public static final int VIRTUAL_WINDOWS = 5;
 	public static final int VIRTUAL_WINDOW_CONTROLS = 6;
-	public static final int VIRTUAL_WINDOW_TRIMS = 7;
-	public static final int VIRTUAL_PART_DESCRIPTORS = 8;
-	public static final int VIRTUAL_MODEL_COMP_COMMANDS = 9;
-	public static final int VIRTUAL_MODEL_COMP_BINDINGS = 10;
-	public static final int VIRTUAL_PARTDESCRIPTOR_MENU = 11;
+	public static final int VIRTUAL_PART_DESCRIPTORS = 7;
+	public static final int VIRTUAL_MODEL_COMP_COMMANDS = 8;
+	public static final int VIRTUAL_MODEL_COMP_BINDINGS = 9;
+	public static final int VIRTUAL_PARTDESCRIPTOR_MENU = 10;
 
 	private Map<EClass, AbstractComponentEditor> editorMap = new HashMap<EClass, AbstractComponentEditor>();
 	private AbstractComponentEditor[] virtualEditors;
@@ -278,7 +276,6 @@ public class ModelEditor {
 				new VCommandEditor(modelProvider.getEditingDomain(), this, ApplicationPackageImpl.Literals.APPLICATION__COMMANDS), 
 				new VWindowEditor(modelProvider.getEditingDomain(), this), 
 				new VControlEditor(modelProvider.getEditingDomain(), this), 
-				new VWindowTrimEditor(modelProvider.getEditingDomain(), this),
 				new VPartDescriptor(modelProvider.getEditingDomain(), this),
 				new VCommandEditor(modelProvider.getEditingDomain(), this, ApplicationPackageImpl.Literals.MODEL_COMPONENT__COMMANDS),
 				new VModelComponentBindingEditor(modelProvider.getEditingDomain(), this),
@@ -315,7 +312,6 @@ public class ModelEditor {
 		registerEditor(BasicPackageImpl.Literals.WINDOW, new WindowEditor(modelProvider.getEditingDomain()));
 		registerEditor(BasicPackageImpl.Literals.PART_SASH_CONTAINER, new PartSashContainerEditor(modelProvider.getEditingDomain(), this));
 		registerEditor(BasicPackageImpl.Literals.PART_STACK, new PartStackEditor(modelProvider.getEditingDomain(),this));
-		registerEditor(BasicPackageImpl.Literals.WINDOW_TRIM, new WindowTrimEditor(modelProvider.getEditingDomain(), this));
 		registerEditor(BasicPackageImpl.Literals.INPUT_PART, new InputPartEditor(modelProvider.getEditingDomain(), project));
 		
 		registerEditor(org.eclipse.e4.ui.model.application.descriptor.basic.impl.BasicPackageImpl.Literals.PART_DESCRIPTOR, new PartDescriptorEditor(modelProvider.getEditingDomain(),project));

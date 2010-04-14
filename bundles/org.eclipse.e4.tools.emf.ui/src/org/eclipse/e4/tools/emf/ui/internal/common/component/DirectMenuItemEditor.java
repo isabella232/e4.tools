@@ -41,7 +41,7 @@ public class DirectMenuItemEditor extends MenuItemEditor {
 	private IProject project;
 	
 	public DirectMenuItemEditor(EditingDomain editingDomain, ModelEditor editor, IProject project) {
-		super(editingDomain, editor);
+		super(editingDomain);
 		this.project = project;
 	}
 

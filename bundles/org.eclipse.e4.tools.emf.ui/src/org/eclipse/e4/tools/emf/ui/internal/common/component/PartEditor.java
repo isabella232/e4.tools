@@ -20,6 +20,7 @@ import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.property.list.IListProperty;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
+import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.VirtualEntry;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.dialogs.ContributionClassDialog;
@@ -73,7 +74,7 @@ public class PartEditor extends AbstractComponentEditor {
 	public Image getImage(Object element, Display display) {
 		if( image == null ) {
 			try {
-				image = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/Part.gif"));
+				image = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/Part.gif")); //$NON-NLS-1$
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -85,12 +86,12 @@ public class PartEditor extends AbstractComponentEditor {
 
 	@Override
 	public String getLabel(Object element) {
-		return "Part";
+		return Messages.PartEditor_Label;
 	}
 
 	@Override
 	public String getDescription(Object element) {
-		return "Part Bla Bla Bla Bla";
+		return Messages.PartEditor_Description;
 	}
 
 	@Override
@@ -112,7 +113,7 @@ public class PartEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Id");
+			l.setText(Messages.PartEditor_Id);
 
 			Text t = new Text(parent, SWT.BORDER);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -124,7 +125,7 @@ public class PartEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Label");
+			l.setText(Messages.PartEditor_LabelLabel);
 
 			Text t = new Text(parent, SWT.BORDER);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -136,7 +137,7 @@ public class PartEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Tooltip");
+			l.setText(Messages.PartEditor_Tooltip);
 
 			Text t = new Text(parent, SWT.BORDER);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -148,7 +149,7 @@ public class PartEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Icon URI");
+			l.setText(Messages.PartEditor_IconURI);
 
 			Text t = new Text(parent, SWT.BORDER);
 			t.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -156,13 +157,13 @@ public class PartEditor extends AbstractComponentEditor {
 
 			Button b = new Button(parent, SWT.PUSH|SWT.FLAT);
 			b.setImage(getImage(t.getDisplay(), SEARCH_IMAGE));
-			b.setText("Find ...");			
+			b.setText(Messages.PartEditor_Find);			
 		}
 
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Class URI");
+			l.setText(Messages.PartEditor_ClassURI);
 
 			Text t = new Text(parent, SWT.BORDER);
 			t.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -170,7 +171,7 @@ public class PartEditor extends AbstractComponentEditor {
 
 			final Button b = new Button(parent, SWT.PUSH|SWT.FLAT);
 			b.setImage(getImage(t.getDisplay(), SEARCH_IMAGE));
-			b.setText("Find ...");
+			b.setText(Messages.PartEditor_Find);
 			b.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -185,7 +186,7 @@ public class PartEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Closeable");
+			l.setText(Messages.PartEditor_Closeable);
 
 			Button checkbox = new Button(parent, SWT.CHECK);
 			checkbox.setLayoutData(new GridData(GridData.BEGINNING, GridData.BEGINNING, false, false, 2, 1));
@@ -238,7 +239,7 @@ public class PartEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Persited State");
+			l.setText(Messages.PartEditor_PersitedState);
 			l.setLayoutData(new GridData(GridData.BEGINNING, GridData.BEGINNING, false, false));
 
 			TableViewer tableviewer = new TableViewer(parent);
@@ -250,7 +251,7 @@ public class PartEditor extends AbstractComponentEditor {
 			tableviewer.getControl().setLayoutData(gd);
 			
 			TableViewerColumn column = new TableViewerColumn(tableviewer, SWT.NONE);
-			column.getColumn().setText("Key");
+			column.getColumn().setText(Messages.PartEditor_PersitedStateKey);
 			column.getColumn().setWidth(200);
 			column.setLabelProvider(new ColumnLabelProvider() {
 				@SuppressWarnings("unchecked")
@@ -263,7 +264,7 @@ public class PartEditor extends AbstractComponentEditor {
 
 			//FIXME How can we react upon changes in the Map-Value?
 			column = new TableViewerColumn(tableviewer, SWT.NONE);
-			column.getColumn().setText("Value");
+			column.getColumn().setText(Messages.PartEditor_PersitedStateValue);
 			column.getColumn().setWidth(200);
 			column.setLabelProvider(new ColumnLabelProvider() {
 				@SuppressWarnings("unchecked")
@@ -287,12 +288,12 @@ public class PartEditor extends AbstractComponentEditor {
 			buttonComp.setLayout(gl);
 
 			Button b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Add ...");
+			b.setText(Messages.PartEditor_Add);
 			b.setImage(getImage(b.getDisplay(), TABLE_ADD_IMAGE));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Remove");
+			b.setText(Messages.PartEditor_Remove);
 			b.setImage(getImage(b.getDisplay(), TABLE_DELETE_IMAGE));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 		}
@@ -309,7 +310,7 @@ public class PartEditor extends AbstractComponentEditor {
 	@Override
 	public IObservableList getChildList(Object element) {
 		WritableList list = new WritableList();
-		list.add(new VirtualEntry<Object>( ModelEditor.VIRTUAL_PART_MENU, PART__MENUS, element, "Menus") {
+		list.add(new VirtualEntry<Object>( ModelEditor.VIRTUAL_PART_MENU, PART__MENUS, element, Messages.PartEditor_Menus) {
 
 			@Override
 			protected boolean accepted(Object o) {
@@ -318,7 +319,7 @@ public class PartEditor extends AbstractComponentEditor {
 
 		});
 
-		list.add(new VirtualEntry<Object>( ModelEditor.VIRTUAL_HANDLER, HANDLER_CONTAINER__HANDLERS, element, "Handlers") {
+		list.add(new VirtualEntry<Object>( ModelEditor.VIRTUAL_HANDLER, HANDLER_CONTAINER__HANDLERS, element, Messages.PartEditor_Handlers) {
 
 			@Override
 			protected boolean accepted(Object o) {

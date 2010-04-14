@@ -22,6 +22,7 @@ import org.eclipse.core.databinding.observable.value.IValueChangeListener;
 import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
+import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.ObservableColumnLabelProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ComponentLabelProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
@@ -90,7 +91,7 @@ public class VBindingTableEditor extends AbstractComponentEditor {
 
 	@Override
 	public String getLabel(Object element) {
-		return "Binding Configuration";
+		return Messages.VBindingTableEditor_Label;
 	}
 
 	@Override
@@ -100,7 +101,7 @@ public class VBindingTableEditor extends AbstractComponentEditor {
 
 	@Override
 	public String getDescription(Object element) {
-		return "Binding Configuration Bla Bla Bla Bla";
+		return Messages.VBindingTableEditor_Description;
 	}
 
 	@Override
@@ -121,7 +122,7 @@ public class VBindingTableEditor extends AbstractComponentEditor {
 
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Contexts");
+			l.setText(Messages.VBindingTableEditor_Contexts);
 			l.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 
 			contextsViewer = new TreeViewer(parent);
@@ -155,7 +156,7 @@ public class VBindingTableEditor extends AbstractComponentEditor {
 				IEMFValueProperty prop = EMFProperties.value(CommandsPackageImpl.Literals.BINDING_CONTEXT__NAME);
 				
 				TreeViewerColumn column = new TreeViewerColumn(contextsViewer, SWT.NONE);
-				column.getColumn().setText("Name");
+				column.getColumn().setText(Messages.VBindingTableEditor_Name);
 				column.getColumn().setWidth(200);				
 				column.setLabelProvider(new ObservableColumnLabelProvider<MBindingContext>(prop.observeDetail(pv.getKnownElements())));
 				column.setEditingSupport(new EditingSupport(contextsViewer) {
@@ -172,7 +173,7 @@ public class VBindingTableEditor extends AbstractComponentEditor {
 					@Override
 					protected Object getValue(Object element) {
 						MBindingContext ctx = (MBindingContext) element; 
-						return ctx.getName() != null ? ctx.getName() : "";
+						return ctx.getName() != null ? ctx.getName() : ""; //$NON-NLS-1$
 					}
 					
 					@Override
@@ -191,7 +192,7 @@ public class VBindingTableEditor extends AbstractComponentEditor {
 				IEMFValueProperty prop = EMFProperties.value(CommandsPackageImpl.Literals.BINDING_CONTEXT__DESCRIPTION);
 				
 				TreeViewerColumn column = new TreeViewerColumn(contextsViewer, SWT.NONE);
-				column.getColumn().setText("Description");
+				column.getColumn().setText(Messages.VBindingTableEditor_LabelDescription);
 				column.getColumn().setWidth(200);				
 				column.setLabelProvider(new ObservableColumnLabelProvider<MBindingContext>(prop.observeDetail(pv.getKnownElements())));				
 				column.setEditingSupport(new EditingSupport(contextsViewer) {
@@ -208,7 +209,7 @@ public class VBindingTableEditor extends AbstractComponentEditor {
 					@Override
 					protected Object getValue(Object element) {
 						MBindingContext ctx = (MBindingContext) element; 
-						return ctx.getDescription() != null ? ctx.getDescription() : "";
+						return ctx.getDescription() != null ? ctx.getDescription() : ""; //$NON-NLS-1$
 					}
 					
 					@Override
@@ -227,7 +228,7 @@ public class VBindingTableEditor extends AbstractComponentEditor {
 				IEMFValueProperty prop = EMFProperties.value(ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__ELEMENT_ID);
 				
 				TreeViewerColumn column = new TreeViewerColumn(contextsViewer, SWT.NONE);
-				column.getColumn().setText("Id");
+				column.getColumn().setText(Messages.VBindingTableEditor_Id);
 				column.getColumn().setWidth(200);
 				column.setLabelProvider(new ObservableColumnLabelProvider<MBindingContext>(prop.observeDetail(pv.getKnownElements())));				
 				column.setEditingSupport(new EditingSupport(contextsViewer) {
@@ -244,7 +245,7 @@ public class VBindingTableEditor extends AbstractComponentEditor {
 					@Override
 					protected Object getValue(Object element) {
 						MBindingContext ctx = (MBindingContext) element; 
-						return ctx.getElementId() != null ? ctx.getElementId() : "";
+						return ctx.getElementId() != null ? ctx.getElementId() : ""; //$NON-NLS-1$
 					}
 					
 					@Override
@@ -283,17 +284,17 @@ public class VBindingTableEditor extends AbstractComponentEditor {
 			buttonComp.setLayout(gl);
 			
 			Button b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Up");
+			b.setText(Messages.VBindingTableEditor_Up);
 			b.setImage(getImage(b.getDisplay(), ARROW_UP));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 			
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Down");
+			b.setText(Messages.VBindingTableEditor_Down);
 			b.setImage(getImage(b.getDisplay(), ARROW_DOWN));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 			
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Add ...");
+			b.setText(Messages.VBindingTableEditor_Add);
 			b.setImage(getImage(b.getDisplay(), TABLE_ADD_IMAGE));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 			b.addSelectionListener(new SelectionAdapter() {
@@ -324,7 +325,7 @@ public class VBindingTableEditor extends AbstractComponentEditor {
 			});
 			
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Remove");
+			b.setText(Messages.VBindingTableEditor_Remove);
 			b.setImage(getImage(b.getDisplay(), TABLE_DELETE_IMAGE));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 			b.addSelectionListener(new SelectionAdapter() {

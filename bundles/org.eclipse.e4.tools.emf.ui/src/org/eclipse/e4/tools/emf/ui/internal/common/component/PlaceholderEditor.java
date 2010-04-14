@@ -16,6 +16,7 @@ import java.net.URL;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
+import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
 import org.eclipse.e4.ui.model.application.ui.MUILabel;
 import org.eclipse.e4.ui.model.application.ui.advanced.MPlaceholder;
@@ -47,7 +48,7 @@ public class PlaceholderEditor extends AbstractComponentEditor {
 	public Image getImage(Object element, Display display) {
 		if (image == null) {
 			try {
-				image = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/Placeholder.gif"));
+				image = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/Placeholder.gif")); //$NON-NLS-1$
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -59,7 +60,7 @@ public class PlaceholderEditor extends AbstractComponentEditor {
 
 	@Override
 	public String getLabel(Object element) {
-		return "Placeholder";
+		return Messages.PlaceholderEditor_Label;
 	}
 
 	@Override
@@ -72,9 +73,9 @@ public class PlaceholderEditor extends AbstractComponentEditor {
 			if( pl.getRef() instanceof MUILabel ) {
 				MUILabel label = (MUILabel) pl.getRef();
 				if( label.getLabel() != null && label.getLabel().trim().length() > 0 ) {
-					b.append(" (" + label.getLabel() + ")");
+					b.append(" (" + label.getLabel() + ")");  //$NON-NLS-1$//$NON-NLS-2$
 				} else if( label.getTooltip() != null && label.getTooltip().trim().length() > 0 ) {
-					b.append(" (" + label.getTooltip() + ")");
+					b.append(" (" + label.getTooltip() + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 				} else {
 					if( pl.getRef().getElementId() != null && pl.getRef().getElementId().trim().length() > 0 ) {
 						b.append(pl.getRef().getElementId());
@@ -82,7 +83,7 @@ public class PlaceholderEditor extends AbstractComponentEditor {
 				}
 			} else {
 				if( pl.getRef().getElementId() != null && pl.getRef().getElementId().trim().length() > 0 ) {
-					b.append(" (" + pl.getRef().getElementId() + ")");
+					b.append(" (" + pl.getRef().getElementId() + ")");  //$NON-NLS-1$//$NON-NLS-2$
 				}
 			}
 
@@ -94,7 +95,7 @@ public class PlaceholderEditor extends AbstractComponentEditor {
 
 	@Override
 	public String getDescription(Object element) {
-		return "Placeholder Bla Bla Bla Bla";
+		return Messages.PlaceholderEditor_Descriptor;
 	}
 
 	@Override
@@ -116,7 +117,7 @@ public class PlaceholderEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Id");
+			l.setText(Messages.PlaceholderEditor_Id);
 
 			Text t = new Text(parent, SWT.BORDER);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);

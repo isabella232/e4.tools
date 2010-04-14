@@ -170,7 +170,7 @@ public class KeyBindingEditor extends AbstractComponentEditor {
 		IEMFEditListProperty prop = EMFEditProperties.list(getEditingDomain(), CommandsPackageImpl.Literals.KEY_BINDING__PARAMETERS);
 
 		TableViewerColumn column = new TableViewerColumn(tableviewer, SWT.NONE);
-		column.getColumn().setText("Key");
+		column.getColumn().setText(Messages.KeyBindingEditor_ParametersKey);
 		column.getColumn().setWidth(200);
 		column.setEditingSupport(new EditingSupport(tableviewer) {
 			private TextCellEditor cellEditor = new TextCellEditor(tableviewer.getTable());
@@ -183,7 +183,7 @@ public class KeyBindingEditor extends AbstractComponentEditor {
 			@Override
 			protected Object getValue(Object element) {
 				String val = ((MParameter) element).getName();
-				return val == null ? "" : val;
+				return val == null ? "" : val; //$NON-NLS-1$
 			}
 
 			@Override
@@ -198,7 +198,7 @@ public class KeyBindingEditor extends AbstractComponentEditor {
 		});
 
 		column = new TableViewerColumn(tableviewer, SWT.NONE);
-		column.getColumn().setText("Value");
+		column.getColumn().setText(Messages.KeyBindingEditor_ParametersValue);
 		column.getColumn().setWidth(200);
 		column.setEditingSupport(new EditingSupport(tableviewer) {
 			private TextCellEditor cellEditor = new TextCellEditor(tableviewer.getTable());
@@ -211,7 +211,7 @@ public class KeyBindingEditor extends AbstractComponentEditor {
 			@Override
 			protected Object getValue(Object element) {
 				String val = ((MParameter) element).getValue();
-				return val == null ? "" : val;
+				return val == null ? "" : val; //$NON-NLS-1$
 			}
 
 			@Override
@@ -248,17 +248,17 @@ public class KeyBindingEditor extends AbstractComponentEditor {
 		buttonComp.setLayout(gl);
 
 		Button b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-		b.setText("Up");
+		b.setText(Messages.KeyBindingEditor_Up);
 		b.setImage(getImage(b.getDisplay(), ARROW_UP));
 		b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 
 		b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-		b.setText("Down");
+		b.setText(Messages.KeyBindingEditor_Down);
 		b.setImage(getImage(b.getDisplay(), ARROW_DOWN));
 		b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 
 		b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-		b.setText("Add ...");
+		b.setText(Messages.KeyBindingEditor_Add);
 		b.setImage(getImage(b.getDisplay(), TABLE_ADD_IMAGE));
 		b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 		b.addSelectionListener(new SelectionAdapter() {
@@ -275,7 +275,7 @@ public class KeyBindingEditor extends AbstractComponentEditor {
 		});
 
 		b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-		b.setText("Remove");
+		b.setText(Messages.KeyBindingEditor_Remove);
 		b.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
@@ -300,7 +300,6 @@ public class KeyBindingEditor extends AbstractComponentEditor {
 
 	@Override
 	public IObservableList getChildList(Object element) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

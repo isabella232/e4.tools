@@ -20,6 +20,7 @@ import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.property.list.IListProperty;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
+import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.VirtualEntry;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.dialogs.ContributionClassDialog;
@@ -74,7 +75,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 	public Image getImage(Object element, Display display) {
 		if( image == null ) {
 			try {
-				image = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/Part.gif"));
+				image = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/Part.gif")); //$NON-NLS-1$
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -86,12 +87,12 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 
 	@Override
 	public String getLabel(Object element) {
-		return "PartDescriptor";
+		return Messages.PartDescriptorEditor_Label;
 	}
 
 	@Override
 	public String getDescription(Object element) {
-		return "PartDescriptor Bla Bla Bla Bla";
+		return Messages.PartDescriptorEditor_Descriptor;
 	}
 
 	@Override
@@ -113,7 +114,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Id");
+			l.setText(Messages.PartDescriptorEditor_Id);
 
 			Text t = new Text(parent, SWT.BORDER);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -125,7 +126,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Label");
+			l.setText(Messages.PartDescriptorEditor_LabelLabel);
 
 			Text t = new Text(parent, SWT.BORDER);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -137,7 +138,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Tooltip");
+			l.setText(Messages.PartDescriptorEditor_Tooltip);
 
 			Text t = new Text(parent, SWT.BORDER);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -149,7 +150,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Icon URI");
+			l.setText(Messages.PartDescriptorEditor_IconURI);
 
 			Text t = new Text(parent, SWT.BORDER);
 			t.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -157,13 +158,13 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 
 			Button b = new Button(parent, SWT.PUSH|SWT.FLAT);
 			b.setImage(getImage(t.getDisplay(), SEARCH_IMAGE));
-			b.setText("Find ...");			
+			b.setText(Messages.PartDescriptorEditor_Find);			
 		}
 
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Class URI");
+			l.setText(Messages.PartDescriptorEditor_ClassURI);
 
 			Text t = new Text(parent, SWT.BORDER);
 			t.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -171,7 +172,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 
 			final Button b = new Button(parent, SWT.PUSH|SWT.FLAT);
 			b.setImage(getImage(t.getDisplay(), SEARCH_IMAGE));
-			b.setText("Find ...");
+			b.setText(Messages.PartDescriptorEditor_Find);
 			b.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -184,7 +185,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Dirtyable");
+			l.setText(Messages.PartDescriptorEditor_Dirtyable);
 
 			Button checkbox = new Button(parent, SWT.CHECK);
 			checkbox.setLayoutData(new GridData(GridData.BEGINNING, GridData.BEGINNING, false, false, 2, 1));
@@ -199,7 +200,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Closeable");
+			l.setText(Messages.PartDescriptorEditor_Closeable);
 
 			Button checkbox = new Button(parent, SWT.CHECK);
 			checkbox.setLayoutData(new GridData(GridData.BEGINNING, GridData.BEGINNING, false, false, 2, 1));
@@ -213,7 +214,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Multiple");
+			l.setText(Messages.PartDescriptorEditor_Multiple);
 
 			Button checkbox = new Button(parent, SWT.CHECK);
 			checkbox.setLayoutData(new GridData(GridData.BEGINNING, GridData.BEGINNING, false, false, 2, 1));
@@ -227,7 +228,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Category");
+			l.setText(Messages.PartDescriptorEditor_Category);
 			
 			Text t = new Text(parent, SWT.BORDER);
 			t.setLayoutData(new GridData(GridData.FILL,GridData.BEGINNING, true, false, 2, 1));
@@ -237,7 +238,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Persited State");
+			l.setText(Messages.PartDescriptorEditor_PersitedState);
 			l.setLayoutData(new GridData(GridData.BEGINNING, GridData.BEGINNING, false, false));
 
 			TableViewer tableviewer = new TableViewer(parent);
@@ -249,7 +250,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 			tableviewer.getControl().setLayoutData(gd);
 			
 			TableViewerColumn column = new TableViewerColumn(tableviewer, SWT.NONE);
-			column.getColumn().setText("Key");
+			column.getColumn().setText(Messages.PartDescriptorEditor_PersitedStateKey);
 			column.getColumn().setWidth(200);
 			column.setLabelProvider(new ColumnLabelProvider() {
 				@SuppressWarnings("unchecked")
@@ -262,7 +263,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 
 			//FIXME How can we react upon changes in the Map-Value?
 			column = new TableViewerColumn(tableviewer, SWT.NONE);
-			column.getColumn().setText("Value");
+			column.getColumn().setText(Messages.PartDescriptorEditor_PersitedStateValue);
 			column.getColumn().setWidth(200);
 			column.setLabelProvider(new ColumnLabelProvider() {
 				@SuppressWarnings("unchecked")
@@ -286,12 +287,12 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 			buttonComp.setLayout(gl);
 
 			Button b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Add ...");
+			b.setText(Messages.PartDescriptorEditor_Add);
 			b.setImage(getImage(b.getDisplay(), TABLE_ADD_IMAGE));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Remove");
+			b.setText(Messages.PartDescriptorEditor_Remove);
 			b.setImage(getImage(b.getDisplay(), TABLE_DELETE_IMAGE));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 		}
@@ -299,7 +300,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Variables");
+			l.setText(Messages.PartDescriptorEditor_Variables);
 			l.setLayoutData(new GridData(GridData.BEGINNING, GridData.BEGINNING, false, false));
 
 			ListViewer viewer = new ListViewer(parent);
@@ -312,7 +313,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Properties");
+			l.setText(Messages.PartDescriptorEditor_Properties);
 			l.setLayoutData(new GridData(GridData.BEGINNING, GridData.BEGINNING, false, false));
 
 			TableViewer tableviewer = new TableViewer(parent);
@@ -323,11 +324,11 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 			tableviewer.getControl().setLayoutData(gd);
 
 			TableViewerColumn column = new TableViewerColumn(tableviewer, SWT.NONE);
-			column.getColumn().setText("Key");
+			column.getColumn().setText(Messages.PartDescriptorEditor_PropertiesKey);
 			column.getColumn().setWidth(200);
 
 			column = new TableViewerColumn(tableviewer, SWT.NONE);
-			column.getColumn().setText("Value");
+			column.getColumn().setText(Messages.PartDescriptorEditor_PropertiesValue);
 			column.getColumn().setWidth(200);
 		}
 
@@ -340,7 +341,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 	@Override
 	public IObservableList getChildList(Object element) {
 		WritableList list = new WritableList();
-		list.add(new VirtualEntry<Object>( ModelEditor.VIRTUAL_PARTDESCRIPTOR_MENU, PART__MENUS, element, "Menus") {
+		list.add(new VirtualEntry<Object>( ModelEditor.VIRTUAL_PARTDESCRIPTOR_MENU, PART__MENUS, element, Messages.PartDescriptorEditor_Menus) {
 
 			@Override
 			protected boolean accepted(Object o) {
@@ -349,7 +350,7 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 
 		});
 
-		list.add(new VirtualEntry<Object>( ModelEditor.VIRTUAL_HANDLER, HANDLER_CONTAINER__HANDLERS, element, "Handlers") {
+		list.add(new VirtualEntry<Object>( ModelEditor.VIRTUAL_HANDLER, HANDLER_CONTAINER__HANDLERS, element, Messages.PartDescriptorEditor_Handlers) {
 
 			@Override
 			protected boolean accepted(Object o) {

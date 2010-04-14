@@ -22,6 +22,7 @@ import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.databinding.property.list.IListProperty;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
+import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.common.ComponentLabelProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
 import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
@@ -89,7 +90,7 @@ public class PartSashContainerEditor extends AbstractComponentEditor {
 
 		if( vImage == null && ! horizontal ) {
 			try {
-				vImage = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/PartSashContainer_vertical.gif"));
+				vImage = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/PartSashContainer_vertical.gif")); //$NON-NLS-1$
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -98,7 +99,7 @@ public class PartSashContainerEditor extends AbstractComponentEditor {
 
 		if( hImage == null && horizontal ) {
 			try {
-				hImage = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/PartSashContainer.gif"));
+				hImage = loadSharedImage(display, new URL("platform:/plugin/org.eclipse.e4.ui.model.workbench.edit/icons/full/obj16/PartSashContainer.gif")); //$NON-NLS-1$
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -114,12 +115,12 @@ public class PartSashContainerEditor extends AbstractComponentEditor {
 
 	@Override
 	public String getLabel(Object element) {
-		return "Sash";
+		return Messages.PartSashContainerEditor_Label;
 	}
 
 	@Override
 	public String getDescription(Object element) {
-		return "Sash bla bla bla";
+		return Messages.PartSashContainerEditor_Description;
 	}
 
 	@Override
@@ -142,7 +143,7 @@ public class PartSashContainerEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Id");
+			l.setText(Messages.PartSashContainerEditor_Id);
 
 			Text t = new Text(parent, SWT.BORDER);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -154,7 +155,7 @@ public class PartSashContainerEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Orientation");
+			l.setText(Messages.PartSashContainerEditor_Orientation);
 
 			ComboViewer viewer = new ComboViewer(parent);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -164,7 +165,7 @@ public class PartSashContainerEditor extends AbstractComponentEditor {
 			viewer.setLabelProvider(new LabelProvider() {
 				@Override
 				public String getText(Object element) {
-					return ((Boolean)element).booleanValue() ? "Horizontal" : "Vertical";
+					return ((Boolean)element).booleanValue() ? Messages.PartSashContainerEditor_Horizontal : Messages.PartSashContainerEditor_Vertical;
 				}
 			});
 			viewer.setInput(new Boolean[] { Boolean.TRUE, Boolean.FALSE });
@@ -175,7 +176,7 @@ public class PartSashContainerEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Selected Element");
+			l.setText(Messages.PartSashContainerEditor_SelectedElement);
 
 			ComboViewer viewer = new ComboViewer(parent);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -212,7 +213,7 @@ public class PartSashContainerEditor extends AbstractComponentEditor {
 
 		{
 			Label l = new Label(parent, SWT.NONE);
-			l.setText("Controls");
+			l.setText(Messages.PartSashContainerEditor_Controls);
 			l.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 			
 			final TableViewer viewer = new TableViewer(parent);
@@ -236,7 +237,7 @@ public class PartSashContainerEditor extends AbstractComponentEditor {
 			buttonComp.setLayout(gl);
 
 			Button b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Up");
+			b.setText(Messages.PartSashContainerEditor_Up);
 			b.setImage(getImage(b.getDisplay(), ARROW_UP));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false,2,1));
 			b.addSelectionListener(new SelectionAdapter() {
@@ -263,7 +264,7 @@ public class PartSashContainerEditor extends AbstractComponentEditor {
 			});
 
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Down");
+			b.setText(Messages.PartSashContainerEditor_Down);
 			b.setImage(getImage(b.getDisplay(), ARROW_DOWN));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false,2,1));
 			b.addSelectionListener(new SelectionAdapter() {
@@ -328,7 +329,7 @@ public class PartSashContainerEditor extends AbstractComponentEditor {
 			});
 			
 			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
-			b.setText("Remove");
+			b.setText(Messages.PartSashContainerEditor_Remove);
 			b.setImage(getImage(b.getDisplay(), TABLE_DELETE_IMAGE));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false,2,1));
 			b.addSelectionListener(new SelectionAdapter() {

@@ -63,7 +63,7 @@ public class HandledMenuItemEditor extends MenuItemEditor {
 	private Image image;
 
 	public HandledMenuItemEditor(EditingDomain editingDomain, ModelEditor editor) {
-		super(editingDomain, editor);
+		super(editingDomain);
 	}
 
 	@Override
