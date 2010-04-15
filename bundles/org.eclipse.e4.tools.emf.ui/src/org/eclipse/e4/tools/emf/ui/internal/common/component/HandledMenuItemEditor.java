@@ -14,10 +14,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.eclipse.core.databinding.observable.value.WritableValue;
+import org.eclipse.e4.tools.emf.ui.common.IModelResource;
 import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.ObservableColumnLabelProvider;
-import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
+import org.eclipse.e4.tools.emf.ui.internal.common.component.dialogs.HandledMenuItemCommandSelectionDialog;
 import org.eclipse.e4.ui.model.application.commands.MCommandsFactory;
+import org.eclipse.e4.ui.model.application.commands.MHandler;
 import org.eclipse.e4.ui.model.application.commands.MParameter;
 import org.eclipse.e4.ui.model.application.commands.impl.CommandsPackageImpl;
 import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
@@ -61,9 +63,11 @@ import org.eclipse.swt.widgets.Text;
 
 public class HandledMenuItemEditor extends MenuItemEditor {
 	private Image image;
+	private IModelResource resource;
 
-	public HandledMenuItemEditor(EditingDomain editingDomain, ModelEditor editor) {
+	public HandledMenuItemEditor(EditingDomain editingDomain, IModelResource resource) {
 		super(editingDomain);
+		this.resource = resource;
 	}
 
 	@Override
@@ -104,10 +108,17 @@ public class HandledMenuItemEditor extends MenuItemEditor {
 			t.setEnabled(false);
 			context.bindValue(textProp.observeDelayed(200, t), EMFEditProperties.value(getEditingDomain(), FeaturePath.fromList(MenuPackageImpl.Literals.HANDLED_ITEM__COMMAND, ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__ELEMENT_ID)).observeDetail(master));
 
-			Button b = new Button(parent, SWT.PUSH | SWT.FLAT);
+			final Button b = new Button(parent, SWT.PUSH | SWT.FLAT);
 			b.setText(Messages.HandledMenuItemEditor_Find);
 			b.setImage(getImage(b.getDisplay(), SEARCH_IMAGE));
 			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
+			b.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					HandledMenuItemCommandSelectionDialog dialog = new HandledMenuItemCommandSelectionDialog(b.getShell(), (MHandledItem) getMaster().getValue(), resource);
+					dialog.open();
+				}
+			});
 		}
 
 		// ------------------------------------------------------------

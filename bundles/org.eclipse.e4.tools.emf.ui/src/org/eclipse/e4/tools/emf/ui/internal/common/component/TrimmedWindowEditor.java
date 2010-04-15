@@ -28,4 +28,9 @@ public class TrimmedWindowEditor extends WindowEditor {
 		});
 		return list;
 	}
+	
+	@Override
+	public String getLabel(Object element) {
+		return "Trimmed Window";
+	}
 }

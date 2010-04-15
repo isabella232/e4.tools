@@ -51,13 +51,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
-public class VControlEditor extends AbstractComponentEditor {
+public class VWindowControlEditor extends AbstractComponentEditor {
 	private Composite composite;
 	private EMFDataBindingContext context;
 	private ModelEditor editor;
 	private TableViewer viewer;
 
-	public VControlEditor(EditingDomain editingDomain, ModelEditor editor) {
+	public VWindowControlEditor(EditingDomain editingDomain, ModelEditor editor) {
 		super(editingDomain);
 		this.editor = editor;
 	}

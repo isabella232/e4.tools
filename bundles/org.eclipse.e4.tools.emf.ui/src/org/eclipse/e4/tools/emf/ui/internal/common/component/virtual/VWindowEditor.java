@@ -27,12 +27,18 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.databinding.edit.IEMFEditValueProperty;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.MoveCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -154,7 +160,7 @@ public class VWindowEditor extends AbstractComponentEditor {
 
 		Composite buttonComp = new Composite(parent, SWT.NONE);
 		buttonComp.setLayoutData(new GridData(GridData.FILL, GridData.END, false, false));
-		GridLayout gl = new GridLayout();
+		GridLayout gl = new GridLayout(2,false);
 		gl.marginLeft = 0;
 		gl.marginRight = 0;
 		gl.marginWidth = 0;
@@ -162,9 +168,10 @@ public class VWindowEditor extends AbstractComponentEditor {
 		buttonComp.setLayout(gl);
 
 		Button b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
+		
 		b.setText("Up");
 		b.setImage(getImage(b.getDisplay(), ARROW_UP));
-		b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+		b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false,2,1));
 		b.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -191,7 +198,7 @@ public class VWindowEditor extends AbstractComponentEditor {
 		b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
 		b.setText("Down");
 		b.setImage(getImage(b.getDisplay(), ARROW_DOWN));
-		b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+		b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false,2,1));
 		b.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -215,14 +222,29 @@ public class VWindowEditor extends AbstractComponentEditor {
 			}
 		});
 
+		final ComboViewer childrenDropDown = new ComboViewer(buttonComp);
+		childrenDropDown.getControl().setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+		childrenDropDown.setContentProvider(new ArrayContentProvider());
+		childrenDropDown.setLabelProvider(new LabelProvider() {
+			@Override
+			public String getText(Object element) {
+				EClass eclass = (EClass) element;
+				return eclass.getName();
+			}
+		});
+		childrenDropDown.setInput(new EClass[] { BasicPackageImpl.Literals.WINDOW, BasicPackageImpl.Literals.TRIMMED_WINDOW });
+		childrenDropDown.setSelection(new StructuredSelection(BasicPackageImpl.Literals.WINDOW));
+		
 		b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
 		b.setText("Add ...");
 		b.setImage(getImage(b.getDisplay(), TABLE_ADD_IMAGE));
-		b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+		b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
 		b.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				MWindow handler = MBasicFactory.INSTANCE.createWindow();
+				EClass eClass = (EClass) ((IStructuredSelection)childrenDropDown.getSelection()).getFirstElement();
+				EObject handler = EcoreUtil.create(eClass);
+				
 				Command cmd = AddCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, handler);
 
 				if (cmd.canExecute()) {
@@ -235,7 +257,7 @@ public class VWindowEditor extends AbstractComponentEditor {
 		b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
 		b.setText("Remove");
 		b.setImage(getImage(b.getDisplay(), TABLE_DELETE_IMAGE));
-		b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+		b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false,2,1));
 		b.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
