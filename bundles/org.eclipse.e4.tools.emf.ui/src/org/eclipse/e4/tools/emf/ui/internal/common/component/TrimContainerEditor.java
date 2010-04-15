@@ -23,7 +23,7 @@ import org.eclipse.e4.tools.emf.ui.internal.common.ComponentLabelProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
 import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
 import org.eclipse.e4.ui.model.application.ui.MElementContainer;
-import org.eclipse.e4.ui.model.application.ui.MTrimContainer;
+import org.eclipse.e4.ui.model.application.ui.MGenericTrimContainer;
 import org.eclipse.e4.ui.model.application.ui.SideValue;
 import org.eclipse.e4.ui.model.application.ui.impl.UiPackageImpl;
 import org.eclipse.e4.ui.model.application.ui.menu.MMenuFactory;
@@ -59,7 +59,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-public class TrimedPartContainerEditor extends AbstractComponentEditor {
+public class TrimContainerEditor extends AbstractComponentEditor {
 
 	private Composite composite;
 	private Image image;
@@ -68,7 +68,7 @@ public class TrimedPartContainerEditor extends AbstractComponentEditor {
 
 	private IListProperty ELEMENT_CONTAINER__CHILDREN = EMFProperties.list(UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN);
 
-	public TrimedPartContainerEditor(EditingDomain editingDomain, ModelEditor editor) {
+	public TrimContainerEditor(EditingDomain editingDomain, ModelEditor editor) {
 		super(editingDomain);
 		this.editor = editor;
 	}
@@ -137,7 +137,7 @@ public class TrimedPartContainerEditor extends AbstractComponentEditor {
 			GridData gd = new GridData();
 			gd.horizontalSpan = 2;
 			viewer.getControl().setLayoutData(gd);
-			IObservableValue sideValueObs = EMFEditProperties.value(getEditingDomain(), UiPackageImpl.Literals.TRIM_CONTAINER__SIDE).observeDetail(master);
+			IObservableValue sideValueObs = EMFEditProperties.value(getEditingDomain(), UiPackageImpl.Literals.GENERIC_TRIM_CONTAINER__SIDE).observeDetail(master);
 			context.bindValue(ViewerProperties.singleSelection().observe(viewer), sideValueObs);
 		}
 
@@ -267,7 +267,7 @@ public class TrimedPartContainerEditor extends AbstractComponentEditor {
 
 	@Override
 	public String getDetailLabel(Object element) {
-		MTrimContainer<?> trim = (MTrimContainer<?>) element;
+		MGenericTrimContainer<?> trim = (MGenericTrimContainer<?>) element;
 		
 		if( trim.getSide() != null ) {
 			return trim.getSide().toString();
@@ -279,7 +279,7 @@ public class TrimedPartContainerEditor extends AbstractComponentEditor {
 	@Override
 	public FeaturePath[] getLabelProperties() {
 		return new FeaturePath[] {
-			FeaturePath.fromList(UiPackageImpl.Literals.TRIM_CONTAINER__SIDE)	
+			FeaturePath.fromList(UiPackageImpl.Literals.GENERIC_TRIM_CONTAINER__SIDE)	
 		};
 	}
 
