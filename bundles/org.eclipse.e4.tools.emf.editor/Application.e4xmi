@@ -4,6 +4,16 @@
     <children xsi:type="basic:PartStack" xmi:id="_gkgxwEjJEd-FKq59UN1_HA" elementId="org.eclipse.e4.tools.emf.editor.mainwindow.editorstack">
       <tags>newtablook</tags>
     </children>
+    <mainMenu xmi:id="_LqyFoEjQEd-XR9_8rlW1bQ" elementId="e4.modeleditor.menu.file">
+      <children xsi:type="menu:Menu" xmi:id="_cURncEjQEd-XR9_8rlW1bQ" elementId="e4.modeleditor.menu.file" label="File">
+        <children xsi:type="menu:Menu" xmi:id="_mRNKoEjQEd-XR9_8rlW1bQ" elementId="_mRNKoEjQEd-XR9_8rlW1bQ" label="New">
+          <children xsi:type="menu:HandledMenuItem" xmi:id="_pdLXYEjQEd-XR9_8rlW1bQ" elementId="_pdLXYEjQEd-XR9_8rlW1bQ" label="Application Model" command="_OI-FgEZCEd-3Rue18XuTew"/>
+          <children xsi:type="menu:HandledMenuItem" xmi:id="_z0xdUEjQEd-XR9_8rlW1bQ" elementId="_z0xdUEjQEd-XR9_8rlW1bQ" label="Model Contribution" command="_OcpPcEZCEd-3Rue18XuTew"/>
+        </children>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_5agWwEjQEd-XR9_8rlW1bQ" elementId="_5agWwEjQEd-XR9_8rlW1bQ" label="Open XMI ..." iconURI="platform:/plugin/org.eclipse.e4.tools.emf.editor/icons/full/folder_page.png"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_ATY6IEjREd-XR9_8rlW1bQ" elementId="_ATY6IEjREd-XR9_8rlW1bQ" label="Save"/>
+      </children>
+    </mainMenu>
     <trimBars xmi:id="_5UAKUUjJEd-Y_4Sy4ZiGUQ" elementId="_5UAKUUjJEd-Y_4Sy4ZiGUQ">
       <children xsi:type="menu:ToolBar" xmi:id="_8DUQQEjJEd-Y_4Sy4ZiGUQ" elementId="_8DUQQEjJEd-Y_4Sy4ZiGUQ">
         <children xsi:type="menu:HandledToolItem" xmi:id="_GTv-QEjKEd-Y_4Sy4ZiGUQ" elementId="org.eclipse.e4.tools.emf.editor.mainwindow.trims.top.toolbars.main.items.openxmi" iconURI="platform:/plugin/org.eclipse.e4.tools.emf.editor/icons/full/folder_page.png" tooltip="Open XMI File" command="_Hx2ycEZCEd-3Rue18XuTew"/>

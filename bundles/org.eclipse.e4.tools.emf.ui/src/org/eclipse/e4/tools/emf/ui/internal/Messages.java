@@ -132,6 +132,10 @@ public class Messages {
 	public static String MenuEditor_Menu;
 	public static String MenuEditor_DirectMenuItem;
 	public static String MenuEditor_Remove;
+	public static String MenuEditor_LabelLabel;
+	public static String MenuEditor_Tooltip;
+	public static String MenuEditor_IconURI;
+	
 	
 	public static String MenuItemEditor_Id;
 	public static String MenuItemEditor_Type;
@@ -279,6 +283,9 @@ public class Messages {
 	public static String VBindingTableEditor_Down;
 	public static String VBindingTableEditor_Add;
 	public static String VBindingTableEditor_Remove;
+	
+	
+	
 	
 	static {
 		NLS.initializeMessages(Messages.class.getName(), Messages.class);
