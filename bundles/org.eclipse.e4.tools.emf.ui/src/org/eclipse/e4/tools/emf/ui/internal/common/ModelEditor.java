@@ -54,7 +54,8 @@ import org.eclipse.e4.tools.emf.ui.internal.common.component.PlaceholderEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.ToolBarEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.ToolBarSeparatorEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.ToolControlEditor;
-import org.eclipse.e4.tools.emf.ui.internal.common.component.TrimContainerEditor;
+import org.eclipse.e4.tools.emf.ui.internal.common.component.TrimBarEditor;
+import org.eclipse.e4.tools.emf.ui.internal.common.component.TrimmedWindowEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.WindowEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VBindingTableEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VCommandEditor;
@@ -64,6 +65,7 @@ import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VMenuEditor
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VModelComponentBindingEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VPartDescriptor;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VWindowEditor;
+import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VWindowTrimEditor;
 import org.eclipse.e4.ui.model.application.commands.impl.CommandsPackageImpl;
 import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
 import org.eclipse.e4.ui.model.application.ui.advanced.impl.AdvancedPackageImpl;
@@ -107,6 +109,7 @@ public class ModelEditor {
 	public static final int VIRTUAL_MODEL_COMP_COMMANDS = 8;
 	public static final int VIRTUAL_MODEL_COMP_BINDINGS = 9;
 	public static final int VIRTUAL_PARTDESCRIPTOR_MENU = 10;
+	public static final int VIRTUAL_TRIMMED_WINDOW_TRIMS = 11;
 
 	private Map<EClass, AbstractComponentEditor> editorMap = new HashMap<EClass, AbstractComponentEditor>();
 	private AbstractComponentEditor[] virtualEditors;
@@ -279,7 +282,8 @@ public class ModelEditor {
 				new VPartDescriptor(modelProvider.getEditingDomain(), this),
 				new VCommandEditor(modelProvider.getEditingDomain(), this, ApplicationPackageImpl.Literals.MODEL_COMPONENT__COMMANDS),
 				new VModelComponentBindingEditor(modelProvider.getEditingDomain(), this),
-				new VMenuEditor(modelProvider.getEditingDomain(), this, org.eclipse.e4.ui.model.application.descriptor.basic.impl.BasicPackageImpl.Literals.PART_DESCRIPTOR__MENUS)
+				new VMenuEditor(modelProvider.getEditingDomain(), this, org.eclipse.e4.ui.model.application.descriptor.basic.impl.BasicPackageImpl.Literals.PART_DESCRIPTOR__MENUS),
+				new VWindowTrimEditor(modelProvider.getEditingDomain(), this)
 		};
 	}
 
@@ -310,10 +314,11 @@ public class ModelEditor {
 		
 		registerEditor(BasicPackageImpl.Literals.PART, new PartEditor(modelProvider.getEditingDomain(),project));
 		registerEditor(BasicPackageImpl.Literals.WINDOW, new WindowEditor(modelProvider.getEditingDomain()));
+		registerEditor(BasicPackageImpl.Literals.TRIMMED_WINDOW, new TrimmedWindowEditor(modelProvider.getEditingDomain()));
 		registerEditor(BasicPackageImpl.Literals.PART_SASH_CONTAINER, new PartSashContainerEditor(modelProvider.getEditingDomain(), this));
 		registerEditor(BasicPackageImpl.Literals.PART_STACK, new PartStackEditor(modelProvider.getEditingDomain(),this));
 		registerEditor(BasicPackageImpl.Literals.INPUT_PART, new InputPartEditor(modelProvider.getEditingDomain(), project));
-		registerEditor(BasicPackageImpl.Literals.TRIM_CONTAINER, new TrimContainerEditor(modelProvider.getEditingDomain(), this));
+		registerEditor(BasicPackageImpl.Literals.TRIM_BAR, new TrimBarEditor(modelProvider.getEditingDomain(), this));
 		
 		registerEditor(org.eclipse.e4.ui.model.application.descriptor.basic.impl.BasicPackageImpl.Literals.PART_DESCRIPTOR, new PartDescriptorEditor(modelProvider.getEditingDomain(),project));
 		

@@ -59,7 +59,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-public class TrimContainerEditor extends AbstractComponentEditor {
+public class TrimBarEditor extends AbstractComponentEditor {
 
 	private Composite composite;
 	private Image image;
@@ -68,7 +68,7 @@ public class TrimContainerEditor extends AbstractComponentEditor {
 
 	private IListProperty ELEMENT_CONTAINER__CHILDREN = EMFProperties.list(UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN);
 
-	public TrimContainerEditor(EditingDomain editingDomain, ModelEditor editor) {
+	public TrimBarEditor(EditingDomain editingDomain, ModelEditor editor) {
 		super(editingDomain);
 		this.editor = editor;
 	}
