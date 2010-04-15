@@ -233,6 +233,7 @@ public class Messages {
 	public static String PartStackEditor_Up;
 	public static String PartStackEditor_Down;
 	public static String PartStackEditor_Remove;
+	public static String PerspectiveStackEditor_Perspectives;
 	
 	public static String PerspectiveEditor_Label;
 	public static String PerspectiveEditor_Description;
@@ -283,6 +284,7 @@ public class Messages {
 	public static String VBindingTableEditor_Down;
 	public static String VBindingTableEditor_Add;
 	public static String VBindingTableEditor_Remove;
+	
 	
 	
 	

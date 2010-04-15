@@ -12,6 +12,7 @@ package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.observable.list.IObservableList;
@@ -22,24 +23,41 @@ import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.databinding.property.list.IListProperty;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
 import org.eclipse.e4.tools.emf.ui.internal.Messages;
+import org.eclipse.e4.tools.emf.ui.internal.common.ComponentLabelProvider;
+import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
 import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
+import org.eclipse.e4.ui.model.application.ui.MElementContainer;
+import org.eclipse.e4.ui.model.application.ui.advanced.MAdvancedFactory;
+import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
 import org.eclipse.e4.ui.model.application.ui.impl.UiPackageImpl;
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.EMFProperties;
+import org.eclipse.emf.databinding.IEMFListProperty;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.databinding.edit.IEMFEditListProperty;
 import org.eclipse.emf.databinding.edit.IEMFEditValueProperty;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.MoveCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.databinding.swt.IWidgetValueProperty;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.databinding.viewers.IViewerValueProperty;
+import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ViewerProperties;
 import org.eclipse.jface.databinding.viewers.ViewerSupport;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
@@ -49,11 +67,13 @@ public class PerspectiveStackEditor extends AbstractComponentEditor {
 	private Composite composite;
 	private Image image;
 	private EMFDataBindingContext context;
+	private ModelEditor modelEditor;
 
 	private IListProperty ELEMENT_CONTAINER__CHILDREN = EMFProperties.list(UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN);
 
-	public PerspectiveStackEditor(EditingDomain editingDomain) {
+	public PerspectiveStackEditor(EditingDomain editingDomain, ModelEditor modelEditor) {
 		super(editingDomain);
+		this.modelEditor = modelEditor;
 	}
 
 	@Override
@@ -146,6 +166,122 @@ public class PerspectiveStackEditor extends AbstractComponentEditor {
 
 				public void handleValueChange(ValueChangeEvent event) {
 					binding[0] = context.bindValue(uiObs, mObs);
+				}
+			});
+		}
+		
+		// ------------------------------------------------------------
+		{
+			Label l = new Label(parent, SWT.NONE);
+			l.setText(Messages.PerspectiveStackEditor_Perspectives);
+			
+			final TableViewer viewer = new TableViewer(parent);
+			viewer.setContentProvider(new ObservableListContentProvider());
+			viewer.setLabelProvider(new ComponentLabelProvider(modelEditor));
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.heightHint = 300;
+			viewer.getControl().setLayoutData(gd);
+			
+			
+			IEMFListProperty prop = EMFProperties.list(UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN);
+			viewer.setInput(prop.observeDetail(getMaster()));
+			
+			Composite buttonComp = new Composite(parent, SWT.NONE);
+			buttonComp.setLayoutData(new GridData(GridData.FILL,GridData.END,false,false));
+			GridLayout gl = new GridLayout();
+			gl.marginLeft=0;
+			gl.marginRight=0;
+			gl.marginWidth=0;
+			gl.marginHeight=0;
+			buttonComp.setLayout(gl);
+
+			Button b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
+			b.setText(Messages.PartStackEditor_Up);
+			b.setImage(getImage(b.getDisplay(), ARROW_UP));
+			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+			b.addSelectionListener(new SelectionAdapter() { 
+				@Override
+				public void widgetSelected(SelectionEvent e) {  
+					if( ! viewer.getSelection().isEmpty() ) {
+						IStructuredSelection s = (IStructuredSelection)viewer.getSelection();
+						if( s.size() == 1 ) {
+							Object obj = s.getFirstElement();
+							MElementContainer<?> container = (MElementContainer<?>) getMaster().getValue();
+							int idx = container.getChildren().indexOf(obj) - 1;
+							if( idx >= 0 ) {
+								Command cmd = MoveCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, obj, idx);
+								
+								if( cmd.canExecute() ) {
+									getEditingDomain().getCommandStack().execute(cmd);
+									viewer.setSelection(new StructuredSelection(obj));
+								}
+							}
+							
+						}
+					}
+				}
+			});
+
+			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
+			b.setText(Messages.PartStackEditor_Down);
+			b.setImage(getImage(b.getDisplay(), ARROW_DOWN));
+			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+			b.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					if( ! viewer.getSelection().isEmpty() ) {
+						IStructuredSelection s = (IStructuredSelection)viewer.getSelection();
+						if( s.size() == 1 ) {
+							Object obj = s.getFirstElement();
+							MElementContainer<?> container = (MElementContainer<?>) getMaster().getValue();
+							int idx = container.getChildren().indexOf(obj) + 1;
+							if( idx < container.getChildren().size() ) {
+								Command cmd = MoveCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, obj, idx);
+								
+								if( cmd.canExecute() ) {
+									getEditingDomain().getCommandStack().execute(cmd);
+									viewer.setSelection(new StructuredSelection(obj));
+								}
+							}
+							
+						}
+					}
+				}
+			});
+						
+			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
+			b.setImage(getImage(b.getDisplay(), TABLE_ADD_IMAGE));
+			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+			b.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					MPerspective eObject = MAdvancedFactory.INSTANCE.createPerspective();
+					
+					Command cmd = AddCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, eObject);
+					
+					if( cmd.canExecute() ) {
+						getEditingDomain().getCommandStack().execute(cmd);
+						modelEditor.setSelection(eObject);
+					}
+				}
+			});
+			
+			
+			b = new Button(buttonComp, SWT.PUSH | SWT.FLAT);
+			b.setText(Messages.PartStackEditor_Remove);
+			b.setImage(getImage(b.getDisplay(), TABLE_DELETE_IMAGE));
+			b.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+			b.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					if( ! viewer.getSelection().isEmpty() ) {
+						List<?> elements = ((IStructuredSelection)viewer.getSelection()).toList();
+						
+						Command cmd = RemoveCommand.create(getEditingDomain(), getMaster().getValue(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN, elements);
+						if( cmd.canExecute() ) {
+							getEditingDomain().getCommandStack().execute(cmd);
+						}
+					}
 				}
 			});
 		}
