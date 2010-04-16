@@ -173,6 +173,18 @@ public class PartStackEditor extends AbstractComponentEditor {
 		// ------------------------------------------------------------
 		{
 			Label l = new Label(parent, SWT.NONE);
+			l.setText(Messages.PartStackEditor_ContainerData);
+
+			Text t = new Text(parent, SWT.BORDER);
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalSpan=2;
+			t.setLayoutData(gd);
+			context.bindValue(textProp.observeDelayed(200,t), EMFEditProperties.value(getEditingDomain(), UiPackageImpl.Literals.UI_ELEMENT__CONTAINER_DATA).observeDetail(master));
+		}
+		
+		// ------------------------------------------------------------
+		{
+			Label l = new Label(parent, SWT.NONE);
 			l.setText(Messages.PartStackEditor_Parts);
 			
 			final TableViewer viewer = new TableViewer(parent);

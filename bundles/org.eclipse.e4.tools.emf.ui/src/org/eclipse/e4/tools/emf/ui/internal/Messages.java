@@ -195,6 +195,7 @@ public class Messages {
 	public static String PartDescriptorEditor_PropertiesValue;
 	public static String PartDescriptorEditor_Menus;
 	public static String PartDescriptorEditor_Handlers;
+	public static String PartDescriptorEditor_ContainerData;
 	
 	public static String PartEditor_Label;
 	public static String PartEditor_Description;
@@ -212,6 +213,7 @@ public class Messages {
 	public static String PartEditor_Remove;
 	public static String PartEditor_Menus;
 	public static String PartEditor_Handlers;
+	public static String PartEditor_ContainerData;
 	
 	public static String PartSashContainerEditor_Label;
 	public static String PartSashContainerEditor_Description;
@@ -224,6 +226,7 @@ public class Messages {
 	public static String PartSashContainerEditor_Up;
 	public static String PartSashContainerEditor_Down;
 	public static String PartSashContainerEditor_Remove;
+	public static String PartSashContainerEditor_ContainerData;
 	
 	public static String PartStackEditor_Label;
 	public static String PartStackEditor_Description;
@@ -233,7 +236,7 @@ public class Messages {
 	public static String PartStackEditor_Up;
 	public static String PartStackEditor_Down;
 	public static String PartStackEditor_Remove;
-	public static String PerspectiveStackEditor_Perspectives;
+	public static String PartStackEditor_ContainerData;
 	
 	public static String PerspectiveEditor_Label;
 	public static String PerspectiveEditor_Description;
@@ -242,7 +245,12 @@ public class Messages {
 	public static String PerspectiveEditor_Tooltip;
 	public static String PerspectiveEditor_IconURI;
 	public static String PerspectiveEditor_Find;
+	public static String PerspectiveEditor_Controls;
+	public static String PerspectiveEditor_Up;
+	public static String PerspectiveEditor_Down;
+	public static String PerspectiveEditor_Remove;
 	
+	public static String PerspectiveStackEditor_Perspectives;
 	public static String PerspectiveStackEditor_Label;
 	public static String PerspectiveStackEditor_Description;
 	public static String PerspectiveStackEditor_Id;
@@ -284,6 +292,14 @@ public class Messages {
 	public static String VBindingTableEditor_Down;
 	public static String VBindingTableEditor_Add;
 	public static String VBindingTableEditor_Remove;
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
