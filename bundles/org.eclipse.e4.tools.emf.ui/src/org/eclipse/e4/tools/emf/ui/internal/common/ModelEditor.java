@@ -10,22 +10,11 @@
  ******************************************************************************/
 package org.eclipse.e4.tools.emf.ui.internal.common;
 
-import org.eclipse.e4.tools.emf.ui.common.EStackLayout;
-
-import org.eclipse.swt.widgets.TreeItem;
-
-import javax.annotation.PostConstruct;
-
-import org.eclipse.e4.ui.internal.workbench.E4XMIResource;
-
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.IObservable;
 import org.eclipse.core.databinding.observable.list.IObservableList;
@@ -36,6 +25,7 @@ import org.eclipse.core.databinding.observable.masterdetail.IObservableFactory;
 import org.eclipse.core.databinding.observable.set.ISetChangeListener;
 import org.eclipse.core.databinding.observable.set.SetChangeEvent;
 import org.eclipse.core.databinding.observable.set.WritableSet;
+import org.eclipse.core.databinding.property.list.IListProperty;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -46,11 +36,13 @@ import org.eclipse.core.runtime.RegistryFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.contributions.IContributionFactory;
+import org.eclipse.e4.tools.emf.ui.common.EStackLayout;
 import org.eclipse.e4.tools.emf.ui.common.IEditorDescriptor;
 import org.eclipse.e4.tools.emf.ui.common.IEditorFeature;
 import org.eclipse.e4.tools.emf.ui.common.IEditorFeature.FeatureClass;
 import org.eclipse.e4.tools.emf.ui.common.IModelResource;
 import org.eclipse.e4.tools.emf.ui.common.ISelectionProviderService;
+import org.eclipse.e4.tools.emf.ui.common.MemoryTransfer;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
 import org.eclipse.e4.tools.emf.ui.internal.ShadowComposite;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.AddonsEditor;
@@ -101,18 +93,31 @@ import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VWindowShar
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VWindowTrimEditor;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
+import org.eclipse.e4.ui.model.application.MApplicationElement;
 import org.eclipse.e4.ui.model.application.commands.impl.CommandsPackageImpl;
 import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
+import org.eclipse.e4.ui.model.application.ui.MElementContainer;
+import org.eclipse.e4.ui.model.application.ui.MUIElement;
 import org.eclipse.e4.ui.model.application.ui.advanced.impl.AdvancedPackageImpl;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.impl.BasicPackageImpl;
+import org.eclipse.e4.ui.model.application.ui.impl.UiPackageImpl;
 import org.eclipse.e4.ui.model.application.ui.menu.impl.MenuPackageImpl;
 import org.eclipse.e4.ui.model.fragment.MModelFragments;
 import org.eclipse.e4.ui.model.fragment.impl.FragmentPackageImpl;
+import org.eclipse.e4.ui.model.internal.ModelUtils;
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.databinding.EMFProperties;
 import org.eclipse.emf.databinding.FeaturePath;
+import org.eclipse.emf.databinding.IEMFProperty;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.CommandParameter;
+import org.eclipse.emf.edit.command.MoveCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -124,10 +129,16 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerDropAdapter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DragSourceAdapter;
+import org.eclipse.swt.dnd.DragSourceEvent;
+import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Rectangle;
@@ -136,6 +147,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.TreeItem;
 
 public class ModelEditor {
 	private static final String CSS_CLASS_KEY = "org.eclipse.e4.ui.css.CssClassName"; //$NON-NLS-1$
@@ -175,7 +187,7 @@ public class ModelEditor {
 	@Inject
 	@Optional
 	private MPart editorPart;
-	
+
 	public ModelEditor(Composite composite, IEclipseContext context, IModelResource modelProvider, IProject project) {
 		this.modelProvider = modelProvider;
 		this.project = project;
@@ -190,7 +202,7 @@ public class ModelEditor {
 		loadEditorFeatures();
 
 		fragment = modelProvider.getRoot().get(0) instanceof MModelFragments;
-		
+
 		SashForm form = new SashForm(composite, SWT.HORIZONTAL);
 		form.setBackground(form.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
@@ -224,7 +236,7 @@ public class ModelEditor {
 		final Label textLabel = new Label(headerContainer, SWT.NONE);
 		textLabel.setData(CSS_CLASS_KEY, "sectionHeader"); //$NON-NLS-1$
 		textLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-				
+
 		final ScrolledComposite scrolling = new ScrolledComposite(editingArea, SWT.H_SCROLL | SWT.V_SCROLL);
 		scrolling.setBackgroundMode(SWT.INHERIT_DEFAULT);
 		scrolling.setData(CSS_CLASS_KEY, "formContainer"); //$NON-NLS-1$
@@ -239,7 +251,7 @@ public class ModelEditor {
 		scrolling.addControlListener(new ControlAdapter() {
 			public void controlResized(ControlEvent e) {
 				Rectangle r = scrolling.getClientArea();
-				scrolling.setMinSize(contentContainer.computeSize(r.width, SWT.DEFAULT));	
+				scrolling.setMinSize(contentContainer.computeSize(r.width, SWT.DEFAULT));
 			}
 		});
 
@@ -278,7 +290,7 @@ public class ModelEditor {
 					Rectangle r = scrolling.getClientArea();
 					scrolling.setMinSize(contentContainer.computeSize(r.width, SWT.DEFAULT));
 					scrolling.setOrigin(0, 0);
-					scrolling.layout(true,true);
+					scrolling.layout(true, true);
 
 					if (selectionService != null) {
 						selectionService.setSelection(s.getFirstElement());
@@ -328,7 +340,7 @@ public class ModelEditor {
 			if (!"editorfeature".equals(el.getName())) { //$NON-NLS-1$
 				continue;
 			}
-			
+
 			try {
 				editorFeatures.add((IEditorFeature) el.createExecutableExtension("class")); //$NON-NLS-1$
 			} catch (CoreException e) {
@@ -337,22 +349,22 @@ public class ModelEditor {
 			}
 		}
 	}
-	
+
 	public boolean isModelFragment() {
 		return fragment;
 	}
-	
+
 	public boolean isLiveModel() {
-		return ! modelProvider.isSaveable();
+		return !modelProvider.isSaveable();
 	}
-	
+
 	public List<FeatureClass> getFeatureClasses(EClass eClass, EStructuralFeature feature) {
 		List<FeatureClass> list = new ArrayList<IEditorFeature.FeatureClass>();
-		
-		for( IEditorFeature f : editorFeatures ) {
+
+		for (IEditorFeature f : editorFeatures) {
 			list.addAll(f.getFeatureClasses(eClass, feature));
 		}
-		
+
 		return list;
 	}
 
@@ -365,12 +377,6 @@ public class ModelEditor {
 			}
 		}
 	}
-
-	// @Inject
-	// public void updateSelection(@Optional @Named(IServiceConstants.SELECTION)
-	// Object selection ) {
-	// System.err.println("The selection: " + selection);
-	// }
 
 	private TreeViewer createTreeViewerArea(Composite parent) {
 		parent = new Composite(parent, SWT.NONE);
@@ -418,6 +424,26 @@ public class ModelEditor {
 
 		viewer.setInput(modelProvider.getRoot());
 		viewer.expandToLevel(2);
+		// ViewerDropAdapter adapter = new ViewerDropAdapter(viewer) {
+		//
+		// @Override
+		// public boolean validateDrop(Object target, int operation,
+		// TransferData transferType) {
+		// // TODO Auto-generated method stub
+		// return false;
+		// }
+		//
+		// @Override
+		// public boolean performDrop(Object data) {
+		// // TODO Auto-generated method stub
+		// return false;
+		// }
+		// };
+		// adapter.setFeedbackEnabled(true);
+
+		int ops = DND.DROP_MOVE;
+		viewer.addDragSupport(ops, new Transfer[] { MemoryTransfer.getInstance() }, new DragListener(viewer));
+		viewer.addDropSupport(ops, new Transfer[] { MemoryTransfer.getInstance() }, new DropListener(viewer, modelProvider.getEditingDomain()));
 
 		return viewer;
 	}
@@ -454,7 +480,7 @@ public class ModelEditor {
 		registerVirtualEditor(VIRTUAL_WINDOW_SHARED_ELEMENTS, new VWindowSharedElementsEditor(modelProvider.getEditingDomain(), this));
 		registerVirtualEditor(VIRTUAL_MODEL_FRAGEMENTS, new VModelFragmentsEditor(modelProvider.getEditingDomain(), this));
 		registerVirtualEditor(VIRTUAL_MODEL_IMPORTS, new VModelImportsEditor(modelProvider.getEditingDomain(), this));
-		
+
 	}
 
 	private void registerVirtualEditor(String id, AbstractComponentEditor editor) {
@@ -488,12 +514,12 @@ public class ModelEditor {
 	}
 
 	private void registerDefaultEditors() {
-		registerEditor(ApplicationPackageImpl.Literals.APPLICATION, new ApplicationEditor(modelProvider.getEditingDomain(),this));
-		registerEditor(ApplicationPackageImpl.Literals.ADDON, new AddonsEditor(modelProvider.getEditingDomain(),this, project));
+		registerEditor(ApplicationPackageImpl.Literals.APPLICATION, new ApplicationEditor(modelProvider.getEditingDomain(), this));
+		registerEditor(ApplicationPackageImpl.Literals.ADDON, new AddonsEditor(modelProvider.getEditingDomain(), this, project));
 
-		registerEditor(CommandsPackageImpl.Literals.KEY_BINDING, new KeyBindingEditor(modelProvider.getEditingDomain(),this, modelProvider));
-		registerEditor(CommandsPackageImpl.Literals.HANDLER, new HandlerEditor(modelProvider.getEditingDomain(),this, modelProvider, project));
-		registerEditor(CommandsPackageImpl.Literals.COMMAND, new CommandEditor(modelProvider.getEditingDomain(),this));
+		registerEditor(CommandsPackageImpl.Literals.KEY_BINDING, new KeyBindingEditor(modelProvider.getEditingDomain(), this, modelProvider));
+		registerEditor(CommandsPackageImpl.Literals.HANDLER, new HandlerEditor(modelProvider.getEditingDomain(), this, modelProvider, project));
+		registerEditor(CommandsPackageImpl.Literals.COMMAND, new CommandEditor(modelProvider.getEditingDomain(), this));
 		registerEditor(CommandsPackageImpl.Literals.BINDING_TABLE, new BindingTableEditor(modelProvider.getEditingDomain(), this));
 
 		registerEditor(MenuPackageImpl.Literals.TOOL_BAR, new ToolBarEditor(modelProvider.getEditingDomain(), this));
@@ -506,11 +532,10 @@ public class ModelEditor {
 		registerEditor(MenuPackageImpl.Literals.MENU_SEPARATOR, new MenuSeparatorEditor(modelProvider.getEditingDomain(), this));
 		registerEditor(MenuPackageImpl.Literals.HANDLED_MENU_ITEM, new HandledMenuItemEditor(modelProvider.getEditingDomain(), this, project, modelProvider));
 		registerEditor(MenuPackageImpl.Literals.DIRECT_MENU_ITEM, new DirectMenuItemEditor(modelProvider.getEditingDomain(), this, project));
-		registerEditor(MenuPackageImpl.Literals.MENU_CONTRIBUTION, new MenuContributionEditor(modelProvider.getEditingDomain(),project, this));
-		registerEditor(MenuPackageImpl.Literals.TOOL_BAR_CONTRIBUTION, new ToolBarContributionEditor(modelProvider.getEditingDomain(),project, this));
-		registerEditor(MenuPackageImpl.Literals.TRIM_CONTRIBUTION, new TrimContributionEditor(modelProvider.getEditingDomain(),project, this));
-		
-		
+		registerEditor(MenuPackageImpl.Literals.MENU_CONTRIBUTION, new MenuContributionEditor(modelProvider.getEditingDomain(), project, this));
+		registerEditor(MenuPackageImpl.Literals.TOOL_BAR_CONTRIBUTION, new ToolBarContributionEditor(modelProvider.getEditingDomain(), project, this));
+		registerEditor(MenuPackageImpl.Literals.TRIM_CONTRIBUTION, new TrimContributionEditor(modelProvider.getEditingDomain(), project, this));
+
 		registerEditor(BasicPackageImpl.Literals.PART, new PartEditor(modelProvider.getEditingDomain(), this, project));
 		registerEditor(BasicPackageImpl.Literals.WINDOW, new WindowEditor(modelProvider.getEditingDomain(), this, project));
 		registerEditor(BasicPackageImpl.Literals.TRIMMED_WINDOW, new TrimmedWindowEditor(modelProvider.getEditingDomain(), this, project));
@@ -523,10 +548,10 @@ public class ModelEditor {
 
 		registerEditor(AdvancedPackageImpl.Literals.PERSPECTIVE_STACK, new PerspectiveStackEditor(modelProvider.getEditingDomain(), this));
 		registerEditor(AdvancedPackageImpl.Literals.PERSPECTIVE, new PerspectiveEditor(modelProvider.getEditingDomain(), project, this));
-		registerEditor(AdvancedPackageImpl.Literals.PLACEHOLDER, new PlaceholderEditor(modelProvider.getEditingDomain(),this,modelProvider));
-		
+		registerEditor(AdvancedPackageImpl.Literals.PLACEHOLDER, new PlaceholderEditor(modelProvider.getEditingDomain(), this, modelProvider));
+
 		registerEditor(FragmentPackageImpl.Literals.MODEL_FRAGMENTS, new ModelFragmentsEditor(modelProvider.getEditingDomain(), this));
-		registerEditor(FragmentPackageImpl.Literals.STRING_MODEL_FRAGMENT, new StringModelFragment(modelProvider.getEditingDomain(),this));
+		registerEditor(FragmentPackageImpl.Literals.STRING_MODEL_FRAGMENT, new StringModelFragment(modelProvider.getEditingDomain(), this));
 	}
 
 	public void registerEditor(EClass eClass, AbstractComponentEditor editor) {
@@ -563,10 +588,10 @@ public class ModelEditor {
 
 	public AbstractComponentEditor getEditor(EClass eClass) {
 		AbstractComponentEditor editor = editorMap.get(eClass);
-		if( editor == null ) {
-			for( EClass cl : eClass.getESuperTypes() ) {
+		if (editor == null) {
+			for (EClass cl : eClass.getESuperTypes()) {
 				editor = getEditor(cl);
-				if( editor != null ) {
+				if (editor != null) {
 					return editor;
 				}
 			}
@@ -586,11 +611,11 @@ public class ModelEditor {
 		viewer.getControl().setFocus();
 	}
 
-	private static class TreeStructureAdvisorImpl extends TreeStructureAdvisor {
+	static class TreeStructureAdvisorImpl extends TreeStructureAdvisor {
 
 	}
 
-	private class ObservableFactoryImpl implements IObservableFactory {
+	class ObservableFactoryImpl implements IObservableFactory {
 
 		public IObservable createObservable(Object target) {
 			if (target instanceof IObservableList) {
@@ -607,4 +632,158 @@ public class ModelEditor {
 			return null;
 		}
 	}
+
+	static class DragListener extends DragSourceAdapter {
+		private final TreeViewer viewer;
+
+		public DragListener(TreeViewer viewer) {
+			this.viewer = viewer;
+		}
+
+		@Override
+		public void dragStart(DragSourceEvent event) {
+			IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+			event.doit = !selection.isEmpty() && selection.getFirstElement() instanceof MApplicationElement;
+		}
+
+		@Override
+		public void dragSetData(DragSourceEvent event) {
+			IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+			Object o = selection.getFirstElement();
+			event.data = o;
+		}
+	}
+
+	static class DropListener extends ViewerDropAdapter {
+		private EditingDomain domain;
+
+		protected DropListener(Viewer viewer, EditingDomain domain) {
+			super(viewer);
+			this.domain = domain;
+		}
+
+		@Override
+		public boolean performDrop(Object data) {
+			if (getCurrentLocation() == LOCATION_ON) {
+				EStructuralFeature feature = null;
+				EObject parent = null;
+				if (getCurrentTarget() instanceof MElementContainer<?>) {
+					feature = UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN;
+					parent = (EObject) getCurrentTarget();
+				} else if (getCurrentTarget() instanceof VirtualEntry<?>) {
+					VirtualEntry<?> entry = (VirtualEntry<?>) getCurrentTarget();
+					IListProperty prop = entry.getProperty();
+					if (prop instanceof IEMFProperty) {
+						feature = ((IEMFProperty) prop).getStructuralFeature();
+						parent = (EObject) entry.getOriginalParent();
+
+					}
+				}
+
+				if (feature != null && parent != null) {
+					Command cmd = AddCommand.create(domain, parent, feature, data);
+					if (cmd.canExecute()) {
+						domain.getCommandStack().execute(cmd);
+					}
+				}
+			} else if (getCurrentLocation() == LOCATION_AFTER || getCurrentLocation() == LOCATION_BEFORE) {
+				EStructuralFeature feature = null;
+				EObject parent = null;
+				int index = CommandParameter.NO_INDEX;
+
+				TreeItem item = (TreeItem) getCurrentEvent().item;
+				if (item != null) {
+					TreeItem parentItem = item.getParentItem();
+					if (item != null) {
+						if (parentItem.getData() instanceof VirtualEntry<?>) {
+							VirtualEntry<?> vE = (VirtualEntry<?>) parentItem.getData();
+							parent = (EObject) vE.getOriginalParent();
+							feature = ((IEMFProperty) vE.getProperty()).getStructuralFeature();
+						} else {
+							parent = (EObject) parentItem.getData();
+							if (parent instanceof MElementContainer<?>) {
+								feature = UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN;
+							}
+						}
+
+						index = parentItem.indexOf(item);
+					}
+				}
+
+				if (feature != null && parent != null) {
+					if (parent == ((EObject) data).eContainer()) {
+						Command cmd = MoveCommand.create(domain, parent, feature, data, index);
+						if (cmd.canExecute()) {
+							domain.getCommandStack().execute(cmd);
+						}
+					} else {
+						if (index >= ((List<?>) parent.eGet(feature)).size()) {
+							index = CommandParameter.NO_INDEX;
+						}
+						Command cmd = AddCommand.create(domain, parent, feature, data, index);
+						if (cmd.canExecute()) {
+							domain.getCommandStack().execute(cmd);
+						}
+					}
+				}
+			}
+
+			return false;
+		}
+
+		@Override
+		public boolean validateDrop(Object target, int operation, TransferData transferType) {
+			boolean rv = false;
+			if (getSelectedObject() instanceof MApplicationElement) {
+				if (getCurrentLocation() == LOCATION_ON) {
+					rv = isValidDrop(target, (MApplicationElement) getSelectedObject(), false);
+				} else if (getCurrentLocation() == LOCATION_AFTER || getCurrentLocation() == LOCATION_BEFORE) {
+					TreeItem item = (TreeItem) getCurrentEvent().item;
+					if (item != null) {
+						item = item.getParentItem();
+						if (item != null) {
+							rv = isValidDrop(item.getData(), (MApplicationElement) getSelectedObject(), true);
+						}
+					}
+				}
+			}
+
+			// System.err.println(getCurrentTarget());
+			// System.err.println(getSelectedObject());
+			// System.err.println(getCurrentLocation() + ":" + rv);
+			// System.err.println("=================");
+
+			return rv;
+		}
+
+		private boolean isValidDrop(Object target, MApplicationElement instance, boolean isIndex) {
+			if (target instanceof MElementContainer<?>) {
+				MElementContainer<MUIElement> container = (MElementContainer<MUIElement>) target;
+
+				// If already contained the skip it
+				if (isIndex || !container.getChildren().contains(instance)) {
+					EClassifier classifier = ModelUtils.getTypeArgument(((EObject) container).eClass(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN.getEGenericType());
+					return classifier.isInstance(instance);
+				}
+			} else if (target instanceof VirtualEntry<?>) {
+				VirtualEntry<Object> vTarget = (VirtualEntry<Object>) target;
+				if (isIndex || !vTarget.getList().contains(instance)) {
+					if (vTarget.getProperty() instanceof IEMFProperty) {
+						EStructuralFeature feature = ((IEMFProperty) vTarget.getProperty()).getStructuralFeature();
+						EObject parent = (EObject) vTarget.getOriginalParent();
+						List<Object> list = (List<Object>) parent.eGet(feature);
+
+						if (!list.contains(instance)) {
+							EClassifier classifier = ModelUtils.getTypeArgument(parent.eClass(), feature.getEGenericType());
+							return classifier.isInstance(instance);
+						}
+					}
+
+				}
+			}
+
+			return false;
+		}
+	}
+
 }
