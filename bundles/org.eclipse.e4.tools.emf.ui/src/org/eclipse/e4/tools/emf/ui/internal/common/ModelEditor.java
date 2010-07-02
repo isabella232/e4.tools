@@ -689,7 +689,6 @@ public class ModelEditor {
 			} else if (getCurrentLocation() == LOCATION_AFTER || getCurrentLocation() == LOCATION_BEFORE) {
 				EStructuralFeature feature = null;
 				EObject parent = null;
-				int index = CommandParameter.NO_INDEX;
 
 				TreeItem item = (TreeItem) getCurrentEvent().item;
 				if (item != null) {
@@ -705,21 +704,27 @@ public class ModelEditor {
 								feature = UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN;
 							}
 						}
-
-						index = parentItem.indexOf(item);
 					}
 				}
 
 				if (feature != null && parent != null) {
+					List<Object> list = (List<Object>) parent.eGet(feature);
+					int index = list.indexOf(getCurrentTarget());
+
+					// if (getCurrentLocation() == LOCATION_AFTER) {
+					// index += 1;
+					// }
+
+					if (index >= list.size()) {
+						index = CommandParameter.NO_INDEX;
+					}
+
 					if (parent == ((EObject) data).eContainer()) {
 						Command cmd = MoveCommand.create(domain, parent, feature, data, index);
 						if (cmd.canExecute()) {
 							domain.getCommandStack().execute(cmd);
 						}
 					} else {
-						if (index >= ((List<?>) parent.eGet(feature)).size()) {
-							index = CommandParameter.NO_INDEX;
-						}
 						Command cmd = AddCommand.create(domain, parent, feature, data, index);
 						if (cmd.canExecute()) {
 							domain.getCommandStack().execute(cmd);
