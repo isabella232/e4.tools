@@ -178,9 +178,6 @@ public class ModelEditor {
 	private List<FeaturePath> labelFeaturePaths = new ArrayList<FeaturePath>();
 	private List<IEditorFeature> editorFeatures = new ArrayList<IEditorFeature>();
 
-	// private List<AbstractComponentEditor> editors = new
-	// ArrayList<AbstractComponentEditor>();
-
 	private TreeViewer viewer;
 	private IModelResource modelProvider;
 	private IProject project;
