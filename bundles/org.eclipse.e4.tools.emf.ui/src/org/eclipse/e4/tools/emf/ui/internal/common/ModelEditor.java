@@ -678,6 +678,15 @@ public class ModelEditor {
 						parent = (EObject) entry.getOriginalParent();
 
 					}
+				} else if (getCurrentTarget() instanceof EObject) {
+					parent = (EObject) getCurrentTarget();
+					for (EStructuralFeature f : parent.eClass().getEAllStructuralFeatures()) {
+						EClassifier cl = ModelUtils.getTypeArgument(parent.eClass(), f.getEGenericType());
+						if (cl.isInstance(data)) {
+							feature = f;
+							break;
+						}
+					}
 				}
 
 				if (feature != null && parent != null) {
@@ -698,10 +707,17 @@ public class ModelEditor {
 							VirtualEntry<?> vE = (VirtualEntry<?>) parentItem.getData();
 							parent = (EObject) vE.getOriginalParent();
 							feature = ((IEMFProperty) vE.getProperty()).getStructuralFeature();
-						} else {
+						} else if (parentItem.getData() instanceof MElementContainer<?>) {
 							parent = (EObject) parentItem.getData();
-							if (parent instanceof MElementContainer<?>) {
-								feature = UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN;
+							feature = UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN;
+						} else if (parentItem.getData() instanceof EObject) {
+							parent = (EObject) parentItem.getData();
+							for (EStructuralFeature f : parent.eClass().getEAllStructuralFeatures()) {
+								EClassifier cl = ModelUtils.getTypeArgument(parent.eClass(), f.getEGenericType());
+								if (cl.isInstance(data)) {
+									feature = f;
+									break;
+								}
 							}
 						}
 					}
@@ -710,10 +726,6 @@ public class ModelEditor {
 				if (feature != null && parent != null) {
 					List<Object> list = (List<Object>) parent.eGet(feature);
 					int index = list.indexOf(getCurrentTarget());
-
-					// if (getCurrentLocation() == LOCATION_AFTER) {
-					// index += 1;
-					// }
 
 					if (index >= list.size()) {
 						index = CommandParameter.NO_INDEX;
@@ -753,11 +765,6 @@ public class ModelEditor {
 				}
 			}
 
-			// System.err.println(getCurrentTarget());
-			// System.err.println(getSelectedObject());
-			// System.err.println(getCurrentLocation() + ":" + rv);
-			// System.err.println("=================");
-
 			return rv;
 		}
 
@@ -765,7 +772,6 @@ public class ModelEditor {
 			if (target instanceof MElementContainer<?>) {
 				MElementContainer<MUIElement> container = (MElementContainer<MUIElement>) target;
 
-				// If already contained the skip it
 				if (isIndex || !container.getChildren().contains(instance)) {
 					EClassifier classifier = ModelUtils.getTypeArgument(((EObject) container).eClass(), UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN.getEGenericType());
 					return classifier.isInstance(instance);
@@ -776,14 +782,18 @@ public class ModelEditor {
 					if (vTarget.getProperty() instanceof IEMFProperty) {
 						EStructuralFeature feature = ((IEMFProperty) vTarget.getProperty()).getStructuralFeature();
 						EObject parent = (EObject) vTarget.getOriginalParent();
-						List<Object> list = (List<Object>) parent.eGet(feature);
-
-						if (!list.contains(instance)) {
-							EClassifier classifier = ModelUtils.getTypeArgument(parent.eClass(), feature.getEGenericType());
-							return classifier.isInstance(instance);
-						}
+						EClassifier classifier = ModelUtils.getTypeArgument(parent.eClass(), feature.getEGenericType());
+						return classifier.isInstance(instance);
 					}
 
+				}
+			} else if (target instanceof EObject) {
+				EObject eObj = (EObject) target;
+				for (EStructuralFeature f : eObj.eClass().getEAllStructuralFeatures()) {
+					EClassifier cl = ModelUtils.getTypeArgument(eObj.eClass(), f.getEGenericType());
+					if (cl.isInstance(instance)) {
+						return true;
+					}
 				}
 			}
 
