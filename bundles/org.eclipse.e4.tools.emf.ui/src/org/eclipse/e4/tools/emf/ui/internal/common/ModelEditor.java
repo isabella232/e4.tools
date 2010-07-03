@@ -91,6 +91,8 @@ import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VWindowCont
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VWindowEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VWindowSharedElementsEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VWindowTrimEditor;
+import org.eclipse.e4.tools.services.IClipboardService;
+import org.eclipse.e4.tools.services.IClipboardService.Handler;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.model.application.MApplicationElement;
@@ -114,9 +116,11 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.MoveCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
@@ -134,6 +138,7 @@ import org.eclipse.jface.viewers.ViewerDropAdapter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSourceAdapter;
 import org.eclipse.swt.dnd.DragSourceEvent;
@@ -183,10 +188,15 @@ public class ModelEditor {
 	private ISelectionProviderService selectionService;
 	private IEclipseContext context;
 	private boolean fragment;
+	private Handler clipboardHandler;
 
 	@Inject
 	@Optional
 	private MPart editorPart;
+
+	@Inject
+	@Optional
+	private IClipboardService clipboardService;
 
 	public ModelEditor(Composite composite, IEclipseContext context, IModelResource modelProvider, IProject project) {
 		this.modelProvider = modelProvider;
@@ -608,7 +618,82 @@ public class ModelEditor {
 
 	@Focus
 	public void setFocus() {
+		if (clipboardHandler == null) {
+			clipboardHandler = new ClipboardHandler();
+		}
+		clipboardService.setHandler(clipboardHandler);
 		viewer.getControl().setFocus();
+	}
+
+	public IModelResource getModelProvider() {
+		return modelProvider;
+	}
+
+	class ClipboardHandler implements Handler {
+
+		public void paste() {
+			Clipboard clip = new Clipboard(viewer.getControl().getDisplay());
+			Object o = clip.getContents(MemoryTransfer.getInstance());
+			clip.dispose();
+			if (o == null) {
+				return;
+			}
+
+			Object parent = ((IStructuredSelection) viewer.getSelection()).getFirstElement();
+
+			EStructuralFeature feature = null;
+			EObject container = null;
+			if (parent instanceof VirtualEntry<?>) {
+				VirtualEntry<?> v = (VirtualEntry<?>) parent;
+				feature = ((IEMFProperty) v.getProperty()).getStructuralFeature();
+				container = (EObject) v.getOriginalParent();
+			} else {
+				if (parent instanceof MElementContainer<?>) {
+					feature = UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN;
+					container = (EObject) parent;
+				} else if (parent instanceof EObject) {
+					container = (EObject) parent;
+					EClass eClass = container.eClass();
+
+					for (EStructuralFeature f : eClass.getEAllStructuralFeatures()) {
+						if (ModelUtils.getTypeArgument(eClass, f.getEGenericType()).isInstance(o)) {
+							feature = f;
+							break;
+						}
+					}
+				}
+			}
+
+			if (feature != null && container != null) {
+				Command cmd = AddCommand.create(getModelProvider().getEditingDomain(), container, feature, o);
+				if (cmd.canExecute()) {
+					getModelProvider().getEditingDomain().getCommandStack().execute(cmd);
+				}
+			}
+		}
+
+		public void copy() {
+			Object o = ((IStructuredSelection) viewer.getSelection()).getFirstElement();
+			if (o != null && o instanceof EObject) {
+				Clipboard clip = new Clipboard(viewer.getControl().getDisplay());
+				clip.setContents(new Object[] { EcoreUtil.copy((EObject) o) }, new Transfer[] { MemoryTransfer.getInstance() });
+				clip.dispose();
+			}
+		}
+
+		public void cut() {
+			Object o = ((IStructuredSelection) viewer.getSelection()).getFirstElement();
+			if (o != null && o instanceof EObject) {
+				Clipboard clip = new Clipboard(viewer.getControl().getDisplay());
+				clip.setContents(new Object[] { o }, new Transfer[] { MemoryTransfer.getInstance() });
+				clip.dispose();
+				EObject eObj = (EObject) o;
+				Command cmd = RemoveCommand.create(getModelProvider().getEditingDomain(), eObj.eContainer(), eObj.eContainingFeature(), eObj);
+				if (cmd.canExecute()) {
+					getModelProvider().getEditingDomain().getCommandStack().execute(cmd);
+				}
+			}
+		}
 	}
 
 	static class TreeStructureAdvisorImpl extends TreeStructureAdvisor {

@@ -34,16 +34,11 @@ public class E4WorkbenchModelEditor extends
 	};
 
 	public E4WorkbenchModelEditor() {
-		super(ApplicationModelEditor.class);
+		super(ApplicationModelEditor.class, COPY|CUT|PASTE);
 	}
 
-	@Override
-	public void createPartControl(Composite parent) {
-		super.createPartControl(parent);
-		makeActions();
-	}
-
-	private void makeActions() {
+	protected void makeActions() {
+		super.makeActions();
 		undoAction = new UndoAction(getComponent().getModelProvider());
 		redoAction = new RedoAction(getComponent().getModelProvider());
 
