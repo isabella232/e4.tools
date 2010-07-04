@@ -71,7 +71,6 @@ public abstract class AbstractNewClassPage extends WizardPage {
 
 		public JavaClass(IPackageFragmentRoot fragmentRoot) {
 			this.fragmentRoot = fragmentRoot;
-			System.err.println("New instance: " + fragmentRoot);
 		}
 
 		public IPackageFragmentRoot getFragmentRoot() {
@@ -149,7 +148,7 @@ public abstract class AbstractNewClassPage extends WizardPage {
 			Text t = new Text(parent, SWT.BORDER);
 			t.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			t.setEditable(false);
-			dbc.bindValue(
+			final Binding bd = dbc.bindValue(
 					WidgetProperties.text().observe(t), 
 					BeanProperties.value("fragmentRoot").observe(clazz), 
 					new UpdateValueStrategy(), 
@@ -165,6 +164,7 @@ public abstract class AbstractNewClassPage extends WizardPage {
 					if( root != null ) {
 						clazz.setFragmentRoot(root);	
 					}
+					bd.updateModelToTarget();
 				}
 			});
 		}
@@ -190,7 +190,6 @@ public abstract class AbstractNewClassPage extends WizardPage {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					IPackageFragment fragment = choosePackage();
-					System.err.println("The new fragment: " + fragment);
 					if( fragment != null ) {
 						clazz.setPackageFragment(fragment);	
 					}
