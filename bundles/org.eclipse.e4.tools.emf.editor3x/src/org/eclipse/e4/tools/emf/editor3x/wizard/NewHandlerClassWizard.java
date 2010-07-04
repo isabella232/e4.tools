@@ -11,9 +11,6 @@
 package org.eclipse.e4.tools.emf.editor3x.wizard;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.MessageFormat;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.BeanProperties;
@@ -45,6 +42,7 @@ import org.eclipse.ui.IWorkbench;
 
 public class NewHandlerClassWizard extends Wizard implements INewWizard {
 	private IPackageFragmentRoot root;
+	private IFile file;
 
 	@Override
 	public void addPages() {
@@ -189,13 +187,13 @@ public class NewHandlerClassWizard extends Wizard implements INewWizard {
 			String cuName = clazz.getName() + ".java";
 			IResource resource = fragment.getCompilationUnit(cuName)
 					.getResource();
-			IFile f = (IFile) resource;
+			file = (IFile) resource;
 			try {
-				if (!f.exists()) {
-					f.create(new ByteArrayInputStream(content.getBytes()),
+				if (!file.exists()) {
+					file.create(new ByteArrayInputStream(content.getBytes()),
 							true, null);
 				} else {
-					f.setContents(new ByteArrayInputStream(content.getBytes()),
+					file.setContents(new ByteArrayInputStream(content.getBytes()),
 							IFile.FORCE | IFile.KEEP_HISTORY, null);
 				}
 			} catch (CoreException e) {
@@ -206,6 +204,10 @@ public class NewHandlerClassWizard extends Wizard implements INewWizard {
 
 		return true;
 
+	}
+	
+	public IFile getFile() {
+		return file;
 	}
 
 	public static class HandlerClass extends JavaClass {

@@ -45,5 +45,11 @@
             name="New Handler">
       </wizard>
       </extension>
+   <extension
+         point="org.eclipse.e4.tools.emf.ui.editors">
+      <contributionClassCreator
+            class="org.eclipse.e4.tools.emf.editor3x.extension.HandlerContributionEditor">
+      </contributionClassCreator>
+   </extension>
 
 </plugin>

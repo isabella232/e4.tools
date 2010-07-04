@@ -37,6 +37,7 @@ import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.contributions.IContributionFactory;
 import org.eclipse.e4.tools.emf.ui.common.EStackLayout;
+import org.eclipse.e4.tools.emf.ui.common.IContributionClassCreator;
 import org.eclipse.e4.tools.emf.ui.common.IEditorDescriptor;
 import org.eclipse.e4.tools.emf.ui.common.IEditorFeature;
 import org.eclipse.e4.tools.emf.ui.common.IEditorFeature.FeatureClass;
@@ -177,6 +178,7 @@ public class ModelEditor {
 	private Map<String, AbstractComponentEditor> virtualEditors = new HashMap<String, AbstractComponentEditor>();
 	private List<FeaturePath> labelFeaturePaths = new ArrayList<FeaturePath>();
 	private List<IEditorFeature> editorFeatures = new ArrayList<IEditorFeature>();
+	private List<IContributionClassCreator> contributionCreator = new ArrayList<IContributionClassCreator>();
 
 	private TreeViewer viewer;
 	private IModelResource modelProvider;
@@ -202,6 +204,7 @@ public class ModelEditor {
 		registerContributedEditors();
 		registerContributedVirtualEditors();
 		loadEditorFeatures();
+		loadContributionCreators();
 
 		fragment = modelProvider.getRoot().get(0) instanceof MModelFragments;
 
@@ -332,6 +335,33 @@ public class ModelEditor {
 			}
 		});
 		viewer.getControl().setMenu(mgr.createContextMenu(viewer.getControl()));
+	}
+
+	private void loadContributionCreators() {
+		IExtensionRegistry registry = RegistryFactory.getRegistry();
+		IExtensionPoint extPoint = registry.getExtensionPoint("org.eclipse.e4.tools.emf.ui.editors"); //$NON-NLS-1$
+
+		for (IConfigurationElement el : extPoint.getConfigurationElements()) {
+			if (!"contributionClassCreator".equals(el.getName())) { //$NON-NLS-1$
+				continue;
+			}
+
+			try {
+				contributionCreator.add((IContributionClassCreator) el.createExecutableExtension("class")); //$NON-NLS-1$
+			} catch (CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public IContributionClassCreator getContributionCreator(EClass eClass) {
+		for (IContributionClassCreator c : contributionCreator) {
+			if (c.getEditorClass().equals(eClass)) {
+				return c;
+			}
+		}
+		return null;
 	}
 
 	private void loadEditorFeatures() {
