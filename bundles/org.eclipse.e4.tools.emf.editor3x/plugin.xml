@@ -14,6 +14,10 @@
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">
+      <category
+            id="org.eclipse.e4"
+            name="e4">
+      </category>
       <wizard
             canFinishEarly="false"
             category="org.eclipse.e4"
@@ -33,10 +37,6 @@
             id="org.eclipse.e4.tools.emf.editor3x.newmodelcontribution"
             name="New Model Fragment">
       </wizard>
-      <category
-            id="org.eclipse.e4"
-            name="e4">
-      </category>
       <wizard
             category="org.eclipse.e4"
             class="org.eclipse.e4.tools.emf.editor3x.wizard.NewHandlerClassWizard"
