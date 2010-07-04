@@ -7,7 +7,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.widgets.Shell;
 
 public interface IContributionClassCreator {
-	public EClass getEditorClass();
+	public boolean isSupported(EClass element);
 
 	public void createOpen(MContribution contribution, EditingDomain domain, IProject project, Shell shell);
 }

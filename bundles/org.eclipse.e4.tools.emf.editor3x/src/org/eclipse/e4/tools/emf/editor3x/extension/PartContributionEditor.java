@@ -12,12 +12,11 @@ package org.eclipse.e4.tools.emf.editor3x.extension;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.e4.tools.emf.editor3x.wizard.NewHandlerClassWizard;
+import org.eclipse.e4.tools.emf.editor3x.wizard.NewPartClassWizard;
 import org.eclipse.e4.tools.emf.ui.common.IContributionClassCreator;
 import org.eclipse.e4.ui.model.application.MContribution;
-import org.eclipse.e4.ui.model.application.commands.MHandler;
-import org.eclipse.e4.ui.model.application.commands.impl.CommandsPackageImpl;
 import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
+import org.eclipse.e4.ui.model.application.ui.basic.impl.BasicPackageImpl;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -29,11 +28,12 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 
-public class HandlerContributionEditor implements IContributionClassCreator {
+public class PartContributionEditor implements IContributionClassCreator {
 
-	public void createOpen(MContribution contribution, EditingDomain domain, IProject project, Shell shell) {
+	public void createOpen(MContribution contribution, EditingDomain domain,
+			IProject project, Shell shell) {
 		if( contribution.getContributionURI() == null || contribution.getContributionURI().trim().length() == 0 ) {
-			NewHandlerClassWizard wizard = new NewHandlerClassWizard();
+			NewPartClassWizard wizard = new NewPartClassWizard();
 			wizard.init( null, new StructuredSelection(project));
 			WizardDialog dialog = new WizardDialog(shell, wizard);
 			if( dialog.open() == WizardDialog.OK ) {
@@ -55,6 +55,9 @@ public class HandlerContributionEditor implements IContributionClassCreator {
 	}
 
 	public boolean isSupported(EClass element) {
-		return CommandsPackageImpl.Literals.HANDLER == element || element.getEAllSuperTypes().contains(CommandsPackageImpl.Literals.HANDLER);
+		return BasicPackageImpl.Literals.PART == element
+				|| element.getEAllSuperTypes().contains(
+						BasicPackageImpl.Literals.PART);
 	}
+
 }

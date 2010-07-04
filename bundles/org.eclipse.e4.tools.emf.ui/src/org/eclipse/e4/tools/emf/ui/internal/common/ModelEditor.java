@@ -357,7 +357,7 @@ public class ModelEditor {
 
 	public IContributionClassCreator getContributionCreator(EClass eClass) {
 		for (IContributionClassCreator c : contributionCreator) {
-			if (c.getEditorClass().equals(eClass)) {
+			if (c.isSupported(eClass)) {
 				return c;
 			}
 		}

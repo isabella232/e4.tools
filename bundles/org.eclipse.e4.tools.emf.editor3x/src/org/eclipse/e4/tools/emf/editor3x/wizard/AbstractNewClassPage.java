@@ -13,24 +13,37 @@ package org.eclipse.e4.tools.emf.editor3x.wizard;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.databinding.conversion.Converter;
 import org.eclipse.core.databinding.validation.IValidator;
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaModel;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.internal.ui.JavaPlugin;
+import org.eclipse.jdt.internal.ui.wizards.NewWizardMessages;
+import org.eclipse.jdt.internal.ui.wizards.TypedElementSelectionValidator;
+import org.eclipse.jdt.internal.ui.wizards.TypedViewerFilter;
+import org.eclipse.jdt.ui.JavaElementComparator;
 import org.eclipse.jdt.ui.JavaElementLabelProvider;
+import org.eclipse.jdt.ui.StandardJavaElementContentProvider;
 import org.eclipse.jface.databinding.swt.IWidgetValueProperty;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -46,6 +59,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
+import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 
 public abstract class AbstractNewClassPage extends WizardPage {
 	public static class JavaClass {
@@ -57,6 +71,7 @@ public abstract class AbstractNewClassPage extends WizardPage {
 
 		public JavaClass(IPackageFragmentRoot fragmentRoot) {
 			this.fragmentRoot = fragmentRoot;
+			System.err.println("New instance: " + fragmentRoot);
 		}
 
 		public IPackageFragmentRoot getFragmentRoot() {
@@ -93,13 +108,13 @@ public abstract class AbstractNewClassPage extends WizardPage {
 	}
 
 	private JavaClass clazz;
-	private IWorkspace workspace;
 	private IPackageFragmentRoot froot;
+	private IWorkspaceRoot fWorkspaceRoot;
 	
-	protected AbstractNewClassPage(String pageName, IWorkspace workspace, String title, String description, IPackageFragmentRoot froot) {
+	protected AbstractNewClassPage(String pageName, String title, String description, IPackageFragmentRoot froot, IWorkspaceRoot fWorkspaceRoot) {
 		super(pageName);
-		this.workspace = workspace;	
 		this.froot = froot;
+		this.fWorkspaceRoot = fWorkspaceRoot;
 		
 		setTitle(title);
 		setDescription(description);
@@ -137,12 +152,21 @@ public abstract class AbstractNewClassPage extends WizardPage {
 			dbc.bindValue(
 					WidgetProperties.text().observe(t), 
 					BeanProperties.value("fragmentRoot").observe(clazz), 
-					new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), 
+					new UpdateValueStrategy(), 
 					new UpdateValueStrategy().setConverter(new PackageFragmentRootToStringConverter())
 			);
 
 			Button b = new Button(parent, SWT.PUSH);
 			b.setText("Browse ...");
+			b.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					IPackageFragmentRoot root = choosePackageRoot();
+					if( root != null ) {
+						clazz.setFragmentRoot(root);	
+					}
+				}
+			});
 		}
 
 		{
@@ -153,10 +177,10 @@ public abstract class AbstractNewClassPage extends WizardPage {
 			Text t = new Text(parent, SWT.BORDER);
 			t.setEditable(false);
 			t.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			dbc.bindValue(
+			final Binding bd = dbc.bindValue(
 					WidgetProperties.text().observe(t), 
 					BeanProperties.value("packageFragment").observe(clazz),
-					new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), 
+					new UpdateValueStrategy(), 
 					new UpdateValueStrategy().setConverter(new PackageFragmentToStringConverter())
 			);
 
@@ -165,7 +189,12 @@ public abstract class AbstractNewClassPage extends WizardPage {
 			b.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					clazz.setPackageFragment(choosePackage());
+					IPackageFragment fragment = choosePackage();
+					System.err.println("The new fragment: " + fragment);
+					if( fragment != null ) {
+						clazz.setPackageFragment(fragment);	
+					}
+					bd.updateModelToTarget();
 				}
 			});
 		}
@@ -189,11 +218,77 @@ public abstract class AbstractNewClassPage extends WizardPage {
 			new Label(parent, SWT.NONE);
 		}
 
+		{
+			Label l = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL);
+			l.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false, 3, 1));
+		}
+		
 		createFields(parent, dbc);
 		setControl(parent);
 	}
 	
-	protected IPackageFragment choosePackage() {
+	private IPackageFragmentRoot choosePackageRoot() {
+		IJavaElement initElement= clazz.getFragmentRoot();
+		Class[] acceptedClasses= new Class[] { IPackageFragmentRoot.class, IJavaProject.class };
+		TypedElementSelectionValidator validator= new TypedElementSelectionValidator(acceptedClasses, false) {
+			public boolean isSelectedValid(Object element) {
+				try {
+					if (element instanceof IJavaProject) {
+						IJavaProject jproject= (IJavaProject)element;
+						IPath path= jproject.getProject().getFullPath();
+						return (jproject.findPackageFragmentRoot(path) != null);
+					} else if (element instanceof IPackageFragmentRoot) {
+						return (((IPackageFragmentRoot)element).getKind() == IPackageFragmentRoot.K_SOURCE);
+					}
+					return true;
+				} catch (JavaModelException e) {
+					JavaPlugin.log(e.getStatus()); // just log, no UI in validation
+				}
+				return false;
+			}
+		};
+
+		acceptedClasses= new Class[] { IJavaModel.class, IPackageFragmentRoot.class, IJavaProject.class };
+		ViewerFilter filter= new TypedViewerFilter(acceptedClasses) {
+			public boolean select(Viewer viewer, Object parent, Object element) {
+				if (element instanceof IPackageFragmentRoot) {
+					try {
+						return (((IPackageFragmentRoot)element).getKind() == IPackageFragmentRoot.K_SOURCE);
+					} catch (JavaModelException e) {
+						JavaPlugin.log(e.getStatus()); // just log, no UI in validation
+						return false;
+					}
+				}
+				return super.select(viewer, parent, element);
+			}
+		};
+
+		StandardJavaElementContentProvider provider= new StandardJavaElementContentProvider();
+		ILabelProvider labelProvider= new JavaElementLabelProvider(JavaElementLabelProvider.SHOW_DEFAULT);
+		ElementTreeSelectionDialog dialog= new ElementTreeSelectionDialog(getShell(), labelProvider, provider);
+		dialog.setValidator(validator);
+		dialog.setComparator(new JavaElementComparator());
+		dialog.setTitle(NewWizardMessages.NewContainerWizardPage_ChooseSourceContainerDialog_title);
+		dialog.setMessage(NewWizardMessages.NewContainerWizardPage_ChooseSourceContainerDialog_description);
+		dialog.addFilter(filter);
+		dialog.setInput(JavaCore.create(fWorkspaceRoot));
+		dialog.setInitialSelection(initElement);
+		dialog.setHelpAvailable(false);
+
+		if (dialog.open() == Window.OK) {
+			Object element= dialog.getFirstResult();
+			if (element instanceof IJavaProject) {
+				IJavaProject jproject= (IJavaProject)element;
+				return jproject.getPackageFragmentRoot(jproject.getProject());
+			} else if (element instanceof IPackageFragmentRoot) {
+				return (IPackageFragmentRoot)element;
+			}
+			return null;
+		}
+		return null;
+	}
+	
+	private IPackageFragment choosePackage() {
 		IJavaElement[] packages= null;
 		try {
 			if (froot != null && froot.exists()) {
@@ -271,6 +366,7 @@ public abstract class AbstractNewClassPage extends WizardPage {
 		}
 		
 		public Object convert(Object fromObject) {
+			System.err.println(" =======================> Converting: " + fromObject);
 			if( fromObject == null ) {
 				return "";
 			}
