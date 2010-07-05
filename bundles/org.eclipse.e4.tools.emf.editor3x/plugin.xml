@@ -16,7 +16,7 @@
          point="org.eclipse.ui.newWizards">
       <category
             id="org.eclipse.e4"
-            name="e4">
+            name="e4 Tooling">
       </category>
       <wizard
             canFinishEarly="false"
@@ -42,7 +42,14 @@
             class="org.eclipse.e4.tools.emf.editor3x.wizard.NewHandlerClassWizard"
             icon="icons/full/obj16/class_obj.gif"
             id="org.eclipse.e4.tools.emf.editor3x.newhandler"
-            name="New Handler">
+            name="New Handler Class">
+      </wizard>
+      <wizard
+            category="org.eclipse.e4"
+            class="org.eclipse.e4.tools.emf.editor3x.wizard.NewPartClassWizard"
+            icon="icons/full/obj16/Part.gif"
+            id="org.eclipse.e4.tools.emf.editor3x.newpart"
+            name="New Part Class">
       </wizard>
       </extension>
    <extension
