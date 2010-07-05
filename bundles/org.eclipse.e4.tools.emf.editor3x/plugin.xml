@@ -13,46 +13,6 @@
       </editor>
    </extension>
    <extension
-         point="org.eclipse.ui.newWizards">
-      <category
-            id="org.eclipse.e4"
-            name="e4 Tooling">
-      </category>
-      <wizard
-            canFinishEarly="false"
-            category="org.eclipse.e4"
-            class="org.eclipse.e4.tools.emf.editor3x.wizard.NewApplicationModelWizard"
-            hasPages="true"
-            icon="icons/full/obj16/application_view_tile.png"
-            id="org.eclipse.e4.tools.emf.editor3x.newappmodel"
-            name="New Application Model">
-      </wizard>
- 
-      <wizard
-            canFinishEarly="false"
-            category="org.eclipse.e4"
-            class="org.eclipse.e4.tools.emf.editor3x.wizard.NewContributionModelWizard"
-            hasPages="true"
-            icon="icons/full/obj16/plugin.png"
-            id="org.eclipse.e4.tools.emf.editor3x.newmodelcontribution"
-            name="New Model Fragment">
-      </wizard>
-      <wizard
-            category="org.eclipse.e4"
-            class="org.eclipse.e4.tools.emf.editor3x.wizard.NewHandlerClassWizard"
-            icon="icons/full/obj16/class_obj.gif"
-            id="org.eclipse.e4.tools.emf.editor3x.newhandler"
-            name="New Handler Class">
-      </wizard>
-      <wizard
-            category="org.eclipse.e4"
-            class="org.eclipse.e4.tools.emf.editor3x.wizard.NewPartClassWizard"
-            icon="icons/full/obj16/Part.gif"
-            id="org.eclipse.e4.tools.emf.editor3x.newpart"
-            name="New Part Class">
-      </wizard>
-      </extension>
-   <extension
          point="org.eclipse.e4.tools.emf.ui.editors">
       <contributionClassCreator
             class="org.eclipse.e4.tools.emf.editor3x.extension.HandlerContributionEditor">
