@@ -164,7 +164,7 @@ public abstract class AbstractNewClassPage extends WizardPage {
 					if( root != null ) {
 						clazz.setFragmentRoot(root);	
 					}
-					bd.updateModelToTarget();
+					bd.updateModelToTarget(); //TODO Find out why this is needed
 				}
 			});
 		}
@@ -193,7 +193,7 @@ public abstract class AbstractNewClassPage extends WizardPage {
 					if( fragment != null ) {
 						clazz.setPackageFragment(fragment);	
 					}
-					bd.updateModelToTarget();
+					bd.updateModelToTarget(); //TODO Find out why this is needed
 				}
 			});
 		}

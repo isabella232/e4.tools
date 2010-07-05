@@ -105,7 +105,7 @@ public abstract class AbstractNewClassWizard extends Wizard implements INewWizar
 
 	protected abstract String getContent();
 	
-	protected JavaClass getDomainClass() {
+	public JavaClass getDomainClass() {
 		return ((AbstractNewClassPage) getPages()[0]).getClazz();
 	}
 	
