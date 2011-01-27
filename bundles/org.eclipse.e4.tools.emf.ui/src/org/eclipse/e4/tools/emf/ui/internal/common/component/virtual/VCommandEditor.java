@@ -12,6 +12,7 @@ package org.eclipse.e4.tools.emf.ui.internal.common.component.virtual;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
@@ -24,6 +25,7 @@ import org.eclipse.e4.tools.services.IResourcePool;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.commands.MCommand;
 import org.eclipse.e4.ui.model.application.commands.impl.CommandsFactoryImpl;
+import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -55,9 +57,10 @@ public class VCommandEditor extends AbstractComponentEditor {
 	private EStructuralFeature commandsFeature;
 	private List<Action> actions = new ArrayList<Action>();
 
-	public VCommandEditor(EditingDomain editingDomain, ModelEditor editor, EStructuralFeature commandsFeature, IResourcePool resourcePool) {
+	@Inject
+	public VCommandEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
 		super(editingDomain, editor, resourcePool);
-		this.commandsFeature = commandsFeature;
+		this.commandsFeature = ApplicationPackageImpl.Literals.APPLICATION__COMMANDS;
 		actions.add(new Action(Messages.VCommandEditor_AddCommand, createImageDescriptor(ResourceProvider.IMG_Command)) {
 			@Override
 			public void run() {

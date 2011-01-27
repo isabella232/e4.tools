@@ -12,6 +12,7 @@ package org.eclipse.e4.tools.emf.ui.internal.common.component.virtual;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
@@ -54,6 +55,7 @@ public class VRootBindingContexts extends AbstractComponentEditor {
 
 	private List<Action> actions = new ArrayList<Action>();
 
+	@Inject
 	public VRootBindingContexts(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
 		super(editingDomain, editor, resourcePool);
 		actions.add(new Action(Messages.VRootBindingContexts_AddContext, createImageDescriptor(ResourceProvider.IMG_BindingContext)) {

@@ -102,10 +102,11 @@ import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VCommandEdi
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VHandlerEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VItemParametersEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VMenuContributionsEditor;
-import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VMenuEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VModelFragmentsEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VModelImportsEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VPartDescriptor;
+import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VPartDescriptorMenuEditor;
+import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VPartMenuEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VRootBindingContexts;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VToolBarContributionsEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VTrimContributionsEditor;
@@ -601,25 +602,25 @@ public class ModelEditor {
 	}
 
 	private void registerVirtualEditors() {
-		registerVirtualEditor(VIRTUAL_PART_MENU, new VMenuEditor(modelProvider.getEditingDomain(), this, BasicPackageImpl.Literals.PART__MENUS, resourcePool));
-		registerVirtualEditor(VIRTUAL_HANDLER, new VHandlerEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerVirtualEditor(VIRTUAL_BINDING_TABLE, new VBindingTableEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerVirtualEditor(VIRTUAL_COMMAND, new VCommandEditor(modelProvider.getEditingDomain(), this, ApplicationPackageImpl.Literals.APPLICATION__COMMANDS, resourcePool));
-		registerVirtualEditor(VIRTUAL_WINDOWS, new VWindowEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerVirtualEditor(VIRTUAL_WINDOW_CONTROLS, new VWindowControlEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerVirtualEditor(VIRTUAL_PART_DESCRIPTORS, new VPartDescriptor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerVirtualEditor(VIRTUAL_PARTDESCRIPTOR_MENU, new VMenuEditor(modelProvider.getEditingDomain(), this, org.eclipse.e4.ui.model.application.descriptor.basic.impl.BasicPackageImpl.Literals.PART_DESCRIPTOR__MENUS, resourcePool));
-		registerVirtualEditor(VIRTUAL_TRIMMED_WINDOW_TRIMS, new VWindowTrimEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerVirtualEditor(VIRTUAL_ADDONS, new VApplicationAddons(modelProvider.getEditingDomain(), this, resourcePool));
-		registerVirtualEditor(VIRTUAL_MENU_CONTRIBUTIONS, new VMenuContributionsEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerVirtualEditor(VIRTUAL_TOOLBAR_CONTRIBUTIONS, new VToolBarContributionsEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerVirtualEditor(VIRTUAL_TRIM_CONTRIBUTIONS, new VTrimContributionsEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerVirtualEditor(VIRTUAL_WINDOW_SHARED_ELEMENTS, new VWindowSharedElementsEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerVirtualEditor(VIRTUAL_MODEL_FRAGEMENTS, new VModelFragmentsEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerVirtualEditor(VIRTUAL_MODEL_IMPORTS, new VModelImportsEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerVirtualEditor(VIRTUAL_CATEGORIES, new VApplicationCategoriesEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerVirtualEditor(VIRTUAL_PARAMETERS, new VItemParametersEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerVirtualEditor(VIRTUAL_ROOT_CONTEXTS, new VRootBindingContexts(modelProvider.getEditingDomain(), this, resourcePool));
+		registerVirtualEditor(VIRTUAL_PART_MENU, ContextInjectionFactory.make(VPartMenuEditor.class, context));
+		registerVirtualEditor(VIRTUAL_HANDLER, ContextInjectionFactory.make(VHandlerEditor.class, context));
+		registerVirtualEditor(VIRTUAL_BINDING_TABLE, ContextInjectionFactory.make(VBindingTableEditor.class, context));
+		registerVirtualEditor(VIRTUAL_COMMAND, ContextInjectionFactory.make(VCommandEditor.class, context));
+		registerVirtualEditor(VIRTUAL_WINDOWS, ContextInjectionFactory.make(VWindowEditor.class, context));
+		registerVirtualEditor(VIRTUAL_WINDOW_CONTROLS, ContextInjectionFactory.make(VWindowControlEditor.class, context));
+		registerVirtualEditor(VIRTUAL_PART_DESCRIPTORS, ContextInjectionFactory.make(VPartDescriptor.class, context));
+		registerVirtualEditor(VIRTUAL_PARTDESCRIPTOR_MENU, ContextInjectionFactory.make(VPartDescriptorMenuEditor.class, context));
+		registerVirtualEditor(VIRTUAL_TRIMMED_WINDOW_TRIMS, ContextInjectionFactory.make(VWindowTrimEditor.class, context));
+		registerVirtualEditor(VIRTUAL_ADDONS, ContextInjectionFactory.make(VApplicationAddons.class, context));
+		registerVirtualEditor(VIRTUAL_MENU_CONTRIBUTIONS, ContextInjectionFactory.make(VMenuContributionsEditor.class, context));
+		registerVirtualEditor(VIRTUAL_TOOLBAR_CONTRIBUTIONS, ContextInjectionFactory.make(VToolBarContributionsEditor.class, context));
+		registerVirtualEditor(VIRTUAL_TRIM_CONTRIBUTIONS, ContextInjectionFactory.make(VTrimContributionsEditor.class, context));
+		registerVirtualEditor(VIRTUAL_WINDOW_SHARED_ELEMENTS, ContextInjectionFactory.make(VWindowSharedElementsEditor.class, context));
+		registerVirtualEditor(VIRTUAL_MODEL_FRAGEMENTS, ContextInjectionFactory.make(VModelFragmentsEditor.class, context));
+		registerVirtualEditor(VIRTUAL_MODEL_IMPORTS, ContextInjectionFactory.make(VModelImportsEditor.class, context));
+		registerVirtualEditor(VIRTUAL_CATEGORIES, ContextInjectionFactory.make(VApplicationCategoriesEditor.class, context));
+		registerVirtualEditor(VIRTUAL_PARAMETERS, ContextInjectionFactory.make(VItemParametersEditor.class, context));
+		registerVirtualEditor(VIRTUAL_ROOT_CONTEXTS, ContextInjectionFactory.make(VRootBindingContexts.class, context));
 	}
 
 	private void registerVirtualEditor(String id, AbstractComponentEditor editor) {

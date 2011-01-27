@@ -80,7 +80,7 @@ import org.eclipse.swt.widgets.Text;
 public class ControlFactory {
 	public static void createXMIId(Composite parent, AbstractComponentEditor editor) {
 		Label l = new Label(parent, SWT.NONE);
-		l.setText("XMI:ID");
+		l.setText("XMI:ID"); //$NON-NLS-1$
 		l.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 
 		final Text t = new Text(parent, SWT.BORDER);

@@ -11,6 +11,7 @@
 package org.eclipse.e4.tools.emf.ui.internal.common.component.virtual;
 
 import java.util.List;
+import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
@@ -50,6 +51,7 @@ public class VModelFragmentsEditor extends AbstractComponentEditor {
 	private EMFDataBindingContext context;
 	private TableViewer viewer;
 
+	@Inject
 	public VModelFragmentsEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
 		super(editingDomain, editor, resourcePool);
 	}

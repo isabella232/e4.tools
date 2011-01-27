@@ -56,7 +56,7 @@ public class VMenuEditor extends AbstractComponentEditor {
 	private EStructuralFeature feature;
 	private List<Action> actions = new ArrayList<Action>();
 
-	public VMenuEditor(EditingDomain editingDomain, ModelEditor editor, EStructuralFeature feature, IResourcePool resourcePool) {
+	protected VMenuEditor(EditingDomain editingDomain, ModelEditor editor, EStructuralFeature feature, IResourcePool resourcePool) {
 		super(editingDomain, editor, resourcePool);
 		this.feature = feature;
 		actions.add(new Action(Messages.VMenuEditor_AddMenuContribution, createImageDescriptor(ResourceProvider.IMG_Menu)) {
