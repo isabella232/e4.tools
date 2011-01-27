@@ -11,6 +11,7 @@
 package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
 import java.util.List;
+import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.databinding.property.list.IListProperty;
@@ -81,6 +82,7 @@ public class ToolBarContributionEditor extends AbstractComponentEditor {
 		}
 	}
 
+	@Inject
 	public ToolBarContributionEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
 		super(editingDomain, editor, resourcePool);
 	}

@@ -12,12 +12,14 @@ package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.conversion.Converter;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.tools.emf.ui.common.EStackLayout;
 import org.eclipse.e4.tools.emf.ui.common.ImageTooltip;
 import org.eclipse.e4.tools.emf.ui.common.Util;
@@ -65,12 +67,15 @@ public abstract class MenuItemEditor extends AbstractComponentEditor {
 
 	private Composite composite;
 	private EMFDataBindingContext context;
-	protected IProject project;
+
 	private EStackLayout stackLayout;
 
-	public MenuItemEditor(EditingDomain editingDomain, ModelEditor editor, IProject project, IResourcePool resourcePool) {
+	@Inject
+	@Optional
+	protected IProject project;
+
+	public MenuItemEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
 		super(editingDomain, editor, resourcePool);
-		this.project = project;
 	}
 
 	@Override

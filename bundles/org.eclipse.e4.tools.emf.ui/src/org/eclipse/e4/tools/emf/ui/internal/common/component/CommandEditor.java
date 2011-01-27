@@ -12,6 +12,7 @@ package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.e4.tools.emf.ui.common.EStackLayout;
@@ -67,6 +68,7 @@ public class CommandEditor extends AbstractComponentEditor {
 
 	private IEMFEditListProperty COMMAND__PARAMETERS = EMFEditProperties.list(getEditingDomain(), CommandsPackageImpl.Literals.COMMAND__PARAMETERS);
 
+	@Inject
 	public CommandEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
 		super(editingDomain, editor, resourcePool);
 		actions.add(new Action(Messages.CommandEditor_AddCommandParameter, createImageDescriptor(ResourceProvider.IMG_CommandParameter)) {

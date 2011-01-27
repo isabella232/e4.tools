@@ -35,6 +35,7 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.RegistryFactory;
+import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.di.extensions.Preference;
@@ -242,6 +243,15 @@ public class ModelEditor {
 		this.context = context;
 		this.context.set(ModelEditor.class, this);
 		this.obsManager = new ObservablesManager();
+
+		context.set(ModelEditor.class, this);
+		context.set(IResourcePool.class, resourcePool);
+		context.set(EditingDomain.class, modelProvider.getEditingDomain());
+		context.set(IModelResource.class, modelProvider);
+
+		if (project != null) {
+			context.set(IProject.class, project);
+		}
 
 		registerDefaultEditors();
 		registerVirtualEditors();
@@ -643,55 +653,57 @@ public class ModelEditor {
 	}
 
 	private void registerDefaultEditors() {
-		registerEditor(ApplicationPackageImpl.Literals.APPLICATION, new ApplicationEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerEditor(ApplicationPackageImpl.Literals.ADDON, new AddonsEditor(modelProvider.getEditingDomain(), this, project, resourcePool));
+		System.err.println(resourcePool);
 
-		registerEditor(CommandsPackageImpl.Literals.KEY_BINDING, new KeyBindingEditor(modelProvider.getEditingDomain(), this, modelProvider, resourcePool));
-		registerEditor(CommandsPackageImpl.Literals.HANDLER, new HandlerEditor(modelProvider.getEditingDomain(), this, modelProvider, project, resourcePool));
-		registerEditor(CommandsPackageImpl.Literals.COMMAND, new CommandEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerEditor(CommandsPackageImpl.Literals.COMMAND_PARAMETER, new CommandParameterEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerEditor(CommandsPackageImpl.Literals.PARAMETER, new ParameterEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerEditor(CommandsPackageImpl.Literals.BINDING_TABLE, new BindingTableEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerEditor(CommandsPackageImpl.Literals.BINDING_CONTEXT, new BindingContextEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerEditor(CommandsPackageImpl.Literals.CATEGORY, new CategoryEditor(modelProvider.getEditingDomain(), this, resourcePool));
+		registerEditor(ApplicationPackageImpl.Literals.APPLICATION, ContextInjectionFactory.make(ApplicationEditor.class, context));
+		registerEditor(ApplicationPackageImpl.Literals.ADDON, ContextInjectionFactory.make(AddonsEditor.class, context));
 
-		registerEditor(MenuPackageImpl.Literals.TOOL_BAR, new ToolBarEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerEditor(MenuPackageImpl.Literals.RENDERED_TOOL_BAR, new RenderedToolBarEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerEditor(MenuPackageImpl.Literals.DIRECT_TOOL_ITEM, new DirectToolItemEditor(modelProvider.getEditingDomain(), this, project, resourcePool));
-		registerEditor(MenuPackageImpl.Literals.HANDLED_TOOL_ITEM, new HandledToolItemEditor(modelProvider.getEditingDomain(), this, project, modelProvider, resourcePool));
-		registerEditor(MenuPackageImpl.Literals.TOOL_BAR_SEPARATOR, new ToolBarSeparatorEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerEditor(MenuPackageImpl.Literals.TOOL_CONTROL, new ToolControlEditor(modelProvider.getEditingDomain(), this, project, resourcePool));
+		registerEditor(CommandsPackageImpl.Literals.KEY_BINDING, ContextInjectionFactory.make(KeyBindingEditor.class, context));
+		registerEditor(CommandsPackageImpl.Literals.HANDLER, ContextInjectionFactory.make(HandlerEditor.class, context));
+		registerEditor(CommandsPackageImpl.Literals.COMMAND, ContextInjectionFactory.make(CommandEditor.class, context));
+		registerEditor(CommandsPackageImpl.Literals.COMMAND_PARAMETER, ContextInjectionFactory.make(CommandParameterEditor.class, context));
+		registerEditor(CommandsPackageImpl.Literals.PARAMETER, ContextInjectionFactory.make(ParameterEditor.class, context));
+		registerEditor(CommandsPackageImpl.Literals.BINDING_TABLE, ContextInjectionFactory.make(BindingTableEditor.class, context));
+		registerEditor(CommandsPackageImpl.Literals.BINDING_CONTEXT, ContextInjectionFactory.make(BindingContextEditor.class, context));
+		registerEditor(CommandsPackageImpl.Literals.CATEGORY, ContextInjectionFactory.make(CategoryEditor.class, context));
 
-		registerEditor(MenuPackageImpl.Literals.MENU, new MenuEditor(modelProvider.getEditingDomain(), project, this, resourcePool));
-		registerEditor(MenuPackageImpl.Literals.RENDERED_MENU, new RenderedMenuEditor(modelProvider.getEditingDomain(), project, this, resourcePool));
-		registerEditor(MenuPackageImpl.Literals.POPUP_MENU, new PopupMenuEditor(modelProvider.getEditingDomain(), project, this, resourcePool));
-		registerEditor(MenuPackageImpl.Literals.MENU_SEPARATOR, new MenuSeparatorEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerEditor(MenuPackageImpl.Literals.HANDLED_MENU_ITEM, new HandledMenuItemEditor(modelProvider.getEditingDomain(), this, project, modelProvider, resourcePool));
-		registerEditor(MenuPackageImpl.Literals.DIRECT_MENU_ITEM, new DirectMenuItemEditor(modelProvider.getEditingDomain(), this, project, resourcePool));
-		registerEditor(MenuPackageImpl.Literals.RENDERED_MENU_ITEM, new RenderedMenuItem(modelProvider.getEditingDomain(), this, project, resourcePool));
-		registerEditor(MenuPackageImpl.Literals.MENU_CONTRIBUTION, new MenuContributionEditor(modelProvider.getEditingDomain(), project, this, resourcePool));
-		registerEditor(MenuPackageImpl.Literals.TOOL_BAR_CONTRIBUTION, new ToolBarContributionEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerEditor(MenuPackageImpl.Literals.TRIM_CONTRIBUTION, new TrimContributionEditor(modelProvider.getEditingDomain(), this, resourcePool));
+		registerEditor(MenuPackageImpl.Literals.TOOL_BAR, ContextInjectionFactory.make(ToolBarEditor.class, context));
+		registerEditor(MenuPackageImpl.Literals.RENDERED_TOOL_BAR, ContextInjectionFactory.make(RenderedToolBarEditor.class, context));
+		registerEditor(MenuPackageImpl.Literals.DIRECT_TOOL_ITEM, ContextInjectionFactory.make(DirectToolItemEditor.class, context));
+		registerEditor(MenuPackageImpl.Literals.HANDLED_TOOL_ITEM, ContextInjectionFactory.make(HandledToolItemEditor.class, context));
+		registerEditor(MenuPackageImpl.Literals.TOOL_BAR_SEPARATOR, ContextInjectionFactory.make(ToolBarSeparatorEditor.class, context));
+		registerEditor(MenuPackageImpl.Literals.TOOL_CONTROL, ContextInjectionFactory.make(ToolControlEditor.class, context));
 
-		registerEditor(UiPackageImpl.Literals.CORE_EXPRESSION, new CoreExpressionEditor(modelProvider.getEditingDomain(), this, resourcePool));
+		registerEditor(MenuPackageImpl.Literals.MENU, ContextInjectionFactory.make(MenuEditor.class, context));
+		registerEditor(MenuPackageImpl.Literals.RENDERED_MENU, ContextInjectionFactory.make(RenderedMenuEditor.class, context));
+		registerEditor(MenuPackageImpl.Literals.POPUP_MENU, ContextInjectionFactory.make(PopupMenuEditor.class, context));
+		registerEditor(MenuPackageImpl.Literals.MENU_SEPARATOR, ContextInjectionFactory.make(MenuSeparatorEditor.class, context));
+		registerEditor(MenuPackageImpl.Literals.HANDLED_MENU_ITEM, ContextInjectionFactory.make(HandledMenuItemEditor.class, context));
+		registerEditor(MenuPackageImpl.Literals.DIRECT_MENU_ITEM, ContextInjectionFactory.make(DirectMenuItemEditor.class, context));
+		registerEditor(MenuPackageImpl.Literals.RENDERED_MENU_ITEM, ContextInjectionFactory.make(RenderedMenuItem.class, context));
+		registerEditor(MenuPackageImpl.Literals.MENU_CONTRIBUTION, ContextInjectionFactory.make(MenuContributionEditor.class, context));
+		registerEditor(MenuPackageImpl.Literals.TOOL_BAR_CONTRIBUTION, ContextInjectionFactory.make(ToolBarContributionEditor.class, context));
+		registerEditor(MenuPackageImpl.Literals.TRIM_CONTRIBUTION, ContextInjectionFactory.make(TrimContributionEditor.class, context));
 
-		registerEditor(BasicPackageImpl.Literals.PART, new PartEditor(modelProvider.getEditingDomain(), this, project, resourcePool));
-		registerEditor(BasicPackageImpl.Literals.WINDOW, new WindowEditor(modelProvider.getEditingDomain(), this, project, resourcePool));
-		registerEditor(BasicPackageImpl.Literals.TRIMMED_WINDOW, new TrimmedWindowEditor(modelProvider.getEditingDomain(), this, project, resourcePool));
-		registerEditor(BasicPackageImpl.Literals.PART_SASH_CONTAINER, new PartSashContainerEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerEditor(AdvancedPackageImpl.Literals.AREA, new AreaEditor(modelProvider.getEditingDomain(), this, project, resourcePool));
-		registerEditor(BasicPackageImpl.Literals.PART_STACK, new PartStackEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerEditor(BasicPackageImpl.Literals.INPUT_PART, new InputPartEditor(modelProvider.getEditingDomain(), this, project, resourcePool));
-		registerEditor(BasicPackageImpl.Literals.TRIM_BAR, new TrimBarEditor(modelProvider.getEditingDomain(), this, resourcePool));
+		registerEditor(UiPackageImpl.Literals.CORE_EXPRESSION, ContextInjectionFactory.make(CoreExpressionEditor.class, context));
 
-		registerEditor(org.eclipse.e4.ui.model.application.descriptor.basic.impl.BasicPackageImpl.Literals.PART_DESCRIPTOR, new PartDescriptorEditor(modelProvider.getEditingDomain(), this, project, resourcePool));
+		registerEditor(BasicPackageImpl.Literals.PART, ContextInjectionFactory.make(PartEditor.class, context));
+		registerEditor(BasicPackageImpl.Literals.WINDOW, ContextInjectionFactory.make(WindowEditor.class, context));
+		registerEditor(BasicPackageImpl.Literals.TRIMMED_WINDOW, ContextInjectionFactory.make(TrimmedWindowEditor.class, context));
+		registerEditor(BasicPackageImpl.Literals.PART_SASH_CONTAINER, ContextInjectionFactory.make(PartSashContainerEditor.class, context));
+		registerEditor(AdvancedPackageImpl.Literals.AREA, ContextInjectionFactory.make(AreaEditor.class, context));
+		registerEditor(BasicPackageImpl.Literals.PART_STACK, ContextInjectionFactory.make(PartStackEditor.class, context));
+		registerEditor(BasicPackageImpl.Literals.INPUT_PART, ContextInjectionFactory.make(InputPartEditor.class, context));
+		registerEditor(BasicPackageImpl.Literals.TRIM_BAR, ContextInjectionFactory.make(TrimBarEditor.class, context));
 
-		registerEditor(AdvancedPackageImpl.Literals.PERSPECTIVE_STACK, new PerspectiveStackEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerEditor(AdvancedPackageImpl.Literals.PERSPECTIVE, new PerspectiveEditor(modelProvider.getEditingDomain(), project, this, resourcePool));
-		registerEditor(AdvancedPackageImpl.Literals.PLACEHOLDER, new PlaceholderEditor(modelProvider.getEditingDomain(), this, modelProvider, resourcePool));
+		registerEditor(org.eclipse.e4.ui.model.application.descriptor.basic.impl.BasicPackageImpl.Literals.PART_DESCRIPTOR, ContextInjectionFactory.make(PartDescriptorEditor.class, context));
 
-		registerEditor(FragmentPackageImpl.Literals.MODEL_FRAGMENTS, new ModelFragmentsEditor(modelProvider.getEditingDomain(), this, resourcePool));
-		registerEditor(FragmentPackageImpl.Literals.STRING_MODEL_FRAGMENT, new StringModelFragment(modelProvider.getEditingDomain(), this, resourcePool));
+		registerEditor(AdvancedPackageImpl.Literals.PERSPECTIVE_STACK, ContextInjectionFactory.make(PerspectiveStackEditor.class, context));
+		registerEditor(AdvancedPackageImpl.Literals.PERSPECTIVE, ContextInjectionFactory.make(PerspectiveEditor.class, context));
+		registerEditor(AdvancedPackageImpl.Literals.PLACEHOLDER, ContextInjectionFactory.make(PlaceholderEditor.class, context));
+
+		registerEditor(FragmentPackageImpl.Literals.MODEL_FRAGMENTS, ContextInjectionFactory.make(ModelFragmentsEditor.class, context));
+		registerEditor(FragmentPackageImpl.Literals.STRING_MODEL_FRAGMENT, ContextInjectionFactory.make(StringModelFragment.class, context));
 	}
 
 	public void registerEditor(EClass eClass, AbstractComponentEditor editor) {

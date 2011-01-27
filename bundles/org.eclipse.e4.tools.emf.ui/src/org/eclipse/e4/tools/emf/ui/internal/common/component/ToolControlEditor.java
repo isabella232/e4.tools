@@ -10,9 +10,11 @@
  ******************************************************************************/
 package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
+import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.tools.emf.ui.common.EStackLayout;
 import org.eclipse.e4.tools.emf.ui.common.Util;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
@@ -48,12 +50,15 @@ import org.eclipse.swt.widgets.Text;
 public class ToolControlEditor extends AbstractComponentEditor {
 	private EMFDataBindingContext context;
 	private Composite composite;
-	private IProject project;
 	private EStackLayout stackLayout;
 
-	public ToolControlEditor(EditingDomain editingDomain, ModelEditor editor, IProject project, IResourcePool resourcePool) {
+	@Inject
+	@Optional
+	private IProject project;
+
+	@Inject
+	public ToolControlEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
 		super(editingDomain, editor, resourcePool);
-		this.project = project;
 	}
 
 	@Override

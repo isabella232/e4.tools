@@ -10,8 +10,8 @@
  ******************************************************************************/
 package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
+import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
 import org.eclipse.e4.tools.services.IResourcePool;
@@ -29,8 +29,9 @@ import org.eclipse.swt.widgets.Text;
 
 public class InputPartEditor extends PartEditor {
 
-	public InputPartEditor(EditingDomain editingDomain, ModelEditor editor, IProject project, IResourcePool resourcePool) {
-		super(editingDomain, editor, project, resourcePool);
+	@Inject
+	public InputPartEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
+		super(editingDomain, editor, resourcePool);
 	}
 
 	@Override

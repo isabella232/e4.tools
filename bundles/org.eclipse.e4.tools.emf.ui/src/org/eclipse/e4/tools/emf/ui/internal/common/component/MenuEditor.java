@@ -12,6 +12,7 @@ package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.list.IListChangeListener;
 import org.eclipse.core.databinding.observable.list.IObservableList;
@@ -23,6 +24,7 @@ import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.databinding.property.list.IListProperty;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.tools.emf.ui.common.EStackLayout;
 import org.eclipse.e4.tools.emf.ui.common.ImageTooltip;
 import org.eclipse.e4.tools.emf.ui.common.Util;
@@ -87,12 +89,15 @@ public class MenuEditor extends AbstractComponentEditor {
 
 	private Composite composite;
 	private EMFDataBindingContext context;
-	private IProject project;
 
 	private IListProperty ELEMENT_CONTAINER__CHILDREN = EMFProperties.list(UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN);
 	private IEMFValueProperty UI_ELEMENT__VISIBLE_WHEN = EMFProperties.value(UiPackageImpl.Literals.UI_ELEMENT__VISIBLE_WHEN);
 	private EStackLayout stackLayout;
 	private List<Action> actions = new ArrayList<Action>();
+
+	@Inject
+	@Optional
+	private IProject project;
 
 	private static class Struct {
 		private final String label;
@@ -106,9 +111,9 @@ public class MenuEditor extends AbstractComponentEditor {
 		}
 	}
 
-	public MenuEditor(EditingDomain editingDomain, IProject project, ModelEditor editor, IResourcePool resourcePool) {
+	@Inject
+	public MenuEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
 		super(editingDomain, editor, resourcePool);
-		this.project = project;
 		actions.add(new Action(Messages.MenuEditor_AddHandledMenuItem, createImageDescriptor(ResourceProvider.IMG_MenuItem)) {
 			@Override
 			public void run() {

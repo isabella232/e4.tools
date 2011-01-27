@@ -12,10 +12,12 @@ package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.databinding.property.list.IListProperty;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.tools.emf.ui.common.EStackLayout;
 import org.eclipse.e4.tools.emf.ui.common.ImageTooltip;
 import org.eclipse.e4.tools.emf.ui.common.Util;
@@ -73,13 +75,17 @@ import org.eclipse.swt.widgets.Text;
 public class PerspectiveEditor extends AbstractComponentEditor {
 	private Composite composite;
 	private EMFDataBindingContext context;
-	private IProject project;
 
 	private IListProperty ELEMENT_CONTAINER__CHILDREN = EMFProperties.list(UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN);
 	private EStackLayout stackLayout;
 	private List<Action> actions = new ArrayList<Action>();
 
-	public PerspectiveEditor(EditingDomain editingDomain, IProject project, ModelEditor editor, IResourcePool resourcePool) {
+	@Inject
+	@Optional
+	private IProject project;
+
+	@Inject
+	public PerspectiveEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
 		super(editingDomain, editor, resourcePool);
 		this.project = project;
 		actions.add(new Action(Messages.PerspectiveEditor_AddPartSashContainer, createImageDescriptor(ResourceProvider.IMG_Perspective)) {

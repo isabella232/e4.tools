@@ -10,9 +10,9 @@
  ******************************************************************************/
 package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
+import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.property.list.IListProperty;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.tools.emf.ui.common.Util;
 import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
@@ -26,8 +26,9 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 public class TrimmedWindowEditor extends WindowEditor {
 	private IListProperty TRIMMED_WINDOW__TRIM_BARS = EMFProperties.list(BasicPackageImpl.Literals.TRIMMED_WINDOW__TRIM_BARS);
 
-	public TrimmedWindowEditor(EditingDomain editingDomain, ModelEditor editor, IProject project, IResourcePool resourcePool) {
-		super(editingDomain, editor, project, resourcePool);
+	@Inject
+	public TrimmedWindowEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
+		super(editingDomain, editor, resourcePool);
 	}
 
 	public IObservableList getChildList(Object element) {

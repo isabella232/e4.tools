@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
+import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.e4.tools.emf.ui.common.EStackLayout;
@@ -40,6 +41,7 @@ public class CategoryEditor extends AbstractComponentEditor {
 	private EMFDataBindingContext context;
 	private EStackLayout stackLayout;
 
+	@Inject
 	public CategoryEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
 		super(editingDomain, editor, resourcePool);
 	}

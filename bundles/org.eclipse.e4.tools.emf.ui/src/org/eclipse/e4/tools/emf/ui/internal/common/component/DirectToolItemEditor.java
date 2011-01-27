@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
+import javax.inject.Inject;
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.list.IObservableList;
@@ -17,7 +18,6 @@ import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.databinding.observable.value.IValueChangeListener;
 import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
 import org.eclipse.core.databinding.observable.value.WritableValue;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.tools.emf.ui.common.ContributionURIValidator;
 import org.eclipse.e4.tools.emf.ui.common.IContributionClassCreator;
 import org.eclipse.e4.tools.emf.ui.common.Util;
@@ -54,8 +54,9 @@ import org.eclipse.swt.widgets.Text;
 public class DirectToolItemEditor extends ToolItemEditor {
 	private IEMFValueProperty UI_ELEMENT__VISIBLE_WHEN = EMFProperties.value(UiPackageImpl.Literals.UI_ELEMENT__VISIBLE_WHEN);
 
-	public DirectToolItemEditor(EditingDomain editingDomain, ModelEditor editor, IProject project, IResourcePool resourcePool) {
-		super(editingDomain, editor, project, resourcePool);
+	@Inject
+	public DirectToolItemEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
+		super(editingDomain, editor, resourcePool);
 	}
 
 	@Override

@@ -12,6 +12,7 @@ package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.list.IObservableList;
@@ -71,15 +72,17 @@ public class KeyBindingEditor extends AbstractComponentEditor {
 
 	private Composite composite;
 	private EMFDataBindingContext context;
-	private IModelResource resource;
 	private EStackLayout stackLayout;
 	private List<Action> actions = new ArrayList<Action>();
 
 	private IEMFEditListProperty KEY_BINDING__PARAMETERS = EMFEditProperties.list(getEditingDomain(), CommandsPackageImpl.Literals.KEY_BINDING__PARAMETERS);
 
-	public KeyBindingEditor(EditingDomain editingDomain, ModelEditor editor, IModelResource resource, IResourcePool resourcePool) {
+	@Inject
+	private IModelResource resource;
+
+	@Inject
+	public KeyBindingEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
 		super(editingDomain, editor, resourcePool);
-		this.resource = resource;
 		actions.add(new Action(Messages.KeyBindingEditor_AddParameter, createImageDescriptor(ResourceProvider.IMG_Parameter)) {
 			@Override
 			public void run() {

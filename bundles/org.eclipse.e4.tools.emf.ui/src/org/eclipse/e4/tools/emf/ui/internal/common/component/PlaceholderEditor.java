@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
+import javax.inject.Inject;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.conversion.Converter;
 import org.eclipse.core.databinding.observable.list.IObservableList;
@@ -54,6 +55,7 @@ public class PlaceholderEditor extends AbstractComponentEditor {
 	private IModelResource resource;
 	private EStackLayout stackLayout;
 
+	@Inject
 	public PlaceholderEditor(EditingDomain editingDomain, ModelEditor editor, IModelResource resource, IResourcePool resourcePool) {
 		super(editingDomain, editor, resourcePool);
 		this.resource = resource;

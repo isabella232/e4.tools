@@ -12,6 +12,7 @@ package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.databinding.property.list.IListProperty;
@@ -67,6 +68,7 @@ public class PerspectiveStackEditor extends AbstractComponentEditor {
 	private EStackLayout stackLayout;
 	private List<Action> actions = new ArrayList<Action>();
 
+	@Inject
 	public PerspectiveStackEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
 		super(editingDomain, editor, resourcePool);
 		actions.add(new Action(Messages.PerspectiveStackEditor_AddPerspective, createImageDescriptor(ResourceProvider.IMG_Perspective)) {

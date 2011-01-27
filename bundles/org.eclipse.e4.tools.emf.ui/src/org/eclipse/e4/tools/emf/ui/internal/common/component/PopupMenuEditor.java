@@ -10,8 +10,8 @@
  ******************************************************************************/
 package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
+import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.value.WritableValue;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
 import org.eclipse.e4.tools.services.IResourcePool;
@@ -22,8 +22,9 @@ import org.eclipse.swt.widgets.Composite;
 
 public class PopupMenuEditor extends MenuEditor {
 
-	public PopupMenuEditor(EditingDomain editingDomain, IProject project, ModelEditor editor, IResourcePool resourcePool) {
-		super(editingDomain, project, editor, resourcePool);
+	@Inject
+	public PopupMenuEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
+		super(editingDomain, editor, resourcePool);
 	}
 
 	@Override

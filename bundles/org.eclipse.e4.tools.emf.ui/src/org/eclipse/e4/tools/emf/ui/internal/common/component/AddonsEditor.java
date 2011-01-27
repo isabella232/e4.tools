@@ -10,11 +10,13 @@
  ******************************************************************************/
 package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
+import javax.inject.Inject;
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.tools.emf.ui.common.ContributionURIValidator;
 import org.eclipse.e4.tools.emf.ui.common.EStackLayout;
 import org.eclipse.e4.tools.emf.ui.common.IContributionClassCreator;
@@ -50,12 +52,16 @@ import org.eclipse.swt.widgets.Text;
 public class AddonsEditor extends AbstractComponentEditor {
 	private Composite composite;
 	private EMFDataBindingContext context;
+
+	@Inject
+	@Optional
 	private IProject project;
+
 	private EStackLayout stackLayout;
 
-	public AddonsEditor(EditingDomain editingDomain, ModelEditor editor, IProject project, IResourcePool resourcePool) {
+	@Inject
+	public AddonsEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
 		super(editingDomain, editor, resourcePool);
-		this.project = project;
 	}
 
 	@Override

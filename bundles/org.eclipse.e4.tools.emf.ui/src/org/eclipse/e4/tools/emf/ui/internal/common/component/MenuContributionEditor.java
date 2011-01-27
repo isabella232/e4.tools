@@ -11,10 +11,10 @@
 package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
 import java.util.List;
+import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.databinding.property.list.IListProperty;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.tools.emf.ui.common.EStackLayout;
 import org.eclipse.e4.tools.emf.ui.common.Util;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
@@ -82,7 +82,8 @@ public class MenuContributionEditor extends AbstractComponentEditor {
 		}
 	}
 
-	public MenuContributionEditor(EditingDomain editingDomain, IProject project, ModelEditor editor, IResourcePool resourcePool) {
+	@Inject
+	public MenuContributionEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
 		super(editingDomain, editor, resourcePool);
 	}
 

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
+import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
@@ -74,9 +75,9 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 	private Button createRemoveToolBar;
 	private EStackLayout stackLayout;
 
-	public PartDescriptorEditor(EditingDomain editingDomain, ModelEditor editor, IProject project, IResourcePool resourcePool) {
+	@Inject
+	public PartDescriptorEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
 		super(editingDomain, editor, resourcePool);
-		this.project = project;
 	}
 
 	@Override

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
+import javax.inject.Inject;
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.list.IObservableList;
@@ -20,6 +21,7 @@ import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
 import org.eclipse.core.databinding.property.list.IListProperty;
 import org.eclipse.core.databinding.property.value.IValueProperty;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.tools.emf.ui.common.ContributionURIValidator;
 import org.eclipse.e4.tools.emf.ui.common.EStackLayout;
 import org.eclipse.e4.tools.emf.ui.common.IContributionClassCreator;
@@ -72,7 +74,6 @@ public class PartEditor extends AbstractComponentEditor {
 
 	private Composite composite;
 	private EMFDataBindingContext context;
-	private IProject project;
 
 	private IListProperty PART__MENUS = EMFProperties.list(BasicPackageImpl.Literals.PART__MENUS);
 	private IListProperty HANDLER_CONTAINER__HANDLERS = EMFProperties.list(CommandsPackageImpl.Literals.HANDLER_CONTAINER__HANDLERS);
@@ -80,9 +81,13 @@ public class PartEditor extends AbstractComponentEditor {
 	private Button createRemoveToolBar;
 	private EStackLayout stackLayout;
 
-	public PartEditor(EditingDomain editingDomain, ModelEditor editor, IProject project, IResourcePool resourcePool) {
+	@Inject
+	@Optional
+	private IProject project;
+
+	@Inject
+	public PartEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
 		super(editingDomain, editor, resourcePool);
-		this.project = project;
 	}
 
 	@Override

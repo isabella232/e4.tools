@@ -10,13 +10,13 @@
  ******************************************************************************/
 package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
+import javax.inject.Inject;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.databinding.observable.value.IValueChangeListener;
 import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
 import org.eclipse.core.databinding.observable.value.WritableValue;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.tools.emf.ui.common.CommandToStringConverter;
 import org.eclipse.e4.tools.emf.ui.common.IModelResource;
 import org.eclipse.e4.tools.emf.ui.internal.Messages;
@@ -56,8 +56,9 @@ public class HandledMenuItemEditor extends MenuItemEditor {
 	private IEMFEditListProperty HANDLED_ITEM__PARAMETERS = EMFEditProperties.list(getEditingDomain(), MenuPackageImpl.Literals.HANDLED_ITEM__PARAMETERS);
 	private IEMFValueProperty UI_ELEMENT__VISIBLE_WHEN = EMFProperties.value(UiPackageImpl.Literals.UI_ELEMENT__VISIBLE_WHEN);
 
-	public HandledMenuItemEditor(EditingDomain editingDomain, ModelEditor editor, IProject project, IModelResource resource, IResourcePool resourcePool) {
-		super(editingDomain, editor, project, resourcePool);
+	@Inject
+	public HandledMenuItemEditor(EditingDomain editingDomain, ModelEditor editor, IModelResource resource, IResourcePool resourcePool) {
+		super(editingDomain, editor, resourcePool);
 		this.resource = resource;
 	}
 

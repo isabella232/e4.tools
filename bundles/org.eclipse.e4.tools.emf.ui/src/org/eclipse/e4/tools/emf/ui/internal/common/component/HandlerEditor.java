@@ -10,11 +10,13 @@
  ******************************************************************************/
 package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
+import javax.inject.Inject;
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.tools.emf.ui.common.CommandToStringConverter;
 import org.eclipse.e4.tools.emf.ui.common.ContributionURIValidator;
 import org.eclipse.e4.tools.emf.ui.common.EStackLayout;
@@ -56,14 +58,18 @@ import org.eclipse.swt.widgets.Text;
 public class HandlerEditor extends AbstractComponentEditor {
 	private Composite composite;
 	private EMFDataBindingContext context;
-	private IModelResource resource;
-	private IProject project;
 	private EStackLayout stackLayout;
 
-	public HandlerEditor(EditingDomain editingDomain, ModelEditor editor, IModelResource resource, IProject project, IResourcePool resourcePool) {
+	@Inject
+	private IModelResource resource;
+
+	@Inject
+	@Optional
+	private IProject project;
+
+	@Inject
+	public HandlerEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
 		super(editingDomain, editor, resourcePool);
-		this.resource = resource;
-		this.project = project;
 	}
 
 	@Override

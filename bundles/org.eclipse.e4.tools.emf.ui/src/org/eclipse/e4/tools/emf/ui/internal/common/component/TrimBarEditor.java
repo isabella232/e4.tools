@@ -12,6 +12,7 @@ package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.WritableValue;
@@ -77,6 +78,7 @@ public class TrimBarEditor extends AbstractComponentEditor {
 	private EStackLayout stackLayout;
 	private List<Action> actions = new ArrayList<Action>();
 
+	@Inject
 	public TrimBarEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
 		super(editingDomain, editor, resourcePool);
 		this.editor = editor;
