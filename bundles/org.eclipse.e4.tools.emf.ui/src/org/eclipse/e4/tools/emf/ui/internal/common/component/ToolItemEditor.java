@@ -26,9 +26,7 @@ import org.eclipse.e4.tools.emf.ui.common.Util;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
 import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.ResourceProvider;
-import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.dialogs.ToolItemIconDialogEditor;
-import org.eclipse.e4.tools.services.IResourcePool;
 import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
 import org.eclipse.e4.ui.model.application.ui.MUILabel;
 import org.eclipse.e4.ui.model.application.ui.impl.UiPackageImpl;
@@ -42,7 +40,6 @@ import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.databinding.swt.IWidgetValueProperty;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.databinding.viewers.ViewerProperties;
@@ -70,8 +67,8 @@ public abstract class ToolItemEditor extends AbstractComponentEditor {
 	@Optional
 	protected IProject project;
 
-	public ToolItemEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
-		super(editingDomain, editor, resourcePool);
+	public ToolItemEditor() {
+		super();
 	}
 
 	@Override

@@ -25,7 +25,6 @@ import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.ResourceProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ComponentLabelProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
-import org.eclipse.e4.tools.services.IResourcePool;
 import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
 import org.eclipse.e4.ui.model.application.ui.MElementContainer;
 import org.eclipse.e4.ui.model.application.ui.MGenericTrimContainer;
@@ -44,7 +43,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.databinding.swt.IWidgetValueProperty;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
@@ -73,16 +71,17 @@ public class TrimBarEditor extends AbstractComponentEditor {
 
 	private Composite composite;
 	private EMFDataBindingContext context;
-	private ModelEditor editor;
 
 	private IListProperty ELEMENT_CONTAINER__CHILDREN = EMFProperties.list(UiPackageImpl.Literals.ELEMENT_CONTAINER__CHILDREN);
 	private EStackLayout stackLayout;
 	private List<Action> actions = new ArrayList<Action>();
 
 	@Inject
-	public TrimBarEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
-		super(editingDomain, editor, resourcePool);
-		this.editor = editor;
+	private ModelEditor editor;
+
+	@Inject
+	public TrimBarEditor() {
+		super();
 	}
 
 	@PostConstruct

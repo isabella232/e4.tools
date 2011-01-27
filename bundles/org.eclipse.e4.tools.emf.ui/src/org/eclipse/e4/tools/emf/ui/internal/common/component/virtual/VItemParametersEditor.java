@@ -20,9 +20,7 @@ import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
 import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.ResourceProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ComponentLabelProvider;
-import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.VirtualEntry;
-import org.eclipse.e4.tools.services.IResourcePool;
 import org.eclipse.e4.ui.model.application.commands.MCommandsFactory;
 import org.eclipse.e4.ui.model.application.commands.MParameter;
 import org.eclipse.e4.ui.model.application.ui.menu.MHandledItem;
@@ -34,7 +32,6 @@ import org.eclipse.emf.databinding.IEMFListProperty;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.MoveCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -60,8 +57,8 @@ public class VItemParametersEditor extends AbstractComponentEditor {
 	private IEMFListProperty HANDLED_ITEM__PARAMETERS = EMFProperties.list(MenuPackageImpl.Literals.HANDLED_ITEM__PARAMETERS);
 
 	@Inject
-	public VItemParametersEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
-		super(editingDomain, editor, resourcePool);
+	public VItemParametersEditor() {
+		super();
 	}
 
 	@PostConstruct

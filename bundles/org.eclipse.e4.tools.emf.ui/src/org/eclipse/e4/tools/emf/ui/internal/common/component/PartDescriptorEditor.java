@@ -29,7 +29,6 @@ import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.VirtualEntry;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.dialogs.ContributionClassDialog;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.dialogs.PartDescriptorIconDialogEditor;
-import org.eclipse.e4.tools.services.IResourcePool;
 import org.eclipse.e4.ui.model.application.commands.impl.CommandsPackageImpl;
 import org.eclipse.e4.ui.model.application.descriptor.basic.MPartDescriptor;
 import org.eclipse.e4.ui.model.application.descriptor.basic.impl.BasicPackageImpl;
@@ -47,7 +46,6 @@ import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.databinding.edit.IEMFEditValueProperty;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.databinding.swt.IWidgetValueProperty;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.swt.SWT;
@@ -76,8 +74,8 @@ public class PartDescriptorEditor extends AbstractComponentEditor {
 	private EStackLayout stackLayout;
 
 	@Inject
-	public PartDescriptorEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
-		super(editingDomain, editor, resourcePool);
+	public PartDescriptorEditor() {
+		super();
 	}
 
 	@Override

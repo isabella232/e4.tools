@@ -12,15 +12,12 @@ package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
 import javax.inject.Inject;
 import org.eclipse.e4.tools.emf.ui.internal.Messages;
-import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
-import org.eclipse.e4.tools.services.IResourcePool;
-import org.eclipse.emf.edit.domain.EditingDomain;
 
 public class RenderedToolBarEditor extends ToolBarEditor {
 
 	@Inject
-	public RenderedToolBarEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
-		super(editingDomain, editor, resourcePool);
+	public RenderedToolBarEditor() {
+		super();
 	}
 
 	@Override

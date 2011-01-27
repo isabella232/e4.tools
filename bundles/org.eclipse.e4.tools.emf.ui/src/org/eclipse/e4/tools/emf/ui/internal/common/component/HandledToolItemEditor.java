@@ -24,7 +24,6 @@ import org.eclipse.e4.tools.emf.ui.internal.ResourceProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.VirtualEntry;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.dialogs.HandledToolItemCommandSelectionDialog;
-import org.eclipse.e4.tools.services.IResourcePool;
 import org.eclipse.e4.ui.model.application.commands.MParameter;
 import org.eclipse.e4.ui.model.application.ui.MUIElement;
 import org.eclipse.e4.ui.model.application.ui.impl.UiPackageImpl;
@@ -36,7 +35,6 @@ import org.eclipse.emf.databinding.EMFProperties;
 import org.eclipse.emf.databinding.IEMFValueProperty;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.databinding.edit.IEMFEditListProperty;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.databinding.swt.IWidgetValueProperty;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.swt.SWT;
@@ -51,15 +49,16 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 public class HandledToolItemEditor extends ToolItemEditor {
-	private IModelResource resource;
 
 	private IEMFEditListProperty HANDLED_ITEM__PARAMETERS = EMFEditProperties.list(getEditingDomain(), MenuPackageImpl.Literals.HANDLED_ITEM__PARAMETERS);
 	private IEMFValueProperty UI_ELEMENT__VISIBLE_WHEN = EMFProperties.value(UiPackageImpl.Literals.UI_ELEMENT__VISIBLE_WHEN);
 
 	@Inject
-	public HandledToolItemEditor(EditingDomain editingDomain, ModelEditor editor, IModelResource resource, IResourcePool resourcePool) {
-		super(editingDomain, editor, resourcePool);
-		this.resource = resource;
+	private IModelResource resource;
+
+	@Inject
+	public HandledToolItemEditor() {
+		super();
 	}
 
 	@Override

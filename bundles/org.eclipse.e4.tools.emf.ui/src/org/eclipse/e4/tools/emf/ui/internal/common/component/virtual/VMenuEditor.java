@@ -19,9 +19,7 @@ import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
 import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.ResourceProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ComponentLabelProvider;
-import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.VirtualEntry;
-import org.eclipse.e4.tools.services.IResourcePool;
 import org.eclipse.e4.ui.model.application.commands.impl.CommandsPackageImpl;
 import org.eclipse.e4.ui.model.application.ui.basic.impl.BasicPackageImpl;
 import org.eclipse.e4.ui.model.application.ui.menu.MMenu;
@@ -33,7 +31,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.MoveCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -57,8 +54,8 @@ public class VMenuEditor extends AbstractComponentEditor {
 	private EStructuralFeature feature;
 	private List<Action> actions = new ArrayList<Action>();
 
-	protected VMenuEditor(EditingDomain editingDomain, ModelEditor editor, EStructuralFeature feature, IResourcePool resourcePool) {
-		super(editingDomain, editor, resourcePool);
+	protected VMenuEditor(EStructuralFeature feature) {
+		super();
 		this.feature = feature;
 	}
 

@@ -13,18 +13,15 @@ package org.eclipse.e4.tools.emf.ui.internal.common.component;
 import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.e4.tools.emf.ui.internal.Messages;
-import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
-import org.eclipse.e4.tools.services.IResourcePool;
 import org.eclipse.e4.ui.model.application.ui.impl.UiPackageImpl;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.widgets.Composite;
 
 public class PopupMenuEditor extends MenuEditor {
 
 	@Inject
-	public PopupMenuEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
-		super(editingDomain, editor, resourcePool);
+	public PopupMenuEditor() {
+		super();
 	}
 
 	@Override

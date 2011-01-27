@@ -12,6 +12,7 @@ package org.eclipse.e4.tools.emf.ui.common.component;
 
 import java.util.Collections;
 import java.util.List;
+import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.e4.tools.emf.ui.common.Util;
@@ -28,8 +29,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
 public abstract class AbstractComponentEditor {
-	private EditingDomain editingDomain;
-
 	private WritableValue master = new WritableValue();
 
 	public static final int SEARCH_IMAGE = 0;
@@ -40,14 +39,12 @@ public abstract class AbstractComponentEditor {
 
 	protected static final int VERTICAL_LIST_WIDGET_INDENT = 10;
 
+	@Inject
+	private EditingDomain editingDomain;
+	@Inject
 	private ModelEditor editor;
-	private final IResourcePool resourcePool;
-
-	public AbstractComponentEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
-		this.editingDomain = editingDomain;
-		this.editor = editor;
-		this.resourcePool = resourcePool;
-	}
+	@Inject
+	private IResourcePool resourcePool;
 
 	public EditingDomain getEditingDomain() {
 		return editingDomain;

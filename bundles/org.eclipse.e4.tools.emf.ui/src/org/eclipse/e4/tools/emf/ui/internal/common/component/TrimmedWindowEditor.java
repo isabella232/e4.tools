@@ -17,18 +17,16 @@ import org.eclipse.e4.tools.emf.ui.common.Util;
 import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.VirtualEntry;
-import org.eclipse.e4.tools.services.IResourcePool;
 import org.eclipse.e4.ui.model.application.ui.basic.impl.BasicPackageImpl;
 import org.eclipse.emf.databinding.EMFProperties;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.edit.domain.EditingDomain;
 
 public class TrimmedWindowEditor extends WindowEditor {
 	private IListProperty TRIMMED_WINDOW__TRIM_BARS = EMFProperties.list(BasicPackageImpl.Literals.TRIMMED_WINDOW__TRIM_BARS);
 
 	@Inject
-	public TrimmedWindowEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
-		super(editingDomain, editor, resourcePool);
+	public TrimmedWindowEditor() {
+		super();
 	}
 
 	public IObservableList getChildList(Object element) {

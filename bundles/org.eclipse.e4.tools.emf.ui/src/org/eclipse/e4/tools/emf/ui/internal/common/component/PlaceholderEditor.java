@@ -21,9 +21,7 @@ import org.eclipse.e4.tools.emf.ui.common.Util;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
 import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.ResourceProvider;
-import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.dialogs.SharedElementsDialog;
-import org.eclipse.e4.tools.services.IResourcePool;
 import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
 import org.eclipse.e4.ui.model.application.ui.MUIElement;
 import org.eclipse.e4.ui.model.application.ui.MUILabel;
@@ -33,7 +31,6 @@ import org.eclipse.e4.ui.model.application.ui.impl.UiPackageImpl;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.databinding.swt.IWidgetValueProperty;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.swt.SWT;
@@ -52,13 +49,14 @@ import org.eclipse.swt.widgets.Text;
 public class PlaceholderEditor extends AbstractComponentEditor {
 	private Composite composite;
 	private EMFDataBindingContext context;
-	private IModelResource resource;
 	private EStackLayout stackLayout;
 
 	@Inject
-	public PlaceholderEditor(EditingDomain editingDomain, ModelEditor editor, IModelResource resource, IResourcePool resourcePool) {
-		super(editingDomain, editor, resourcePool);
-		this.resource = resource;
+	private IModelResource resource;
+
+	@Inject
+	public PlaceholderEditor() {
+		super();
 	}
 
 	@Override
