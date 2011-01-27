@@ -87,7 +87,6 @@ public class PerspectiveEditor extends AbstractComponentEditor {
 	@Inject
 	public PerspectiveEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
 		super(editingDomain, editor, resourcePool);
-		this.project = project;
 		actions.add(new Action(Messages.PerspectiveEditor_AddPartSashContainer, createImageDescriptor(ResourceProvider.IMG_Perspective)) {
 			@Override
 			public void run() {
