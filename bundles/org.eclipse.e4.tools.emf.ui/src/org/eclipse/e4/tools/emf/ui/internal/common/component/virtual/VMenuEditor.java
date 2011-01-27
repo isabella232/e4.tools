@@ -12,6 +12,7 @@ package org.eclipse.e4.tools.emf.ui.internal.common.component.virtual;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
@@ -59,6 +60,10 @@ public class VMenuEditor extends AbstractComponentEditor {
 	protected VMenuEditor(EditingDomain editingDomain, ModelEditor editor, EStructuralFeature feature, IResourcePool resourcePool) {
 		super(editingDomain, editor, resourcePool);
 		this.feature = feature;
+	}
+
+	@PostConstruct
+	void init() {
 		actions.add(new Action(Messages.VMenuEditor_AddMenuContribution, createImageDescriptor(ResourceProvider.IMG_Menu)) {
 			@Override
 			public void run() {

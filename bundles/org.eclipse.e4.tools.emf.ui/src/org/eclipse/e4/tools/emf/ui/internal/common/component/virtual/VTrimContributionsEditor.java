@@ -12,6 +12,7 @@ package org.eclipse.e4.tools.emf.ui.internal.common.component.virtual;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.WritableValue;
@@ -57,6 +58,10 @@ public class VTrimContributionsEditor extends AbstractComponentEditor {
 	@Inject
 	public VTrimContributionsEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
 		super(editingDomain, editor, resourcePool);
+	}
+
+	@PostConstruct
+	void init() {
 		actions.add(new Action(Messages.VTrimContributionsEditor_AddTrimContribution, createImageDescriptor(ResourceProvider.IMG_TrimContribution)) {
 			@Override
 			public void run() {

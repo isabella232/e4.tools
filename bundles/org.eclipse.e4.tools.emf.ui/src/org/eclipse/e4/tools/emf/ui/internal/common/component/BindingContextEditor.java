@@ -12,6 +12,7 @@ package org.eclipse.e4.tools.emf.ui.internal.common.component;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.WritableValue;
@@ -69,6 +70,10 @@ public class BindingContextEditor extends AbstractComponentEditor {
 	@Inject
 	public BindingContextEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
 		super(editingDomain, editor, resourcePool);
+	}
+
+	@PostConstruct
+	void init() {
 		actions.add(new Action(Messages.BindingContextEditor_AddContext, createImageDescriptor(ResourceProvider.IMG_BindingContext)) {
 			@Override
 			public void run() {

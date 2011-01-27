@@ -12,6 +12,7 @@ package org.eclipse.e4.tools.emf.ui.internal.common.component.virtual;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.WritableValue;
@@ -61,6 +62,10 @@ public class VCommandEditor extends AbstractComponentEditor {
 	public VCommandEditor(EditingDomain editingDomain, ModelEditor editor, IResourcePool resourcePool) {
 		super(editingDomain, editor, resourcePool);
 		this.commandsFeature = ApplicationPackageImpl.Literals.APPLICATION__COMMANDS;
+	}
+
+	@PostConstruct
+	void init() {
 		actions.add(new Action(Messages.VCommandEditor_AddCommand, createImageDescriptor(ResourceProvider.IMG_Command)) {
 			@Override
 			public void run() {
