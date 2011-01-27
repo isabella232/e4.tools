@@ -18,7 +18,6 @@ import org.eclipse.core.databinding.property.list.IListProperty;
 import org.eclipse.e4.tools.emf.ui.common.EStackLayout;
 import org.eclipse.e4.tools.emf.ui.common.Util;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
-import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.ResourceProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ComponentLabelProvider;
 import org.eclipse.e4.ui.model.application.impl.ApplicationPackageImpl;
@@ -158,7 +157,7 @@ public class MenuContributionEditor extends AbstractComponentEditor {
 		IWidgetValueProperty textProp = WidgetProperties.text(SWT.Modify);
 
 		if (isImport) {
-			ControlFactory.createFindImport(parent, this, context);
+			ControlFactory.createFindImport(parent, Messages, this, context);
 			return parent;
 		}
 
@@ -212,7 +211,7 @@ public class MenuContributionEditor extends AbstractComponentEditor {
 			final TableViewer viewer = new TableViewer(parent);
 			ObservableListContentProvider cp = new ObservableListContentProvider();
 			viewer.setContentProvider(cp);
-			viewer.setLabelProvider(new ComponentLabelProvider(getEditor()));
+			viewer.setLabelProvider(new ComponentLabelProvider(getEditor(), Messages));
 
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.heightHint = 300;
@@ -337,7 +336,7 @@ public class MenuContributionEditor extends AbstractComponentEditor {
 		ControlFactory.createCheckBox(parent, "To Be Rendered", getMaster(), context, WidgetProperties.selection(), EMFEditProperties.value(getEditingDomain(), UiPackageImpl.Literals.UI_ELEMENT__TO_BE_RENDERED)); //$NON-NLS-1$
 		ControlFactory.createCheckBox(parent, "Visible", getMaster(), context, WidgetProperties.selection(), EMFEditProperties.value(getEditingDomain(), UiPackageImpl.Literals.UI_ELEMENT__VISIBLE)); //$NON-NLS-1$
 
-		ControlFactory.createStringListWidget(parent, this, Messages.ModelTooling_ApplicationElement_Tags, ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__TAGS, VERTICAL_LIST_WIDGET_INDENT);
+		ControlFactory.createStringListWidget(parent, Messages, this, Messages.ModelTooling_ApplicationElement_Tags, ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__TAGS, VERTICAL_LIST_WIDGET_INDENT);
 
 		return parent;
 	}

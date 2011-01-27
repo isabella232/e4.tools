@@ -24,7 +24,6 @@ import org.eclipse.e4.tools.emf.ui.common.IContributionClassCreator;
 import org.eclipse.e4.tools.emf.ui.common.IModelResource;
 import org.eclipse.e4.tools.emf.ui.common.Util;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
-import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.ResourceProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.dialogs.ContributionClassDialog;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.dialogs.HandlerCommandSelectionDialog;
@@ -130,7 +129,7 @@ public class HandlerEditor extends AbstractComponentEditor {
 		}
 
 		if (isImport) {
-			ControlFactory.createFindImport(parent, this, context);
+			ControlFactory.createFindImport(parent, Messages, this, context);
 			return parent;
 		}
 
@@ -156,7 +155,7 @@ public class HandlerEditor extends AbstractComponentEditor {
 			Text t = new Text(parent, SWT.BORDER);
 			t.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			t.setEditable(false);
-			context.bindValue(textProp.observeDelayed(200, t), EMFEditProperties.value(getEditingDomain(), CommandsPackageImpl.Literals.HANDLER__COMMAND).observeDetail(getMaster()), new UpdateValueStrategy(), new UpdateValueStrategy().setConverter(new CommandToStringConverter()));
+			context.bindValue(textProp.observeDelayed(200, t), EMFEditProperties.value(getEditingDomain(), CommandsPackageImpl.Literals.HANDLER__COMMAND).observeDetail(getMaster()), new UpdateValueStrategy(), new UpdateValueStrategy().setConverter(new CommandToStringConverter(Messages)));
 
 			final Button b = new Button(parent, SWT.PUSH | SWT.FLAT);
 			b.setText(Messages.ModelTooling_Common_FindEllipsis);
@@ -165,7 +164,7 @@ public class HandlerEditor extends AbstractComponentEditor {
 			b.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					HandlerCommandSelectionDialog dialog = new HandlerCommandSelectionDialog(b.getShell(), (MHandler) getMaster().getValue(), resource);
+					HandlerCommandSelectionDialog dialog = new HandlerCommandSelectionDialog(b.getShell(), (MHandler) getMaster().getValue(), resource, Messages);
 					dialog.open();
 				}
 			});
@@ -202,13 +201,13 @@ public class HandlerEditor extends AbstractComponentEditor {
 			b.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					ContributionClassDialog dialog = new ContributionClassDialog(b.getShell(), project, getEditingDomain(), (MContribution) getMaster().getValue(), ApplicationPackageImpl.Literals.CONTRIBUTION__CONTRIBUTION_URI);
+					ContributionClassDialog dialog = new ContributionClassDialog(b.getShell(), project, getEditingDomain(), (MContribution) getMaster().getValue(), ApplicationPackageImpl.Literals.CONTRIBUTION__CONTRIBUTION_URI, Messages);
 					dialog.open();
 				}
 			});
 		}
-		ControlFactory.createMapProperties(parent, this, Messages.ModelTooling_Contribution_PersistedState, ApplicationPackageImpl.Literals.CONTRIBUTION__PERSISTED_STATE, VERTICAL_LIST_WIDGET_INDENT);
-		ControlFactory.createStringListWidget(parent, this, Messages.ModelTooling_ApplicationElement_Tags, ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__TAGS, VERTICAL_LIST_WIDGET_INDENT);
+		ControlFactory.createMapProperties(parent, Messages, this, Messages.ModelTooling_Contribution_PersistedState, ApplicationPackageImpl.Literals.CONTRIBUTION__PERSISTED_STATE, VERTICAL_LIST_WIDGET_INDENT);
+		ControlFactory.createStringListWidget(parent, Messages, this, Messages.ModelTooling_ApplicationElement_Tags, ApplicationPackageImpl.Literals.APPLICATION_ELEMENT__TAGS, VERTICAL_LIST_WIDGET_INDENT);
 
 		return parent;
 	}

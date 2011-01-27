@@ -16,8 +16,10 @@ import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.e4.tools.emf.ui.common.Util;
+import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
 import org.eclipse.e4.tools.services.IResourcePool;
+import org.eclipse.e4.tools.services.Translation;
 import org.eclipse.e4.ui.model.application.MApplicationElement;
 import org.eclipse.emf.databinding.FeaturePath;
 import org.eclipse.emf.ecore.EObject;
@@ -45,6 +47,10 @@ public abstract class AbstractComponentEditor {
 	private ModelEditor editor;
 	@Inject
 	private IResourcePool resourcePool;
+
+	@Inject
+	@Translation
+	protected Messages Messages;
 
 	public EditingDomain getEditingDomain() {
 		return editingDomain;

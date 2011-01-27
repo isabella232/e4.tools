@@ -18,7 +18,6 @@ import org.eclipse.core.databinding.property.list.IListProperty;
 import org.eclipse.e4.tools.emf.ui.common.IEditorFeature.FeatureClass;
 import org.eclipse.e4.tools.emf.ui.common.Util;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
-import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.ResourceProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ComponentLabelProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.dialogs.FeatureSelectionDialog;
@@ -139,7 +138,7 @@ public class StringModelFragment extends AbstractComponentEditor {
 			b.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					FindParentReferenceElementDialog dialog = new FindParentReferenceElementDialog(b.getShell(), StringModelFragment.this, (MStringModelFragment) getMaster().getValue());
+					FindParentReferenceElementDialog dialog = new FindParentReferenceElementDialog(b.getShell(), StringModelFragment.this, (MStringModelFragment) getMaster().getValue(), Messages);
 					dialog.open();
 				}
 			});
@@ -170,7 +169,7 @@ public class StringModelFragment extends AbstractComponentEditor {
 			button.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					FeatureSelectionDialog dialog = new FeatureSelectionDialog(button.getShell(), getEditingDomain(), (MStringModelFragment) getMaster().getValue());
+					FeatureSelectionDialog dialog = new FeatureSelectionDialog(button.getShell(), getEditingDomain(), (MStringModelFragment) getMaster().getValue(), Messages);
 					dialog.open();
 				}
 			});
@@ -197,7 +196,7 @@ public class StringModelFragment extends AbstractComponentEditor {
 
 			final TableViewer viewer = new TableViewer(parent);
 			viewer.setContentProvider(new ObservableListContentProvider());
-			viewer.setLabelProvider(new ComponentLabelProvider(getEditor()));
+			viewer.setLabelProvider(new ComponentLabelProvider(getEditor(), Messages));
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.heightHint = 300;
 			viewer.getControl().setLayoutData(gd);

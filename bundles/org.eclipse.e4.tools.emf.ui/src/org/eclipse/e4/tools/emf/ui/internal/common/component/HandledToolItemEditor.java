@@ -19,7 +19,6 @@ import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.e4.tools.emf.ui.common.CommandToStringConverter;
 import org.eclipse.e4.tools.emf.ui.common.IModelResource;
-import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.ResourceProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.VirtualEntry;
@@ -87,7 +86,7 @@ public class HandledToolItemEditor extends ToolItemEditor {
 			Text t = new Text(parent, SWT.BORDER);
 			t.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			t.setEditable(false);
-			context.bindValue(textProp.observeDelayed(200, t), EMFEditProperties.value(getEditingDomain(), MenuPackageImpl.Literals.HANDLED_ITEM__COMMAND).observeDetail(master), new UpdateValueStrategy(), new UpdateValueStrategy().setConverter(new CommandToStringConverter()));
+			context.bindValue(textProp.observeDelayed(200, t), EMFEditProperties.value(getEditingDomain(), MenuPackageImpl.Literals.HANDLED_ITEM__COMMAND).observeDetail(master), new UpdateValueStrategy(), new UpdateValueStrategy().setConverter(new CommandToStringConverter(Messages)));
 
 			final Button b = new Button(parent, SWT.PUSH | SWT.FLAT);
 			b.setText(Messages.ModelTooling_Common_FindEllipsis);
@@ -96,7 +95,7 @@ public class HandledToolItemEditor extends ToolItemEditor {
 			b.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					HandledToolItemCommandSelectionDialog dialog = new HandledToolItemCommandSelectionDialog(b.getShell(), (MHandledItem) getMaster().getValue(), resource);
+					HandledToolItemCommandSelectionDialog dialog = new HandledToolItemCommandSelectionDialog(b.getShell(), (MHandledItem) getMaster().getValue(), resource, Messages);
 					dialog.open();
 				}
 			});

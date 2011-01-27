@@ -17,7 +17,6 @@ import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.e4.tools.emf.ui.common.IEditorFeature.FeatureClass;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
-import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.ResourceProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ComponentLabelProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.VirtualEntry;
@@ -109,7 +108,7 @@ public class VModelImportsEditor extends AbstractComponentEditor {
 
 			viewer = new TableViewer(parent);
 			viewer.setContentProvider(new ObservableListContentProvider());
-			viewer.setLabelProvider(new ComponentLabelProvider(getEditor()));
+			viewer.setLabelProvider(new ComponentLabelProvider(getEditor(), Messages));
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.heightHint = 300;
 			viewer.getControl().setLayoutData(gd);

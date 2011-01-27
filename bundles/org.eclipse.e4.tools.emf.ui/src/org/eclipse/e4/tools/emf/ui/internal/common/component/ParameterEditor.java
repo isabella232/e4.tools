@@ -16,7 +16,6 @@ import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.e4.tools.emf.ui.common.EStackLayout;
 import org.eclipse.e4.tools.emf.ui.common.Util;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
-import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.ResourceProvider;
 import org.eclipse.e4.ui.model.application.commands.MParameter;
 import org.eclipse.e4.ui.model.application.commands.impl.CommandsPackageImpl;
@@ -116,7 +115,7 @@ public class ParameterEditor extends AbstractComponentEditor {
 		IWidgetValueProperty textProp = WidgetProperties.text(SWT.Modify);
 
 		if (isImport) {
-			ControlFactory.createFindImport(parent, this, context);
+			ControlFactory.createFindImport(parent, Messages, this, context);
 			return parent;
 		}
 

@@ -117,6 +117,7 @@ import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VWindowTrim
 import org.eclipse.e4.tools.services.IClipboardService;
 import org.eclipse.e4.tools.services.IClipboardService.Handler;
 import org.eclipse.e4.tools.services.IResourcePool;
+import org.eclipse.e4.tools.services.Translation;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.model.application.MApplicationElement;
@@ -233,6 +234,10 @@ public class ModelEditor {
 	@Optional
 	private IExtensionLookup extensionLookup;
 
+	@Inject
+	@Translation
+	private Messages messages;
+
 	private ObservablesManager obsManager;
 
 	private final IResourcePool resourcePool;
@@ -244,7 +249,10 @@ public class ModelEditor {
 		this.context = context;
 		this.context.set(ModelEditor.class, this);
 		this.obsManager = new ObservablesManager();
+	}
 
+	@PostConstruct
+	void postCreate(Composite composite) {
 		context.set(ModelEditor.class, this);
 		context.set(IResourcePool.class, resourcePool);
 		context.set(EditingDomain.class, modelProvider.getEditingDomain());
@@ -394,7 +402,7 @@ public class ModelEditor {
 						}
 
 						if (o.eContainer() != null) {
-							actions.add(new Action(Messages.ModelEditor_Delete, ImageDescriptor.createFromImage(resourcePool.getImageUnchecked(ResourceProvider.IMG_Obj16_cross))) {
+							actions.add(new Action(messages.ModelEditor_Delete, ImageDescriptor.createFromImage(resourcePool.getImageUnchecked(ResourceProvider.IMG_Obj16_cross))) {
 								public void run() {
 									if (o.eContainingFeature().isMany()) {
 										Command cmd = RemoveCommand.create(ModelEditor.this.modelProvider.getEditingDomain(), o.eContainer(), o.eContainingFeature(), o);
@@ -420,10 +428,6 @@ public class ModelEditor {
 			}
 		});
 		viewer.getControl().setMenu(mgr.createContextMenu(viewer.getControl()));
-	}
-
-	@PostConstruct
-	void postCreate() {
 		viewer.setSelection(new StructuredSelection(modelProvider.getRoot()));
 	}
 
@@ -527,7 +531,7 @@ public class ModelEditor {
 		ShadowComposite editingArea = new ShadowComposite(parent, SWT.NONE);
 		editingArea.setLayout(new FillLayout());
 		final TreeViewer viewer = new TreeViewer(editingArea, SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL);
-		viewer.setLabelProvider(new ComponentLabelProvider(this));
+		viewer.setLabelProvider(new ComponentLabelProvider(this, messages));
 		ObservableListTreeContentProvider contentProvider = new ObservableListTreeContentProvider(new ObservableFactoryImpl(), new TreeStructureAdvisorImpl());
 		viewer.setContentProvider(contentProvider);
 

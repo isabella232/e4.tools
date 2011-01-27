@@ -20,7 +20,6 @@ import org.eclipse.core.databinding.property.list.IListProperty;
 import org.eclipse.e4.tools.emf.ui.common.EStackLayout;
 import org.eclipse.e4.tools.emf.ui.common.Util;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
-import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.ResourceProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ComponentLabelProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.dialogs.BindingContextSelectionDialog;
@@ -145,7 +144,7 @@ public class BindingTableEditor extends AbstractComponentEditor {
 		}
 
 		if (isImport) {
-			ControlFactory.createFindImport(parent, this, context);
+			ControlFactory.createFindImport(parent, Messages, this, context);
 			return parent;
 		}
 
@@ -177,7 +176,7 @@ public class BindingTableEditor extends AbstractComponentEditor {
 			b.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					BindingContextSelectionDialog dialog = new BindingContextSelectionDialog(b.getShell(), getEditor().getModelProvider());
+					BindingContextSelectionDialog dialog = new BindingContextSelectionDialog(b.getShell(), getEditor().getModelProvider(), Messages);
 					if (dialog.open() == BindingContextSelectionDialog.OK) {
 						Command cmd = SetCommand.create(getEditingDomain(), getMaster().getValue(), CommandsPackageImpl.Literals.BINDING_TABLE__BINDING_CONTEXT_ID, dialog.getSelectedId());
 						if (cmd.canExecute()) {
@@ -200,7 +199,7 @@ public class BindingTableEditor extends AbstractComponentEditor {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.heightHint = 300;
 			viewer.getControl().setLayoutData(gd);
-			viewer.setLabelProvider(new ComponentLabelProvider(getEditor()));
+			viewer.setLabelProvider(new ComponentLabelProvider(getEditor(), Messages));
 
 			IEMFListProperty prop = EMFProperties.list(CommandsPackageImpl.Literals.BINDING_TABLE__BINDINGS);
 			viewer.setInput(prop.observeDetail(getMaster()));

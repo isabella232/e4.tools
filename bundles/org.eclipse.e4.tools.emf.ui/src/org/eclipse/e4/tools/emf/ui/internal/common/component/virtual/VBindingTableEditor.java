@@ -17,7 +17,6 @@ import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.e4.tools.emf.ui.common.component.AbstractComponentEditor;
-import org.eclipse.e4.tools.emf.ui.internal.Messages;
 import org.eclipse.e4.tools.emf.ui.internal.ResourceProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.ComponentLabelProvider;
 import org.eclipse.e4.tools.emf.ui.internal.common.VirtualEntry;
@@ -116,7 +115,7 @@ public class VBindingTableEditor extends AbstractComponentEditor {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.heightHint = 300;
 			bindingViewer.getControl().setLayoutData(gd);
-			bindingViewer.setLabelProvider(new ComponentLabelProvider(getEditor()));
+			bindingViewer.setLabelProvider(new ComponentLabelProvider(getEditor(), Messages));
 
 			Composite buttonComp = new Composite(parent, SWT.NONE);
 			buttonComp.setLayoutData(new GridData(GridData.FILL, GridData.END, false, false));
