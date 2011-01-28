@@ -114,6 +114,10 @@ import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VWindowCont
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VWindowEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VWindowSharedElementsEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VWindowTrimEditor;
+import org.eclipse.e4.tools.emf.ui.internal.common.xml.ColorManager;
+import org.eclipse.e4.tools.emf.ui.internal.common.xml.EMFDocument;
+import org.eclipse.e4.tools.emf.ui.internal.common.xml.XMLConfiguration;
+import org.eclipse.e4.tools.emf.ui.internal.common.xml.XMLPartitionScanner;
 import org.eclipse.e4.tools.services.IClipboardService;
 import org.eclipse.e4.tools.services.IClipboardService.Handler;
 import org.eclipse.e4.tools.services.IResourcePool;
@@ -154,6 +158,11 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.databinding.viewers.ObservableListTreeContentProvider;
 import org.eclipse.jface.databinding.viewers.TreeStructureAdvisor;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IDocumentPartitioner;
+import org.eclipse.jface.text.rules.FastPartitioner;
+import org.eclipse.jface.text.source.SourceViewer;
+import org.eclipse.jface.text.source.VerticalRuler;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -162,6 +171,8 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerDropAdapter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.dnd.Clipboard;
@@ -172,11 +183,14 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TreeItem;
 
@@ -203,6 +217,8 @@ public class ModelEditor {
 	public static final String VIRTUAL_PARAMETERS = ModelEditor.class.getName() + ".VIRTUAL_PARAMETERS"; //$NON-NLS-1$
 	public static final String VIRTUAL_MENUELEMENTS = ModelEditor.class.getName() + ".VIRTUAL_MENUELEMENTS"; //$NON-NLS-1$
 	public static final String VIRTUAL_ROOT_CONTEXTS = ModelEditor.class.getName() + ".VIRTUAL_ROOT_CONTEXTS"; //$NON-NLS-1$
+
+	private static final int VERTICAL_RULER_WIDTH = 12;
 
 	private Map<EClass, AbstractComponentEditor> editorMap = new HashMap<EClass, AbstractComponentEditor>();
 	private Map<String, AbstractComponentEditor> virtualEditors = new HashMap<String, AbstractComponentEditor>();
@@ -242,6 +258,8 @@ public class ModelEditor {
 
 	private final IResourcePool resourcePool;
 
+	private EMFDocument emfDocumentProvider;
+
 	public ModelEditor(Composite composite, IEclipseContext context, IModelResource modelProvider, IProject project, final IResourcePool resourcePool) {
 		this.resourcePool = resourcePool;
 		this.modelProvider = modelProvider;
@@ -272,6 +290,47 @@ public class ModelEditor {
 
 		fragment = modelProvider.getRoot().get(0) instanceof MModelFragments;
 
+		final CTabFolder folder = new CTabFolder(composite, SWT.BOTTOM);
+		CTabItem item = new CTabItem(folder, SWT.NONE);
+		item.setText(messages.ModelEditor_Form);
+		item.setControl(createFormTab(folder));
+		item.setImage(resourcePool.getImageUnchecked(ResourceProvider.IMG_Obj16_application_form));
+
+		emfDocumentProvider = new EMFDocument(modelProvider);
+
+		item = new CTabItem(folder, SWT.NONE);
+		item.setText(messages.ModelEditor_XMI);
+		item.setControl(createXMITab(folder));
+		item.setImage(resourcePool.getImageUnchecked(ResourceProvider.IMG_Obj16_chart_organisation));
+		folder.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (folder.getSelectionIndex() == 1) {
+					emfDocumentProvider.updateFromEMF();
+				}
+			}
+		});
+
+		folder.setSelection(0);
+	}
+
+	private Control createXMITab(Composite composite) {
+		VerticalRuler verticalRuler = new VerticalRuler(VERTICAL_RULER_WIDTH);
+		ColorManager colorManager = new ColorManager();
+		int styles = SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION;
+		SourceViewer viewer = new SourceViewer(composite, verticalRuler, styles);
+		viewer.configure(new XMLConfiguration(colorManager));
+		viewer.setEditable(false);
+		IDocument document = emfDocumentProvider.getDocument();
+		IDocumentPartitioner partitioner = new FastPartitioner(new XMLPartitionScanner(), new String[] { XMLPartitionScanner.XML_TAG, XMLPartitionScanner.XML_COMMENT });
+		partitioner.connect(document);
+		document.setDocumentPartitioner(partitioner);
+		viewer.setDocument(document);
+
+		return viewer.getControl();
+	}
+
+	private Composite createFormTab(Composite composite) {
 		SashForm form = new SashForm(composite, SWT.HORIZONTAL);
 		form.setBackground(form.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
@@ -429,6 +488,8 @@ public class ModelEditor {
 		});
 		viewer.getControl().setMenu(mgr.createContextMenu(viewer.getControl()));
 		viewer.setSelection(new StructuredSelection(modelProvider.getRoot()));
+
+		return form;
 	}
 
 	public IExtensionLookup getExtensionLookup() {
