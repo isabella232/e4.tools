@@ -114,8 +114,9 @@ import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VWindowCont
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VWindowEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VWindowSharedElementsEditor;
 import org.eclipse.e4.tools.emf.ui.internal.common.component.virtual.VWindowTrimEditor;
+import org.eclipse.e4.tools.emf.ui.internal.common.xml.AnnotationAccess;
 import org.eclipse.e4.tools.emf.ui.internal.common.xml.ColorManager;
-import org.eclipse.e4.tools.emf.ui.internal.common.xml.EMFDocument;
+import org.eclipse.e4.tools.emf.ui.internal.common.xml.EMFDocumentResourceMediator;
 import org.eclipse.e4.tools.emf.ui.internal.common.xml.XMLConfiguration;
 import org.eclipse.e4.tools.emf.ui.internal.common.xml.XMLPartitionScanner;
 import org.eclipse.e4.tools.services.IClipboardService;
@@ -144,6 +145,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.CommandParameter;
@@ -158,9 +160,13 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.databinding.viewers.ObservableListTreeContentProvider;
 import org.eclipse.jface.databinding.viewers.TreeStructureAdvisor;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentPartitioner;
+import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.rules.FastPartitioner;
+import org.eclipse.jface.text.source.Annotation;
+import org.eclipse.jface.text.source.AnnotationModel;
 import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.jface.text.source.VerticalRuler;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -218,7 +224,7 @@ public class ModelEditor {
 	public static final String VIRTUAL_MENUELEMENTS = ModelEditor.class.getName() + ".VIRTUAL_MENUELEMENTS"; //$NON-NLS-1$
 	public static final String VIRTUAL_ROOT_CONTEXTS = ModelEditor.class.getName() + ".VIRTUAL_ROOT_CONTEXTS"; //$NON-NLS-1$
 
-	private static final int VERTICAL_RULER_WIDTH = 12;
+	private static final int VERTICAL_RULER_WIDTH = 20;
 
 	private Map<EClass, AbstractComponentEditor> editorMap = new HashMap<EClass, AbstractComponentEditor>();
 	private Map<String, AbstractComponentEditor> virtualEditors = new HashMap<String, AbstractComponentEditor>();
@@ -258,7 +264,7 @@ public class ModelEditor {
 
 	private final IResourcePool resourcePool;
 
-	private EMFDocument emfDocumentProvider;
+	private EMFDocumentResourceMediator emfDocumentProvider;
 
 	public ModelEditor(Composite composite, IEclipseContext context, IModelResource modelProvider, IProject project, final IResourcePool resourcePool) {
 		this.resourcePool = resourcePool;
@@ -296,7 +302,7 @@ public class ModelEditor {
 		item.setControl(createFormTab(folder));
 		item.setImage(resourcePool.getImageUnchecked(ResourceProvider.IMG_Obj16_application_form));
 
-		emfDocumentProvider = new EMFDocument(modelProvider);
+		emfDocumentProvider = new EMFDocumentResourceMediator(modelProvider);
 
 		item = new CTabItem(folder, SWT.NONE);
 		item.setText(messages.ModelEditor_XMI);
@@ -315,17 +321,41 @@ public class ModelEditor {
 	}
 
 	private Control createXMITab(Composite composite) {
-		VerticalRuler verticalRuler = new VerticalRuler(VERTICAL_RULER_WIDTH);
+
+		final AnnotationModel model = new AnnotationModel();
+		VerticalRuler verticalRuler = new VerticalRuler(VERTICAL_RULER_WIDTH, new AnnotationAccess(resourcePool));
 		ColorManager colorManager = new ColorManager();
 		int styles = SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION;
 		SourceViewer viewer = new SourceViewer(composite, verticalRuler, styles);
 		viewer.configure(new XMLConfiguration(colorManager));
-		viewer.setEditable(false);
-		IDocument document = emfDocumentProvider.getDocument();
+		viewer.setEditable(project != null);
+
+		final IDocument document = emfDocumentProvider.getDocument();
 		IDocumentPartitioner partitioner = new FastPartitioner(new XMLPartitionScanner(), new String[] { XMLPartitionScanner.XML_TAG, XMLPartitionScanner.XML_COMMENT });
 		partitioner.connect(document);
 		document.setDocumentPartitioner(partitioner);
 		viewer.setDocument(document);
+		verticalRuler.setModel(model);
+
+		emfDocumentProvider.setValidationChangedCallback(new Runnable() {
+
+			public void run() {
+				model.removeAllAnnotations();
+
+				for (Diagnostic d : emfDocumentProvider.getErrorList()) {
+					Annotation a = new Annotation("e4xmi.error", false, d.getMessage()); //$NON-NLS-1$
+					int l;
+					try {
+						l = document.getLineOffset(d.getLine() - 1);
+						model.addAnnotation(a, new Position(l));
+					} catch (BadLocationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+
+			}
+		});
 
 		return viewer.getControl();
 	}
