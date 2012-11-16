@@ -26,6 +26,7 @@ import org.eclipse.e4.tools.emf.ui.internal.common.ModelEditor;
 import org.eclipse.e4.tools.services.IResourcePool;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.swt.widgets.Composite;
 
@@ -46,7 +47,9 @@ public class ApplicationModelEditor extends ModelEditor {
 	@Inject
 	public ApplicationModelEditor(Composite composite, IEclipseContext context, IModelResource modelProvider, @Named(EDITORPROJECT) @Optional IProject project, IResourcePool resourcePool) {
 		super(composite, context, modelProvider, project, resourcePool);
-		resource = modelProvider.getEditingDomain().getResourceSet().getResources().get(0);
+		EList<Resource> resources = modelProvider.getEditingDomain().getResourceSet().getResources();
+		if (!resources.isEmpty())
+			resource = resources.get(0);
 	}
 
 	@Inject
