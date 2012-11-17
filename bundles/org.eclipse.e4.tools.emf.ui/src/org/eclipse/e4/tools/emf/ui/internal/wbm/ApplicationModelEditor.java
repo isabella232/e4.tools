@@ -35,6 +35,7 @@ public class ApplicationModelEditor extends ModelEditor {
 	private static final String EDITORPROJECT = "org.eclipse.e4.tools.emf.ui.editorproject";
 
 	@Inject
+	@Optional
 	MPart part;
 
 	@Inject
