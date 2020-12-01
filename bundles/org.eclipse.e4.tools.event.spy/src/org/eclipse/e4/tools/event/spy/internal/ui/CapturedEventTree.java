@@ -63,7 +63,7 @@ import org.eclipse.swt.widgets.TreeItem;
 public class CapturedEventTree extends TreeViewer {
 	private ICapturedEventTreeListener listener;
 
-	private WritableList capturedEvents;
+	private WritableList<CapturedEvent> capturedEvents;
 
 	private Clipboard clipboard;
 
@@ -97,7 +97,7 @@ public class CapturedEventTree extends TreeViewer {
 		column.setText(ItemToFilter.ChangedElement.toString());
 		column.setWidth(150);
 
-		ObservableListTreeContentProvider contentProvider = new ObservableListTreeContentProvider(
+		ObservableListTreeContentProvider contentProvider = new ObservableListTreeContentProvider<>(
 				new CapturedEventsObservableFactory(), new CapturedEventsTreeStructureAdvisor());
 		setContentProvider(contentProvider);
 
@@ -105,7 +105,7 @@ public class CapturedEventTree extends TreeViewer {
 				new String[] { "name", "param1", "param2" });
 		setLabelProvider(new ObservableMapLabelProvider(attributes));
 
-		capturedEvents = new WritableList(new ArrayList<CapturedEvent>(), CapturedEvent.class);
+		capturedEvents = new WritableList<>(new ArrayList<>(), CapturedEvent.class);
 		setInput(capturedEvents);
 
 		clipboard = new Clipboard(getTree().getDisplay());

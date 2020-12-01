@@ -21,7 +21,7 @@ import org.eclipse.core.databinding.observable.set.WritableSet;
 
 public class PreferenceNodeEntry extends PreferenceEntry {
 
-	private IObservableSet preferenceEntries = new WritableSet();
+	private IObservableSet preferenceEntries = new WritableSet<>();
 
 	public PreferenceNodeEntry() {
 		super();

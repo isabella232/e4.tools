@@ -28,7 +28,7 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 
 public class MemoryModelResource implements IModelResource {
-	private WritableList list = new WritableList();
+	private WritableList list = new WritableList<>();
 	private EditingDomain editingDomain;
 
 	public MemoryModelResource(MApplication application) {
