@@ -12,6 +12,9 @@
    <feature url="features/org.eclipse.e4.tools.spies.feature_0.18.0.qualifier.jar" id="org.eclipse.e4.tools.spies.feature" version="0.18.0.qualifier">
       <category name="org.eclipse.e4.tools.spies.feature"/>
    </feature>
+   <feature id="org.eclipse.e4.tools.spies.feature.source">
+      <category name="org.eclipse.e4.tools.spies.feature"/>
+   </feature>
    <feature url="features/org.eclipse.e4.tools.css.spy.feature_0.14.0.qualifier.jar" id="org.eclipse.e4.tools.css.spy.feature" version="0.14.0.qualifier">
       <category name="org.eclipse.e4.tools.css.spy"/>
    </feature>
